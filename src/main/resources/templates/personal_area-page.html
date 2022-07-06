@@ -1,10 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<div th:insert="blocks/header"></div>
+<br><br>
+<style>
+    .transaction_window{
+        margin-left: 65%;
+        margin-right: 2%;
+        border: 2px solid green;
+        padding: 10px;
+    }
+    .button{
+            background-color: #1cb51f;
+            border: 1px solid green;
+    }
+    .input_field{
+            background-color: #87ec82;
+            border: 1px solid green;
+    }
+</style>
+<style>
+    table {
+         /* Ширина таблицы */
+        border: 2px double black; /* Рамка вокруг таблицы */
+        border-collapse: collapse; /* Отображать только одинарные линии */
+    }
+    th {
+        text-align: center; /* Выравнивание по центру */
+        background: #1cb51f; /* Цвет фона ячеек */
+        /*padding: 3px; !* Поля вокруг содержимого ячеек *!*/
+        border: 1px solid black; /* Граница вокруг ячеек */
+    }
+    td {
+        /*padding: 5px; !* Поля вокруг содержимого ячеек *!*/
+        border: 1px solid black; /* Граница вокруг ячеек */
+        background-color: #87ec82;
+    }
+    .pad{
+        padding: 3px;
+    }
+
+</style>
+
+
 <body>
-$END$
+<br><br>
+
+
+<!--<div class="personal_data">-->
+<!--        <label th:text="${firstName}"  style="font-weight: bold"></label><br>-->
+<!--        <label th:text="${lastName}"  style="font-weight: bold"></label><br>-->
+<!--        <label th:text="${balance}"  style="font-weight: bold"></label><br>-->
+<!--        <label th:text="${phone}"  style="font-weight: bold"></label><br>-->
+<!--        <label th:text="${incoming}"  style="font-weight: bold"></label><br>-->
+<!--        <label th:text="${outcoming}"  style="font-weight: bold"></label><br>-->
+<!--</div>-->
+<form class="transaction_window" name="f" th:action="@{/main/personal-area}" method="post" style="float: right">
+        <label>
+        <input type="text" name="recipientPhoneNumber" placeholder="Recipient" class="input_field">
+        <input type="number" name="sum" placeholder="Sum" required min="1" class="input_field">
+        <button type="submit" class="button">---></button>
+        </label>
+</form>
+
+<table>
+        <tr>
+                <th width="400px;">Входящие платежи</th>
+                <th width="400px;">Исходящие платежи</th>
+        </tr>
+        <tr valign=top align=center>
+                <td>
+                    <table class="pad">
+                         <tr>
+                                 <th>Дата</th>
+                                 <th>Сумма</th>
+                                 <th >Отправитель</th>
+                         </tr>
+                         <tr th:each="transaction : ${incoming}">
+                                  <td th:text="${transaction.timestamp}" align="center"></td>
+                                  <td th:text="${transaction.sum}" align="center"></td>
+                                  <td th:text="${transaction.sender}" align="center"></td>
+                         </tr>
+                    </table>
+                </td>
+
+                <td>
+                    <table class="pad">
+                          <tr>
+                                 <th>Дата</th>
+                                 <th>Сумма</th>
+                                 <th>Получатель</th>
+                          </tr>
+                          <tr th:each="transaction : ${outcoming}">
+                                 <td th:text="${transaction.timestamp}" align="center"></td>
+                                 <td th:text="${transaction.sum}" align="center"></td>
+                                 <td th:text="${transaction.recipient}" align="center"></td>
+                          </tr>
+                    </table>
+                </td>
+        </tr>
+</table>
+
+<div th:insert="blocks/footer"></div>
 </body>
-</html>

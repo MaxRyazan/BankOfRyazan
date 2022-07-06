@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.maxryazan.bankofryazan.models.Transaction;
 
 @Repository
-public interface TransactionalService extends JpaRepository<Transaction, Long> {
+public interface TransactionalRepository extends JpaRepository<Transaction, Long> {
 }

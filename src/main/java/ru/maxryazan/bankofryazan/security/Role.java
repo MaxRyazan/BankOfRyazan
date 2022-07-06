@@ -1,2 +1,6 @@
-package ru.maxryazan.bankofryazan.security;public enum Role {
+package ru.maxryazan.bankofryazan.security;
+
+public enum Role {
+    CLIENT,
+    MANAGER
 }

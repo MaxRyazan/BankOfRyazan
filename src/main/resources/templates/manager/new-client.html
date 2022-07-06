@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div th:insert="blocks/header"></div>
+<br><br>
+
+<form name="f" th:action="@{/manager/new-client}" method="post">
+    <label>
+        <input type="text" name="firstName" placeholder="First name" class="form-control" required minlength="2">
+    </label>
+    <label>
+        <input type="text" name="lastName" placeholder="Last name" class="form-control" required minlength="2">
+    </label>
+    <label>
+        <input type="text" name="pinCode" placeholder="Pin Code" class="form-control" required minlength="10">
+    </label>
+<br>
+    <button type="submit" class="btn btn-success">Confirm</button>
+<br>
+    <input type="button" value="Back" onclick="history.back()">
+</form>

@@ -1,4 +1,4 @@
-package ru.maxryazan.bankofryazan.models;
+package ru.maxryazan.bankofryazan.jobs;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

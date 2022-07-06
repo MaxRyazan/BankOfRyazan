@@ -1,10 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Main page
-</body>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 </html>
+<style>
+    .aa {
+        text-decoration: none;
+    }
+</style>
+<div th:insert="blocks/header"></div>
+<br><br><br><br><br><br><br><br>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <div>
+        <div class="card shadow-sm">
+            <img src="../static/img/main1.png" th:src="@{img/main1.png}" alt="picture.png"/>
+
+            <div class="card-body">
+                <p class="card-text">
+                    Вклад "Профессиональный":<br>
+                    Получите фиксированные 11% годовых в рублях, без бумажной волокиты! Полчаса в офисе банка, или
+                    при личной встрече с менеджером на Вашей территории.* <br><br>
+                    Полные условия читайте <a class="aa" href="/main/contribution">здесь</a>
+                </p>
+                <br>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">* выезд менеджера доступен клиентам, чья сумма вклада превышает 250 тысяч рублей.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="card shadow-sm">
+            <img src="../static/img/safe.png" th:src="@{img/safe.png}" alt="picture.png"/>
+
+            <div class="card-body">
+                <p class="card-text">
+                    Аренда сейфовой ячейки за 1 рубль в месяц:<br>
+                    Мы ценим и уважаем наших постоянных клиентов. И чтобы доказать это на деле,
+                    мы решили предоставить Вам в почти безвозмездное пользование на время кредита или вклада
+                    сейфовую ячейку!* <br><br>
+                    Подробнее <a class="aa" href="/main/cell-rental">здесь</a>
+                </p>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                    *Доступно клиентам, текущий счет/займ которых большее 500 тысяч рублей.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="card shadow-sm">
+            <img src="../static/img/main3.png" th:src="@{img/main3.png}" alt="picture.png"/>
+
+            <div class="card-body">
+                <p class="card-text">
+                    Готовьте Ваших детей в школу с нашим новым специальным кредитом "Лучший".<br>
+                    До 100 тысяч рублей по паспорту* за 20 минут! <br><br> Подробнее <a class="aa" href="/main/credit">здесь</a>
+                </p>
+                <br><br><br>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">* Доступно только гражданам РФ</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br><br><br>
+</div>
+<div th:insert="blocks/footer"></div>
+
