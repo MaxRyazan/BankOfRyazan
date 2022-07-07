@@ -54,7 +54,7 @@ public class TransactionalService {
         Client recipient = clientService.findByPhoneNumber(recipientPhoneNumber);
 
         Date date = new Date();
-        String pattern = "dd-MM-yyyy hh:mm";
+        String pattern = "dd-MM-yyyy HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
         if (sender.getBalance() >= sum) {

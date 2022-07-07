@@ -1,31 +1,45 @@
-<div th:insert="blocks/header"></div>
-<br><br>
 <style>
     .transaction_window{
-        margin-left: 65%;
+        margin-left: 25%;
         margin-right: 2%;
         border: 2px solid green;
         padding: 10px;
     }
     .button{
-            background-color: #1cb51f;
-            border: 1px solid green;
+        background-color: #1cb51f;
+        border: 1px solid green;
     }
     .input_field{
-            background-color: #87ec82;
-            border: 1px solid green;
+        background-color: #87ec82;
+        border: 1px solid green;
+    }
+    .personalData1{
+        background-color: #87ec82;
+    }
+    .personalData2{
+        margin-left: 0.5%;
+
+    }
+    .inline{
+        width: 96%;
+        display: inline-block;
+        margin-left: 0.5%;
+
+    }
+    .pad{
+        padding: 3px;
     }
 </style>
 <style>
     table {
-         /* Ширина таблицы */
+        /* Ширина таблицы */
         border: 2px double black; /* Рамка вокруг таблицы */
         border-collapse: collapse; /* Отображать только одинарные линии */
     }
     th {
         text-align: center; /* Выравнивание по центру */
         background: #1cb51f; /* Цвет фона ячеек */
-        /*padding: 3px; !* Поля вокруг содержимого ячеек *!*/
+        padding: 3px; /* Поля вокруг содержимого ячеек !!!!! */
         border: 1px solid black; /* Граница вокруг ячеек */
     }
     td {
@@ -36,47 +50,55 @@
     .pad{
         padding: 3px;
     }
-
+    .align-center{
+        text-align: center;
+    }
+    .align-center400{
+        text-align: center;
+        width: 400px;
+    }
 </style>
 
-
+<div th:insert="blocks/header"></div>
 <body>
-<br><br>
+<!-- -->
 
-
-<!--<div class="personal_data">-->
-<!--        <label th:text="${firstName}"  style="font-weight: bold"></label><br>-->
-<!--        <label th:text="${lastName}"  style="font-weight: bold"></label><br>-->
-<!--        <label th:text="${balance}"  style="font-weight: bold"></label><br>-->
-<!--        <label th:text="${phone}"  style="font-weight: bold"></label><br>-->
-<!--        <label th:text="${incoming}"  style="font-weight: bold"></label><br>-->
-<!--        <label th:text="${outcoming}"  style="font-weight: bold"></label><br>-->
-<!--</div>-->
-<form class="transaction_window" name="f" th:action="@{/main/personal-area}" method="post" style="float: right">
+<div class="inline">
+    <form>
+         <label class="personalData1">
+              <label th:text="${firstName}"></label>
+              <label th:text="${lastName}"></label>
+              <label>Баланс:  <label th:text="${balance}"></label>  рублей</label>
+              <label>Телефон:  <label th:text="${phone}"></label></label>
+              </label>
+    </form>
+    <form class="transaction_window" name="f" th:action="@{/main/personal-area}" method="post" style="float: right">
         <label>
-        <input type="text" name="recipientPhoneNumber" placeholder="Recipient" class="input_field">
-        <input type="number" name="sum" placeholder="Sum" required min="1" class="input_field">
+        <input type="text" name="recipientPhoneNumber" placeholder="Получатель" class="input_field">
+        <input type="number" name="sum" placeholder="Сумма" required min="1" class="input_field">
         <button type="submit" class="button">---></button>
         </label>
-</form>
+    </form>
+</div>
 
-<table>
+<div class="personalData2">
+    <table>
         <tr>
-                <th width="400px;">Входящие платежи</th>
-                <th width="400px;">Исходящие платежи</th>
+                <th class="align-center400">Входящие платежи</th>
+                <th class="align-center400">Исходящие платежи</th>
         </tr>
         <tr valign=top align=center>
                 <td>
                     <table class="pad">
                          <tr>
-                                 <th>Дата</th>
-                                 <th>Сумма</th>
-                                 <th >Отправитель</th>
+                                 <th class="align-center">Дата</th>
+                                 <th class="align-center">Сумма</th>
+                                 <th class="align-center">Отправитель</th>
                          </tr>
                          <tr th:each="transaction : ${incoming}">
-                                  <td th:text="${transaction.timestamp}" align="center"></td>
-                                  <td th:text="${transaction.sum}" align="center"></td>
-                                  <td th:text="${transaction.sender}" align="center"></td>
+                                  <td th:text="${transaction.timestamp}" class="align-center"></td>
+                                  <td th:text="${transaction.sum}" class="align-center"></td>
+                                  <td th:text="${transaction.sender}" class="align-center"></td>
                          </tr>
                     </table>
                 </td>
@@ -84,19 +106,21 @@
                 <td>
                     <table class="pad">
                           <tr>
-                                 <th>Дата</th>
-                                 <th>Сумма</th>
-                                 <th>Получатель</th>
+                                 <th class="align-center">Дата</th>
+                                 <th class="align-center">Сумма</th>
+                                 <th class="align-center">Получатель</th>
                           </tr>
                           <tr th:each="transaction : ${outcoming}">
-                                 <td th:text="${transaction.timestamp}" align="center"></td>
-                                 <td th:text="${transaction.sum}" align="center"></td>
-                                 <td th:text="${transaction.recipient}" align="center"></td>
+                                 <td th:text="${transaction.timestamp}" class="align-center"></td>
+                                 <td th:text="${transaction.sum}" class="align-center"></td>
+                                 <td th:text="${transaction.recipient}" class="align-center"></td>
                           </tr>
                     </table>
                 </td>
         </tr>
 </table>
+</div>
 
+<!-- -->
 <div th:insert="blocks/footer"></div>
 </body>
