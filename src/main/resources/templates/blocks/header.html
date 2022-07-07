@@ -8,18 +8,6 @@
 </head>
 </html>
     <style>
-        .color {
-            color: slateblue;
-            text-decoration: none;
-        }
-        .money {
-            margin: auto;
-            display: flex;
-        }
-        .money2 {
-            margin-left: 5%;
-            margin-right: 5%;
-        }
         .nav{
             display: flex;
             margin: auto;
@@ -27,6 +15,12 @@
         .text {
             color: black;
             margin-left: 0.5%;
+            margin-right: 0.5%;
+            text-decoration: none;
+        }
+        .text2 {
+            color: black;
+            margin-left: 25%;
             margin-right: 0.5%;
             text-decoration: none;
         }
@@ -39,14 +33,14 @@
         <a  href="/main/cell-rental" class="text"><span style="font-weight: bold">Аренда персональных ячеек</span></a>
         <a  href="/main/precision-metal" class="text"><span style="font-weight: bold">Драгоценные металлы</span></a>
 
-        <div class="money">
-        <span style="font-weight: bold" class="money2">$ </span>
-            <span th:text="${USD}"  style="font-weight: bold" class="color"></span>
-        <span style="font-weight: bold" class="money2"> &#8364; </span>
-            <span th:text="${EUR}"  style="font-weight: bold" class="color"></span>
-        </div>
+<!--        <div class="money">-->
+<!--        <span style="font-weight: bold" class="money2">$ </span>-->
+<!--            <span th:text="${USD}"  style="font-weight: bold" class="color"></span>-->
+<!--        <span style="font-weight: bold" class="money2"> &#8364; </span>-->
+<!--            <span th:text="${EUR}"  style="font-weight: bold" class="color"></span>-->
+<!--        </div>-->
 
-        <a  href="/main/feedback"  class="text"><span style="font-weight: bold">Обратная связь</span></a>
+        <a  href="/main/feedback"  class="text2"><span style="font-weight: bold">Обратная связь</span></a>
         <a  href="/main/request-a-call"  class="text"><span style="font-weight: bold">Заказать звонок</span></a>
         <a  href="/main/personal-area" class="text" ><span style="font-weight: bold">Личный кабинет</span></a>
 
