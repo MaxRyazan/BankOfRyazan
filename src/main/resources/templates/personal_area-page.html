@@ -1,9 +1,11 @@
 <style>
     .transaction_window{
-        margin-left: 25%;
-        margin-right: 2%;
+        margin-left: 0.5%;
+        margin-right: 0.5%;
         border: 2px solid green;
         padding: 10px;
+        float: right;
+        width: 33%;
     }
     .button{
         background-color: #1cb51f;
@@ -21,13 +23,24 @@
 
     }
     .inline{
-        width: 96%;
+        width: 99%;
         display: inline-block;
         margin-left: 0.5%;
+        margin-right: 0.5%;
 
     }
     .pad{
         padding: 3px;
+    }
+    .float{
+        float: left;
+        width: 35%;
+        border: 2px solid green;
+        padding: 10px;
+    }
+    .float2{
+        float: right;
+        margin-right: 10px;
     }
 </style>
 <style>
@@ -64,7 +77,7 @@
 <!-- -->
 
 <div class="inline">
-    <form>
+    <form class="float">
          <label class="personalData1">
               <label th:text="${firstName}"></label>
               <label th:text="${lastName}"></label>
