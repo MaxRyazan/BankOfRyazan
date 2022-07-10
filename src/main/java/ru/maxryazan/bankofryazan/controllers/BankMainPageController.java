@@ -3,14 +3,14 @@ package ru.maxryazan.bankofryazan.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.maxryazan.bankofryazan.jobs.MoneyParser;
+import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 
 @Controller
 public class BankMainPageController {
-    private final MoneyParser parser;
+    private final ExchangeRateClass parser;
 
 
-    public BankMainPageController(MoneyParser parser) {
+    public BankMainPageController(ExchangeRateClass parser) {
         this.parser = parser;
     }
 
@@ -22,9 +22,9 @@ public class BankMainPageController {
     @GetMapping("/main")
     public String showMainPage(Model model) {
         try {
-            MoneyParser moneyParser = parser.someMethod();
-            model.addAttribute("USD", moneyParser.getCourse_USD());
-            model.addAttribute("EUR", moneyParser.getCourse_EUR());
+            ExchangeRateClass exchangeRateClass = parser.getRateFromAPI();
+            model.addAttribute("USD", exchangeRateClass.getCourse_USD());
+            model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
         } catch (Exception e){
             throw  new RuntimeException();
         }

@@ -4,23 +4,15 @@ import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Credit;
 import ru.maxryazan.bankofryazan.repository.CreditRepository;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class CreditService {
-    private final CreditRepository creditRepository;
-    private final ClientService clientService;
-
-    public CreditService(CreditRepository creditRepository, ClientService clientService) {
-        this.creditRepository = creditRepository;
-        this.clientService = clientService;
-    }
+public record CreditService(CreditRepository creditRepository, ClientService clientService) {
 
 
     public void addNewCredit(String phoneNumber, int sum, double percent, int numberOfPays) {
-        if(phoneNumber.isBlank() || sum <= 9999 || percent <= 5 || numberOfPays <= 1){
+        if (phoneNumber.isBlank() || sum <= 9999 || percent <= 5 || numberOfPays <= 1) {
             throw new IllegalArgumentException("Can borrow minimum 10 000, and minimum 2 pays");
         }
         Date date = new Date();
@@ -57,13 +49,13 @@ public class CreditService {
 
     private double generateEveryMonthPay(int sum, double percent, int numberOfPays) {
         long sumInKop = sum * 100L;
-        return (((sumInKop +  sumInKop * (percent / 100)) / numberOfPays) / 100);
+        return (((sumInKop + sumInKop * (percent / 100)) / numberOfPays) / 100);
     }
 
     private boolean isUnique(String str) {
-    List<Credit> allCredits = creditRepository.findAll();
-        for(Credit cr : allCredits) {
-            if(cr.getNumberOfCreditContract().equals(str)) {
+        List<Credit> allCredits = creditRepository.findAll();
+        for (Credit cr : allCredits) {
+            if (cr.getNumberOfCreditContract().equals(str)) {
                 return false;
             }
         }

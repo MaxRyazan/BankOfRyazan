@@ -155,12 +155,13 @@
     <table class="pad2">
         <caption class="caption">Мои кредиты:</caption>
         <tr>
-            <th class="align-center">№ Договора</th>
-            <th class="align-center">Дата начала</th>
-            <th class="align-center">Сумма кредита</th>
+            <th class="align-center">Договор</th>
+            <th class="align-center">От(дата)</th>
+            <th class="align-center">Сумма</th>
             <th class="align-center">Процент</th>
+            <th class="align-center">К выплате</th>
             <th class="align-center">Платёж</th>
-            <th class="align-center">Выплат</th>
+            <th class="align-center">Платежей</th>
 
         </tr>
         <tr th:each="credit : ${credits}">
@@ -168,6 +169,7 @@
             <td th:text="${credit.dateOfBegin}" class="align-center"></td>
             <td th:text="${credit.sumOfCredit}" class="align-center"></td>
             <td th:text="${credit.creditPercent}" class="align-center"></td>
+            <td th:text="${credit.sumWithPercents}" class="align-center"></td>
             <td th:text="${credit.everyMonthPay}" class="align-center"></td>
             <td th:text="${credit.numberOfPays}" class="align-center"></td>
         </tr>

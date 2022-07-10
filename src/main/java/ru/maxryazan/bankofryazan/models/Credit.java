@@ -36,6 +36,11 @@ public class Credit {
     @Column(name = "monthly_payment")
     private double everyMonthPay;
 
+    @Column(name = "sum_with_percents")
+    private final double sumWithPercents = everyMonthPay * numberOfPays;
+    
+
+
     //TODO запилить сумму остатка по кредиту
 
     @ManyToOne
