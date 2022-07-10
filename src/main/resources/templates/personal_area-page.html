@@ -17,9 +17,11 @@
     }
     .personalData1{
         background-color: #87ec82;
+        width: 100%;
     }
     .personalData2{
         margin-left: 0.5%;
+        float: right;
 
     }
     .inline{
@@ -31,17 +33,21 @@
     }
     .pad{
         padding: 3px;
+        margin: auto;
+    }
+    .pad2{
+        padding: 3px;
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+        max-width: 47%;
     }
     .float{
         float: left;
-        width: 35%;
+        width: 39%;
         border: 2px solid green;
         padding: 10px;
     }
-    .float2{
-        float: right;
-        margin-right: 10px;
-    }
+
 </style>
 <style>
     table {
@@ -60,19 +66,27 @@
         border: 1px solid black; /* Граница вокруг ячеек */
         background-color: #87ec82;
     }
-    .pad{
-        padding: 3px;
+    .caption{
+        caption-side: top;
+        color: black;
+        font-weight: bold;
     }
     .align-center{
         text-align: center;
+        white-space: pre;
     }
     .align-center400{
         text-align: center;
         width: 400px;
     }
+    .marg{
+        margin-left: 3%;
+        white-space: pre;
+    }
 </style>
 
 <div th:insert="blocks/header"></div>
+<br>
 <body>
 <!-- -->
 
@@ -81,8 +95,8 @@
          <label class="personalData1">
               <label th:text="${firstName}"></label>
               <label th:text="${lastName}"></label>
-              <label>Баланс:  <label th:text="${balance}"></label>  рублей</label>
-              <label>Телефон:  <label th:text="${phone}"></label></label>
+              <label  class="marg">Баланс:  <label th:text="${balance}" style="font-weight: bold"></label>  рублей</label>
+              <label  class="marg">Телефон:  <label th:text="${phone}"></label></label>
               </label>
     </form>
     <form class="transaction_window" name="f" th:action="@{/main/personal-area}" method="post" style="float: right">
@@ -93,9 +107,9 @@
         </label>
     </form>
 </div>
-
 <div class="personalData2">
-    <table>
+    <table class="pad2">
+        <caption class="caption">Мои транзакции:</caption>
         <tr>
                 <th class="align-center400">Входящие платежи</th>
                 <th class="align-center400">Исходящие платежи</th>
@@ -107,11 +121,13 @@
                                  <th class="align-center">Дата</th>
                                  <th class="align-center">Сумма</th>
                                  <th class="align-center">Отправитель</th>
+                                 <th class="align-center">Телефон</th>
                          </tr>
                          <tr th:each="transaction : ${incoming}">
                                   <td th:text="${transaction.timestamp}" class="align-center"></td>
                                   <td th:text="${transaction.sum}" class="align-center"></td>
                                   <td th:text="${transaction.sender}" class="align-center"></td>
+                                  <td th:text="${transaction.sender.getPhoneNumber}" class="align-center"></td>
                          </tr>
                     </table>
                 </td>
@@ -122,16 +138,80 @@
                                  <th class="align-center">Дата</th>
                                  <th class="align-center">Сумма</th>
                                  <th class="align-center">Получатель</th>
+                                 <th class="align-center">Телефон</th>
                           </tr>
                           <tr th:each="transaction : ${outcoming}">
                                  <td th:text="${transaction.timestamp}" class="align-center"></td>
                                  <td th:text="${transaction.sum}" class="align-center"></td>
                                  <td th:text="${transaction.recipient}" class="align-center"></td>
+                              <td th:text="${transaction.recipient.getPhoneNumber}" class="align-center"></td>
                           </tr>
                     </table>
                 </td>
         </tr>
 </table>
+</div>
+<div>
+    <table class="pad2">
+        <caption class="caption">Мои кредиты:</caption>
+        <tr>
+            <th class="align-center">№ Договора</th>
+            <th class="align-center">Дата начала</th>
+            <th class="align-center">Сумма кредита</th>
+            <th class="align-center">Процент</th>
+            <th class="align-center">Платёж</th>
+            <th class="align-center">Выплат</th>
+
+        </tr>
+        <tr th:each="credit : ${credits}">
+            <td th:text="${credit.numberOfCreditContract}" class="align-center"></td>
+            <td th:text="${credit.dateOfBegin}" class="align-center"></td>
+            <td th:text="${credit.sumOfCredit}" class="align-center"></td>
+            <td th:text="${credit.creditPercent}" class="align-center"></td>
+            <td th:text="${credit.everyMonthPay}" class="align-center"></td>
+            <td th:text="${credit.numberOfPays}" class="align-center"></td>
+        </tr>
+    </table>
+</div>
+<br>
+<div>
+    <table class="pad2">
+        <caption class="caption">Мои вклады:</caption>
+        <tr>
+            <th class="align-center">Дата начала</th>
+            <th class="align-center">Сумма вклада</th>
+            <th class="align-center">Проценты</th>
+            <th class="align-center">Длительность</th>
+            <th class="align-center">Сумма к получению</th>
+        </tr>
+                <tr th:each="contribution : ${contributions}">
+                    <td th:text="${contribution.dateOfBegin}" class="align-center"></td>
+                    <td th:text="${contribution.sumOfContribution}" class="align-center"></td>
+                    <td th:text="${contribution.percentByContribution}" class="align-center"></td>
+                    <td th:text="${contribution.durationOfContributionInYears}" class="align-center"></td>
+                    <td th:text="${contribution.sumWithPercent}" class="align-center"></td>
+                </tr>
+    </table>
+</div>
+<br>
+<div>
+    <table class="pad2">
+        <caption class="caption">Мои инвестиции:</caption>
+        <tr>
+            <th class="align-center">Вид инвестиции</th>
+            <th class="align-center">Единица</th>
+            <th class="align-center">Цена за ед.</th>
+            <th class="align-center">Объём инвестиции</th>
+            <th class="align-center">Текущая стоимость</th>
+        </tr>
+                <tr th:each="investment : ${investments}">
+                    <td th:text="${investment.type}" class="align-center"></td>
+                    <td th:text="${investment.unit}" class="align-center"></td>
+                    <td th:text="${investment.pricePerUnit}" class="align-center"></td>
+                    <td th:text="${investment.investmentSizeByUnits}" class="align-center"></td>
+                    <td th:text="${investment.priceOfInvestment}" class="align-center"></td>
+                </tr>
+    </table>
 </div>
 
 <!-- -->

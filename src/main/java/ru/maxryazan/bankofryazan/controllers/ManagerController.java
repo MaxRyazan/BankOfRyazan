@@ -2,19 +2,30 @@ package ru.maxryazan.bankofryazan.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.service.ClientService;
+import ru.maxryazan.bankofryazan.service.ContributionService;
+import ru.maxryazan.bankofryazan.service.CreditService;
+import ru.maxryazan.bankofryazan.service.InvestmentService;
 
 
 @Controller
 public class ManagerController {
 
     private final ClientService clientService;
+    private final CreditService creditService;
+    private final ContributionService contributionService;
+    private final InvestmentService investmentService;
+
     @Autowired
-    public ManagerController(ClientService clientService) {
+    public ManagerController(ClientService clientService, CreditService creditService, ContributionService contributionService, InvestmentService investmentService) {
         this.clientService = clientService;
+        this.creditService = creditService;
+        this.contributionService = contributionService;
+        this.investmentService = investmentService;
     }
 
     @GetMapping("/manager")
@@ -31,9 +42,24 @@ public class ManagerController {
     @PostMapping("/manager/new-client")
     public String postAddNewClient(@RequestParam String firstName,
                                    @RequestParam String lastName,
-                                   @RequestParam String pinCode){
+                                   @RequestParam String phoneNumber){
         System.out.println("post");
-        clientService.save(firstName, lastName, pinCode);
+        clientService.save(firstName, lastName, phoneNumber);
         return "redirect:/manager";
     }
+
+    @GetMapping("manager/credit")
+    public String getNewCredit(){
+        return "manager/new-credit";
+    }
+
+    @PostMapping("/manager/credit")
+    public String postNewCredit(@RequestParam String phoneNumber,
+                                @RequestParam int sumOfCredit,
+                                @RequestParam double percentOfCredit,
+                                @RequestParam int numberOfPays){
+        creditService.addNewCredit(phoneNumber, sumOfCredit, percentOfCredit, numberOfPays);
+        return "redirect:/manager/credit";
+    }
+
 }

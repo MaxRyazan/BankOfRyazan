@@ -51,9 +51,9 @@ public class BankMainPageController {
         return "cell_rental-page";
     }
 
-    @GetMapping("/main/precision-metal")
-    public String preciousMetalPage(){
-        return "precision_metal-page";
+    @GetMapping("/main/investments")
+    public String investmentsPage(){
+        return "investments-page";
     }
 
     @GetMapping("/main/feedback")

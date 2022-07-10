@@ -23,6 +23,7 @@ public class PersonalAreaController {
         this.transactionalService = transactionalService;
     }
 
+
     @GetMapping("/main/personal-area")
     public String openPersonalArea(Model model, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
@@ -35,6 +36,9 @@ public class PersonalAreaController {
         model.addAttribute("balance", client.getBalance());
         model.addAttribute("incoming", client.getInComingTransactions());
         model.addAttribute("outcoming", client.getOutComingTransactions());
+        model.addAttribute("credits", client.getCredits());
+        model.addAttribute("investments", client.getInvestments());
+        model.addAttribute("contributions", client.getContributions());
 
         return "personal_area-page";
     }

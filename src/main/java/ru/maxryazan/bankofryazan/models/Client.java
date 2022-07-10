@@ -2,7 +2,6 @@ package ru.maxryazan.bankofryazan.models;
 
 import lombok.*;
 import javax.persistence.*;
-import java.util.HashMap;
 import java.util.Set;
 
 @Entity
@@ -41,15 +40,26 @@ public class Client {
     @OneToMany(mappedBy = "recipient", fetch = FetchType.LAZY)
     private Set<Transaction> inComingTransactions;
 
-    public Client(String firstName, String lastName, String hashPinCode) {
+    @OneToMany(mappedBy = "borrower", fetch = FetchType.LAZY)
+    private Set<Credit> credits;
+
+    @OneToMany(mappedBy = "investor", fetch = FetchType.LAZY)
+    private Set<Investment> investments;
+
+    @OneToMany(mappedBy = "contributor", fetch = FetchType.LAZY)
+    private Set<Contribution> contributions;
+
+    public Client(String firstName, String lastName, String pinCode) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.pinCode = hashPinCode;
+        this.pinCode = pinCode;
     }
+
+
 
     @Override
     public String toString() {
-        return  firstName + " " + lastName + " phone: " + phoneNumber;
+        return  firstName + " " + lastName;
     }
 }
 

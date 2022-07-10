@@ -15,9 +15,10 @@ import java.net.URL;
 @Setter
 public class MoneyParser {
     @JsonProperty("EUR_RUB")
-    public double course_EUR;
+    private double course_EUR;
+
     @JsonProperty("USD_RUB")
-    public double course_USD;
+    private double course_USD;
 
 
     public MoneyParser someMethod() throws IOException {

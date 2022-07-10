@@ -1,0 +1,17 @@
+<div th:insert="blocks/header"></div>
+<br><br>
+<body>
+
+<form name="f" th:action="@{/manager/credit}" method="post">
+    <label>
+    <input type="text" name="phoneNumber" placeholder="phoneNumber">
+    <input type="text" name="sumOfCredit" placeholder="sumOfCredit">
+    <input type="text" name="percentOfCredit" placeholder="percentOfCredit">
+    <input type="text" name="numberOfPays" placeholder="numberOfPays">
+    <input type="submit" value="ok">
+    </label>
+</form>
+
+
+</body>
+<div th:insert="blocks/footer"></div>

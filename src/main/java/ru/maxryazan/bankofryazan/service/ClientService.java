@@ -20,8 +20,8 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
         throw new IllegalArgumentException();
     }
 
-    public void save(String firstName, String lastName, String pinCode) {
-        Client newClient = new Client(firstName, lastName, passwordEncoder.encode(pinCode));
+    public void save(String firstName, String lastName, String phoneNumber) {
+        Client newClient = new Client(firstName, lastName, phoneNumber);
         newClient.setBalance(0);
         clientRepository.save(newClient);
         System.out.println("save");
@@ -40,4 +40,5 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
+
 }

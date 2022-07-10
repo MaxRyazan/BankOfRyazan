@@ -1,4 +1,3 @@
-<div th:fragment="header">
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <title>Bank of Ryazan</title>
 <head>
@@ -7,43 +6,34 @@
     <title></title>
 </head>
 </html>
-    <style>
-        .nav{
-            display: flex;
-            margin: auto;
-        }
-        .text {
-            color: black;
-            margin-left: 0.5%;
-            margin-right: 0.5%;
-            text-decoration: none;
-        }
-        .text2 {
-            color: black;
-            margin-left: 25%;
-            margin-right: 0.5%;
-            text-decoration: none;
-        }
-    </style>
+<style>
+    .nav{
+        display: flex;
+        margin: auto;
+    }
+    .text {
+        color: black;
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+        text-decoration: none;
+    }
+    .text2 {
+        color: black;
+        margin-left: 25%;
+        margin-right: 0.5%;
+        text-decoration: none;
+    }
+</style>
+<div th:fragment="header">
     <div class="nav">
-
         <a  href="/main/credit" class="text"><span style="font-weight: bold">Кредиты</span></a>
         <a  href="/main/contribution"  class="text"><span style="font-weight: bold">Вклады</span></a>
         <a  href="/main/insurance" class="text"><span style="font-weight: bold">Страхование</span></a>
         <a  href="/main/cell-rental" class="text"><span style="font-weight: bold">Аренда персональных ячеек</span></a>
-        <a  href="/main/precision-metal" class="text"><span style="font-weight: bold">Драгоценные металлы</span></a>
-
-<!--        <div class="money">-->
-<!--        <span style="font-weight: bold" class="money2">$ </span>-->
-<!--            <span th:text="${USD}"  style="font-weight: bold" class="color"></span>-->
-<!--        <span style="font-weight: bold" class="money2"> &#8364; </span>-->
-<!--            <span th:text="${EUR}"  style="font-weight: bold" class="color"></span>-->
-<!--        </div>-->
-
+        <a  href="/main/investments" class="text"><span style="font-weight: bold">Инвестиции</span></a>
         <a  href="/main/feedback"  class="text2"><span style="font-weight: bold">Обратная связь</span></a>
         <a  href="/main/request-a-call"  class="text"><span style="font-weight: bold">Заказать звонок</span></a>
         <a  href="/main/personal-area" class="text" ><span style="font-weight: bold">Личный кабинет</span></a>
-
         <input name="_csrf" type="hidden" value="e4b50f0c-4caf-4678-aaf3-55b52f554c8e">
     </div>
     <body  th:style="'background: url(/img/fon.png) no-repeat center center fixed; background-size:cover;'"></body>
