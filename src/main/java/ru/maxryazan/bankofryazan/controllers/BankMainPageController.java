@@ -4,14 +4,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
+import ru.maxryazan.bankofryazan.service.ExchangeRateClassService;
 
 @Controller
 public class BankMainPageController {
-    private final ExchangeRateClass parser;
+    private final ExchangeRateClassService exchangeRate;
 
 
-    public BankMainPageController(ExchangeRateClass parser) {
-        this.parser = parser;
+    public BankMainPageController(ExchangeRateClassService exchangeRate) {
+        this.exchangeRate = exchangeRate;
     }
 
     @GetMapping("/")
@@ -21,13 +22,13 @@ public class BankMainPageController {
 
     @GetMapping("/main")
     public String showMainPage(Model model) {
-        try {
-            ExchangeRateClass exchangeRateClass = parser.getRateFromAPI();
-            model.addAttribute("USD", exchangeRateClass.getCourse_USD());
-            model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
-        } catch (Exception e){
-            throw  new RuntimeException();
-        }
+//        try {
+//            ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
+//            model.addAttribute("USD", exchangeRateClass.getCourse_USD());
+//            model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
+//        } catch (Exception e){
+//            throw  new RuntimeException();
+//        }
         return "main-page";
     }
 

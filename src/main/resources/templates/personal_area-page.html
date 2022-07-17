@@ -84,6 +84,37 @@
         white-space: pre;
     }
 </style>
+<style>
+    #okno {
+        max-width: 230px;
+        max-height: 300px;
+        text-align: center;
+        padding: 15px;
+        border: 3px solid #0000cc;
+        border-radius: 10px;
+        color: #0000cc;
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+    }
+    #okno:target {display: block;}
+    .close {
+        display: inline-block;
+        border: 1px solid #0000cc;
+        color: #0000cc;
+        padding: 0 12px;
+        margin: 10px;
+        text-decoration: none;
+        background: #f2f2f2;
+        font-size: 14pt;
+        cursor:pointer;
+    }
+    .close:hover {background: #e6e6ff;}
+</style>
 
 <div th:insert="blocks/header"></div>
 <br>
@@ -153,31 +184,6 @@
 </div>
 <div>
     <table class="pad2">
-        <caption class="caption">Мои кредиты:</caption>
-        <tr>
-            <th class="align-center">Договор</th>
-            <th class="align-center">От(дата)</th>
-            <th class="align-center">Сумма</th>
-            <th class="align-center">Процент</th>
-            <th class="align-center">К выплате</th>
-            <th class="align-center">Платёж</th>
-            <th class="align-center">Платежей</th>
-
-        </tr>
-        <tr th:each="credit : ${credits}">
-            <td th:text="${credit.numberOfCreditContract}" class="align-center"></td>
-            <td th:text="${credit.dateOfBegin}" class="align-center"></td>
-            <td th:text="${credit.sumOfCredit}" class="align-center"></td>
-            <td th:text="${credit.creditPercent}" class="align-center"></td>
-            <td th:text="${credit.sumWithPercents}" class="align-center"></td>
-            <td th:text="${credit.everyMonthPay}" class="align-center"></td>
-            <td th:text="${credit.numberOfPays}" class="align-center"></td>
-        </tr>
-    </table>
-</div>
-<br>
-<div>
-    <table class="pad2">
         <caption class="caption">Мои вклады:</caption>
         <tr>
             <th class="align-center">Дата начала</th>
@@ -215,7 +221,39 @@
                 </tr>
     </table>
 </div>
+<br>
+<div>
+    <table class="pad2">
+        <caption class="caption">Мои кредиты:</caption>
+        <tr>
+            <th class="align-center">Договор</th>
+            <th class="align-center">От(дата)</th>
+            <th class="align-center">Сумма</th>
+            <th class="align-center">Процент</th>
+            <th class="align-center">К выплате</th>
+            <th class="align-center">Платёж</th>
+            <th class="align-center">Остаток</th>
+            <th class="align-center">Статус</th>
+            <th class="align-center">Детали</th>
+        </tr>
+        <tr th:each="credit : ${credits}">
+            <td th:text="${credit.numberOfCreditContract}" class="align-center"></td>
+            <td th:text="${credit.dateOfBegin}" class="align-center"></td>
+            <td th:text="${credit.sumOfCredit}" class="align-center"></td>
+            <td th:text="${credit.creditPercent}" class="align-center"></td>
+            <td th:text="${credit.sumWithPercents}" class="align-center"></td>
+            <td th:text="${credit.everyMonthPay}" class="align-center"></td>
+            <td th:text="${credit.restOfCredit}" class="align-center"></td>
+            <td th:text="${credit.status}" class="align-center"></td>
+            <td>
+                <a th:href="'/credit/' + ${credit.id}">Детали</a>
+            </td>
+        </tr>
+    </table>
+</div>
 
-<!-- -->
 <div th:insert="blocks/footer"></div>
+
+
+
 </body>

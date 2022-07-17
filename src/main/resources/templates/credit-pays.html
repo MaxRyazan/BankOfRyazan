@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        TABLE {
+            background-color: #87ec82;
+            width: 400px;
+            border: double black 1px;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        TD, TH {
+            padding: 3px; /* Поля вокруг содержимого таблицы */
+            border: 1px solid black; /* Параметры рамки */
+        }
+        TH {
+            background: #1cb51f; /* Цвет фона */
+        }
+    </style>
+    <style>
+        .text {
+            font-weight: bold;
+            margin-left: 4%;
+            margin-bottom: 2%;
+        }
+
+        .text3 {
+            font-weight: bold;
+            margin-left: 7%;
+        }
+        .green {
+            font-weight: bold;
+            color: #1cb51f;
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: black;
+        }
+        .red {
+            font-weight: bold;
+            color: red;
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: black;
+        }
+    </style>
+    <style>
+        .container {
+            padding: 10px;
+            float: right;
+            max-width: 35%;
+            margin-left: 25%;
+        }
+        .inline{
+            padding: 10px;
+            width: 85%;
+            display: inline-block;
+            margin-left: 5%;
+            margin-right: 5%;
+
+        }
+        .input_field{
+            background-color: #87ec82;
+            border: 1px solid green;
+        }
+        .input {
+            margin-left: 4%;
+        }
+        .button{
+            background-color: #1cb51f;
+            border: 1px solid black;
+        }
+    </style>
+
+</head>
+
+<body th:style="'background: url(/img/fon.png) no-repeat center center fixed; background-size:cover;'">
+<div class="inline">
+    <div class="text">Внести очередной платёж? Номер этого договора: <span th:text="${creditNumber}"></span></div>
+    <div class="input">
+        <form th:action="@{/credit-pays}"  method="post" style="float: left" >
+                <label>
+                    <input type="text" name="numberOfCreditContract" th:value="${creditNumber}" class="input_field">
+                    <input type="number" name="sum" th:value="${everyMonthPay}" class="input_field">
+                </label>
+                <input type="submit" value="Внести">
+        </form>
+    </div>
+    <div class="container">
+         <table>
+            <tr>
+                <th>Дата</th>
+                <th>Сумма</th>
+            </tr>
+            <tr th:each="element : ${pays}">
+                <td th:text="${element.date}"></td>
+                <td th:text="${element.sum}"></td>
+            </tr>
+         </table>
+        <br>
+         <label class="text">Внесено платежей: </label><label th:text="${numberOfPays}" class="green"></label>
+        <label class="text3"> на сумму: </label><label th:text="${payd}" class="green"></label> <br>
+        <label class="text">Осталось платежей: </label><label th:text="${ostPays}" class="red"></label>
+        <label class="text3"> на сумму: </label><label th:text="${ost}" class="red"></label>
+    </div>
+</div>
+<input type="button" value="Назад" onclick="history.back()">
+</body>
+</html>

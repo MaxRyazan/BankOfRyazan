@@ -29,8 +29,8 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
 
     public Client findByPhoneNumber(String phoneNumber) {
         List<Client> allClients = clientRepository.findAll();
-        Optional<Client> cl = allClients.stream().filter(client -> client.getPhoneNumber().equals(phoneNumber)).
-                findFirst();
+        Optional<Client> cl = allClients.stream().filter(
+                client -> client.getPhoneNumber().equals(phoneNumber)).findFirst();
         if (cl.isPresent()) {
             return cl.get();
         }
@@ -41,4 +41,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
         return clientRepository.findAll();
     }
 
+    public void save(Client client) {
+        clientRepository.save(client);
+    }
 }
