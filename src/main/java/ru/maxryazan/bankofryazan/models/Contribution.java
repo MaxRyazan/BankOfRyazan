@@ -11,6 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "contribution")
 public class Contribution {
 
     @Id
@@ -21,19 +22,25 @@ public class Contribution {
     private String numberOfContribution;
 
     @Column(name = "sum", nullable = false)
-    private int sumOfContribution;
+    private double sumOfContribution;
 
     @Column(name = "percent", nullable = false)
-    private int percentByContribution;
+    private double percentByContribution;
 
     @Column(name = "date_of_begin", nullable = false)
     private String dateOfBegin;
+
+    @Column(name = "date_of_end", nullable = false)
+    private String dateOfEnd;
 
     @Column(name = "duration", nullable = false)
     private int durationOfContributionInYears;
 
     @Column(name = "sum_with_percent")
-    private final int sumWithPercent = sumOfContribution + sumOfContribution * (percentByContribution / 100 * durationOfContributionInYears);
+    private double sumWithPercent;
+
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "contributor_id")

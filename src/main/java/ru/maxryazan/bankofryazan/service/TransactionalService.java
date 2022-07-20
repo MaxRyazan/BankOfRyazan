@@ -7,7 +7,6 @@ import ru.maxryazan.bankofryazan.models.Transaction;
 import ru.maxryazan.bankofryazan.repository.TransactionalRepository;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -15,10 +14,12 @@ public class TransactionalService {
 
     private final TransactionalRepository transactionalRepository;
     private final ClientService clientService;
+    private final CreditService creditService;
 
-    public TransactionalService(TransactionalRepository transactionalRepository, ClientService clientService) {
+    public TransactionalService(TransactionalRepository transactionalRepository, ClientService clientService, CreditService creditService) {
         this.transactionalRepository = transactionalRepository;
         this.clientService = clientService;
+        this.creditService = creditService;
     }
 
 
@@ -53,12 +54,9 @@ public class TransactionalService {
         Client sender = clientService.findByPhoneNumber(senderLastName);
         Client recipient = clientService.findByPhoneNumber(recipientPhoneNumber);
 
-        Date date = new Date();
-        String pattern = "dd-MM-yyyy HH:mm";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
         if (sender.getBalance() >= sum) {
-            Transaction transaction = new Transaction(sender, recipient, sum, simpleDateFormat.format(date));
+            Transaction transaction = new Transaction(sender, recipient, sum, creditService.generateDateWithHours());
             sender.setBalance(sender.getBalance() - sum);
             recipient.setBalance(recipient.getBalance() + sum);
             transactionalRepository.save(transaction);

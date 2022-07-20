@@ -22,13 +22,13 @@ public class BankMainPageController {
 
     @GetMapping("/main")
     public String showMainPage(Model model) {
-//        try {
-//            ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
-//            model.addAttribute("USD", exchangeRateClass.getCourse_USD());
-//            model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
-//        } catch (Exception e){
-//            throw  new RuntimeException();
-//        }
+        try {
+            ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
+            model.addAttribute("USD", exchangeRateClass.getCourse_USD());
+            model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
+        } catch (Exception e){
+            throw  new RuntimeException();
+        }
         return "main-page";
     }
 
@@ -37,10 +37,6 @@ public class BankMainPageController {
         return "credit-page";
         }
 
-    @GetMapping("/main/contribution")  //вклад
-    public String showContributionPage(){
-        return "contribution-page";
-    }
 
     @GetMapping("/main/insurance")
     public String showInsurancePage(){

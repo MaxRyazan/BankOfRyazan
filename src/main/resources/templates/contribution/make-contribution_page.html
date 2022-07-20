@@ -1,0 +1,16 @@
+<div th:insert="blocks/header"></div>
+<style>
+    .container {
+        width: 400px;
+        margin-left: 10%;
+        margin-top: 5%;
+    }
+</style>
+<div class="container">
+    <form name="f" th:action="@{/main/contribution/make-contribution}" method="post">
+        <label>
+        <input type="text" name="???" th:value="${contribution.sum}" class="input_field">
+        <input type="text" name="???" th:value="${contribution.duration}" class="input_field">
+        </label>
+    </form>
+</div>

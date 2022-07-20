@@ -2,7 +2,6 @@ package ru.maxryazan.bankofryazan.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,6 +59,20 @@ public class ManagerController {
                                 @RequestParam int numberOfPays){
         creditService.addNewCredit(phoneNumber, sumOfCredit, percentOfCredit, numberOfPays);
         return "redirect:/manager/credit";
+    }
+
+    @GetMapping("/manager/contribution")
+    public String getNewContribution(){
+        return "manager/new-contribution";
+    }
+
+    @PostMapping("/manager/contribution")
+    public String postNewContribution(@RequestParam String phoneNumber,
+                                      @RequestParam double sum,
+                                      @RequestParam double percent,
+                                      @RequestParam int duration) {
+        contributionService.addNewContribution(phoneNumber, sum, percent, duration);
+        return "redirect:/manager/contribution";
     }
 
 }

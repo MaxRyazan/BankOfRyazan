@@ -5,20 +5,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.repository.ClientRepository;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public record ClientService(ClientRepository clientRepository, BCryptPasswordEncoder passwordEncoder) {
 
-
-    public Client findById(long id) {
-        Optional<Client> client = clientRepository.findById(id);
-        if (client.isPresent()) {
-            return client.get();
-        }
-        throw new IllegalArgumentException();
-    }
 
     public void save(String firstName, String lastName, String phoneNumber) {
         Client newClient = new Client(firstName, lastName, phoneNumber);
@@ -43,5 +38,11 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
 
     public void save(Client client) {
         clientRepository.save(client);
+    }
+
+    public Client findByRequest(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        String authClientPhoneNumber = principal.getName();
+        return findByPhoneNumber(authClientPhoneNumber);
     }
 }
