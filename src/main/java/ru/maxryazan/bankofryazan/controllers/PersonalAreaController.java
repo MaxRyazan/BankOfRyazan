@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.models.Client;
+import ru.maxryazan.bankofryazan.models.Contribution;
+import ru.maxryazan.bankofryazan.models.Status;
 import ru.maxryazan.bankofryazan.service.ClientService;
 import ru.maxryazan.bankofryazan.service.ContributionService;
 import ru.maxryazan.bankofryazan.service.TransactionalService;
@@ -38,7 +40,11 @@ public class PersonalAreaController {
         model.addAttribute("outcoming", client.getOutComingTransactions());
         model.addAttribute("credits", client.getCredits());
         model.addAttribute("investments", client.getInvestments());
-        model.addAttribute("contributions", client.getContributions());
+        for(Contribution cn : client.getContributions()) {
+            if (cn.getStatus().equals(Status.ACTIVE)) {
+                model.addAttribute("contributions", client.getContributions());
+            }
+        }
         return "personal_area-page";
     }
 

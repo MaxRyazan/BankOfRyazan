@@ -22,6 +22,7 @@
     .personalData2{
         margin-left: 0.5%;
         float: right;
+        padding-right: 0;
 
     }
     .inline{
@@ -36,10 +37,18 @@
         margin: auto;
     }
     .pad2{
+        border: 2px double black;
         padding: 3px;
         margin-left: 0.5%;
         margin-right: 0.5%;
         max-width: 47%;
+    }
+    .pad3{
+        padding: 3px;
+        margin-left: 0.5%;
+        margin-right: 0.5%;
+        max-width: 47%;
+        border: none;
     }
     .float{
         float: left;
@@ -52,7 +61,7 @@
 <style>
     table {
         /* Ширина таблицы */
-        border: 2px double black; /* Рамка вокруг таблицы */
+        /* Рамка вокруг таблицы */
         border-collapse: collapse; /* Отображать только одинарные линии */
     }
     th {
@@ -139,7 +148,7 @@
     </form>
 </div>
 <div class="personalData2">
-    <table class="pad2">
+    <table class="pad3">
         <caption class="caption">Мои транзакции:</caption>
         <tr>
                 <th class="align-center400">Входящие платежи</th>
@@ -186,18 +195,20 @@
     <table class="pad2">
         <caption class="caption">Мои вклады:</caption>
         <tr>
-            <th class="align-center">Дата начала</th>
-            <th class="align-center">Сумма вклада</th>
-            <th class="align-center">Проценты</th>
-            <th class="align-center">Длительность</th>
-            <th class="align-center">Сумма к получению</th>
+            <th class="align-center">Дата от</th>
+            <th class="align-center">Сумма</th>
+            <th class="align-center">Процент</th>
+            <th class="align-center">Дата до</th>
+            <th class="align-center">К выдаче</th>
+            <th class="align-center">Статус</th>
         </tr>
                 <tr th:each="contribution : ${contributions}">
                     <td th:text="${contribution.dateOfBegin}" class="align-center"></td>
                     <td th:text="${contribution.sumOfContribution}" class="align-center"></td>
                     <td th:text="${contribution.percentByContribution}" class="align-center"></td>
-                    <td th:text="${contribution.durationOfContributionInYears}" class="align-center"></td>
+                    <td th:text="${contribution.dateOfEnd}" class="align-center"></td>
                     <td th:text="${contribution.sumWithPercent}" class="align-center"></td>
+                    <td th:text="${contribution.status}" class="align-center"></td>
                 </tr>
     </table>
 </div>
@@ -226,7 +237,6 @@
     <table class="pad2">
         <caption class="caption">Мои кредиты:</caption>
         <tr>
-            <th class="align-center">Договор</th>
             <th class="align-center">От(дата)</th>
             <th class="align-center">Сумма</th>
             <th class="align-center">Процент</th>
@@ -237,7 +247,6 @@
             <th class="align-center">Детали</th>
         </tr>
         <tr th:each="credit : ${credits}">
-            <td th:text="${credit.numberOfCreditContract}" class="align-center"></td>
             <td th:text="${credit.dateOfBegin}" class="align-center"></td>
             <td th:text="${credit.sumOfCredit}" class="align-center"></td>
             <td th:text="${credit.creditPercent}" class="align-center"></td>

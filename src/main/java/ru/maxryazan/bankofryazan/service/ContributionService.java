@@ -31,22 +31,26 @@ public class ContributionService {
      * @param percent of contribution
      * @param duration in MONTHS
      */
-    public void addNewContribution(String phoneNumber, double sum, double percent, int duration) {
+    public void addNewContribution(String phoneNumber, int sum, double percent, int duration) {
         Client client = clientService.findByPhoneNumber(phoneNumber);
+
         if(client.getBalance() >= sum) {
+
             Contribution contribution = new Contribution();
               contribution.setNumberOfContribution(creditService.generateRandomUniqueNumber());
               contribution.setSumOfContribution(sum);
               contribution.setPercentByContribution(percent);
               contribution.setDurationOfContributionInYears(duration);
               contribution.setDateOfBegin(creditService.generateDate());
-              contribution.setSumWithPercent(sum + sum * (percent / 100));
+              contribution.setSumWithPercent(generateSumWithPercent(sum, percent, duration));
               contribution.setDateOfEnd(generateDateOfEnd(duration));
               contribution.setStatus(Status.ACTIVE);
-                client.getContributions().add(contribution);
+              contribution.setContributor(client);
+              contributionRepository.save(contribution);
                 client.setBalance(client.getBalance() - sum);
-            contributionRepository.save(contribution);
             clientService.save(client);
+        } else {
+            throw new IllegalArgumentException("not enough money");
         }
     }
 
@@ -77,11 +81,19 @@ public class ContributionService {
      */
     public void checkEndDateOfContributions(Set<Contribution> contributions) {
         for(Contribution cn : contributions) {
-            if(cn.getDateOfEnd().equals(creditService.generateDate())) {
-                cn.setStatus(Status.CLOSED);
-                cn.getContributor().setBalance(cn.getContributor().getBalance() + cn.getSumWithPercent());
+            if(cn.getStatus().equals(Status.ACTIVE)) {
+                if (cn.getDateOfEnd().equals(creditService.generateDate())) {
+                    cn.setStatus(Status.CLOSED);
+                    contributionRepository.save(cn);
+                    cn.getContributor().setBalance(cn.getContributor().getBalance() + cn.getSumWithPercent());
+                    clientService.save(cn.getContributor());
+                }
             }
         }
     }
 
+    private double generateSumWithPercent(int sum, double percent, int duration) {
+        double percentByThisContributionDependsOfDuration = percent / 12 * duration * 0.01;
+        return sum + sum * percentByThisContributionDependsOfDuration;
+    }
 }

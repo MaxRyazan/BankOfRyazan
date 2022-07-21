@@ -1,0 +1,15 @@
+<div th:insert="blocks/header"></div>
+
+<form name="f" th:action="@{/manager/contribution}" method="post">
+  <label>
+    <input type="text" name="phoneNumber" placeholder="Телефон клиента">
+    <input type="text" name="sum" placeholder="Сумма вклада">
+    <input type="text" name="percent" placeholder="Процент по вкладу">
+    <input type="text" name="duration" placeholder="Длительность в месяцах">
+    <input type="submit" value="ok">
+    <input type="button" value="Назад" onclick="history.back()">
+  </label>
+</form>
+
+
+<div th:insert="blocks/footer"></div>

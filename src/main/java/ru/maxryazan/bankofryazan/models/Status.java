@@ -11,7 +11,7 @@ public enum Status {
     CLOSED {
         @Override
         public String toString() {
-            return "ПОГАШЕН";
+            return "ЗАКРЫТ";
         }
     }
 

@@ -22,7 +22,7 @@ public class Contribution {
     private String numberOfContribution;
 
     @Column(name = "sum", nullable = false)
-    private double sumOfContribution;
+    private int sumOfContribution;
 
     @Column(name = "percent", nullable = false)
     private double percentByContribution;
@@ -45,4 +45,20 @@ public class Contribution {
     @ManyToOne
     @JoinColumn(name = "contributor_id")
     private Client contributor;
+
+    @Override
+    public String toString() {
+        return "Contribution{" +
+                "id=" + id +
+                ", numberOfContribution='" + numberOfContribution + '\'' +
+                ", sumOfContribution=" + sumOfContribution +
+                ", percentByContribution=" + percentByContribution +
+                ", dateOfBegin='" + dateOfBegin + '\'' +
+                ", dateOfEnd='" + dateOfEnd + '\'' +
+                ", durationOfContributionInYears=" + durationOfContributionInYears +
+                ", sumWithPercent=" + sumWithPercent +
+                ", status=" + status +
+                ", contributor=" + contributor +
+                '}';
+    }
 }
