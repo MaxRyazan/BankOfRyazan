@@ -10,6 +10,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RateService {
@@ -45,6 +47,11 @@ public class RateService {
             }
         }
         return null;
+    }
+
+    public Rate showFromDB(String date){
+        Optional<Rate> thisRate = rateRepository.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst();
+        return thisRate.orElseGet(this::getRateFromAPI);
     }
 
 }

@@ -156,19 +156,23 @@
         </tr>
         <tr valign=top align=center>
                 <td>
-                    <table class="pad">
+                    <table class="table">
+                        <thead>
                          <tr>
-                                 <th class="align-center">Дата</th>
-                                 <th class="align-center">Сумма</th>
-                                 <th class="align-center">Отправитель</th>
-                                 <th class="align-center">Телефон</th>
+                             <th scope="col">Дата</th>
+                             <th scope="col">Сумма</th>
+                             <th scope="col">Отправитель</th>
+                             <th scope="col">Телефон</th>
                          </tr>
+                        <thead>
+                        <tbody>
                          <tr th:each="transaction : ${incoming}">
                                   <td th:text="${transaction.timestamp}" class="align-center"></td>
                                   <td th:text="${transaction.sum}" class="align-center"></td>
                                   <td th:text="${transaction.sender}" class="align-center"></td>
                                   <td th:text="${transaction.sender.getPhoneNumber}" class="align-center"></td>
                          </tr>
+                    </tbody>
                     </table>
                 </td>
 
@@ -215,7 +219,7 @@
 <br>
 <div>
     <table class="pad2">
-        <caption class="caption">Мои инвестиции:</caption>
+        <caption class="caption"><a href="investments/make">Инвестировать</a> </caption>
         <tr>
             <th class="align-center">Вид инвестиции</th>
             <th class="align-center">Единица</th>

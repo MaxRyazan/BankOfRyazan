@@ -5,16 +5,20 @@
     .aa {
         text-decoration: none;
     }
+    .pict {
+        display: inline-flex;
+        width: 100%;
+    }
 </style>
 <div th:insert="blocks/header-main"></div>
 <br><br><br><br><br><br><br><br>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-    <div>
+    <div class="pict">
         <div class="card shadow-sm">
             <img src="../static/img/main1.png" th:src="@{img/main1.png}" alt="picture.png"/>
 
             <div class="card-body">
-                <p class="card-text">
+                <p class="card-text" style="max-width: 33%">
                     Вклад "Профессиональный":<br>
                     Получите фиксированные 11% годовых в рублях, без бумажной волокиты! Полчаса в офисе банка, или
                     при личной встрече с менеджером на Вашей территории.* <br><br>
@@ -26,13 +30,11 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div>
         <div class="card shadow-sm">
             <img src="../static/img/safe.png" th:src="@{img/safe.png}" alt="picture.png"/>
 
             <div class="card-body">
-                <p class="card-text">
+                <p class="card-text" style="max-width: 33%">
                     Аренда сейфовой ячейки за 1 рубль в месяц:<br>
                     Мы ценим и уважаем наших постоянных клиентов. И чтобы доказать это на деле,
                     мы решили предоставить Вам в почти безвозмездное пользование на время кредита или вклада
@@ -46,8 +48,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div>
         <div class="card shadow-sm">
             <img src="../static/img/main3.png" th:src="@{img/main3.png}" alt="picture.png"/>
 

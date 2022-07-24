@@ -45,8 +45,29 @@ public class PersonalAreaController {
                 model.addAttribute("contributions", client.getContributions());
             }
         }
-        return "personal_area-page";
+        return "personal/personal";
     }
+
+//    @GetMapping("/main/personal-area")
+//    public String openPersonalArea(Model model, HttpServletRequest request) {
+//        Client client = clientService.findByRequest(request);
+//        contributionService.checkEndDateOfContributions(client.getContributions());
+//
+//        model.addAttribute("firstName", client.getFirstName());
+//        model.addAttribute("lastName", client.getLastName());
+//        model.addAttribute("phone", client.getPhoneNumber());
+//        model.addAttribute("balance", (double)((int)(client.getBalance() * 100)) / 100);
+//        model.addAttribute("incoming", client.getInComingTransactions());
+//        model.addAttribute("outcoming", client.getOutComingTransactions());
+//        model.addAttribute("credits", client.getCredits());
+//        model.addAttribute("investments", client.getInvestments());
+//        for(Contribution cn : client.getContributions()) {
+//            if (cn.getStatus().equals(Status.ACTIVE)) {
+//                model.addAttribute("contributions", client.getContributions());
+//            }
+//        }
+//        return "personalArea/personal_area-page";
+//    }
 
 
 

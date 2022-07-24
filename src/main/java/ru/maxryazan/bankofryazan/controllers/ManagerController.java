@@ -71,7 +71,6 @@ public class ManagerController {
                                       @RequestParam int sum,
                                       @RequestParam double percent,
                                       @RequestParam int duration) {
-        System.out.println("11111");
         contributionService.addNewContribution(phoneNumber, sum, percent, duration);
         return "redirect:/manager/contribution";
     }

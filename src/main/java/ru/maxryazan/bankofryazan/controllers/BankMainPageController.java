@@ -37,36 +37,4 @@ public class BankMainPageController {
         }
         return "main-page";
     }
-
-    @GetMapping("/main/credit")
-    public String showCreditPage(){
-        return "credit-page";
-        }
-
-
-    @GetMapping("/main/insurance")
-    public String showInsurancePage(){
-        return "insurance-page";
-    }
-
-    @GetMapping("/main/cell-rental")
-    public String cellRentalPage(){
-        return "cell_rental-page";
-    }
-
-    @GetMapping("/main/investments")
-    public String investmentsPage(){
-        return "investments-page";
-    }
-
-    @GetMapping("/main/feedback")
-    public String feedbackPage(){
-        return "feedback-page";
-    }
-
-    @GetMapping("/main/request-a-call")
-    public String requestACallPage(){
-        return "request_a_call-page";
-    }
-
 }

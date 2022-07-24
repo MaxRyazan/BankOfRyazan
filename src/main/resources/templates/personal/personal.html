@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="shortcut icon">
+    <link type="Image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="icon">
+    <link rel="stylesheet" href="/templates/style.css">
+    <title>Bank</title>
+</head>
+<body style="background:
+url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav d-flex ms-0 p-2">
+                <li class="nav-item d-flex p-auto" style="color: lightgray">
+                    <h6><span th:text="${firstName}"></span> <span th:text="${lastName}"></span></h6>
+                </li>
+                <li class="nav-item d-flex p-auto ms-4" style="color: lightgray">
+                    <h6><span th:text="${balance}"></span> рублей</h6>
+                </li>
+            </ul>
+            <ul class="navbar-nav d-flex ms-auto p-2">
+                <li class="nav-item">
+                    <a href="/investments/main" class="nav-link">Инвестиции</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br><br>
+<div class="container-fluid">
+  <div class="row">
+    <div class="carousel slide d-flex flex-wrap carousel-fade mt-3 p-3 col-sm-8" data-interval="false" style="max-width: 500px; height: 263px;" id="carouselControls1"> <!-- data-ride="carousel"  - автоматически запускает смену слайдов -->
+        <div class="carousel-inner"> <!-- в этом блоке располагаются все изображения -->
+            <div class="carousel-item active">  <!-- active - обязательно. Те это изображение показывается первым -->
+                <img class="d-block w-100 h-100"
+                     src="https://img.freepik.com/premium-vector/financial-technology-graphic-concept-background_73426-141.jpg?w=1380"
+                     alt="png1">
+                <div class="carousel-caption d-none d-md-block">
+                <form  name="f" th:action="@{/main/personal-area}" method="post"  class=" justify-content-center mb-2">
+                    <div class="col-sm">
+                        <input type="text" name="recipientPhoneNumber" placeholder="Получатель" minlength="11"
+                               class="form-control form-control-sm"
+                               style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                               no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; width: 84%;">
+                    </div>
+                    <div class="col-sm d-flex mt-1">
+                        <input type="text" name="sum" placeholder="Сумма" min="1"
+                               class="form-control form-control-sm"
+                               style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                               no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+width: 50%;">
+                        <button type="submit" class="btn btn-secondary btn-sm ms-4" style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                               no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover; color: dimgray">Перевести</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 h-100"
+                     src="https://t3.ftcdn.net/jpg/03/07/33/08/240_F_307330826_1jbziBACdgkPIHlFjIcoHqdLJvMjxCCo.jpg"
+                     alt="png2">
+                <div class="carousel-caption d-none d-md-block">
+                   <button class="btn btn-outline-success ms-1" data-bs-toggle="modal" data-bs-target="#incomingTransactions">Входящие платежи</button>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 h-100"
+
+                     src="https://img.freepik.com/premium-vector/stock-market-or-forex-trading-graph-in-graphic-concept_73426-431.jpg?w=1380"
+                     alt="png3">
+                <div class="carousel-caption d-none d-md-block">
+                    <button class="btn btn-outline-success ms-1" data-bs-toggle="modal" data-bs-target="#outcomingTransactions">Исходящие платежи</button>
+                </div>
+            </div>
+        </div>
+        <a data-bs-target="#carouselControls1" class="carousel-control-prev" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a data-bs-target="#carouselControls1" class="carousel-control-next" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+    <div class="carousel slide d-flex flex-wrap carousel-fade mt-3 p-3 col-sm-8"  data-interval="false" style="max-width: 500px; height: 263px;" id="carouselControls2"> <!-- data-ride="carousel"  - автоматически запускает смену слайдов -->
+        <div class="carousel-inner"> <!-- в этом блоке располагаются все изображения -->
+            <div class="carousel-item active">  <!-- active - обязательно. Те это изображение показывается первым -->
+                <img class="d-block w-100 h-100"
+                     style="max-height: 700px;"
+                     src="https://img.freepik.com/premium-vector/financial-technology-graphic-concept-background_73426-141.jpg?w=1380"
+                     alt="png1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><a href="/investments/make"  style="text-decoration: none"> Инвестируйте грамотно!</a></h5>
+                    <p style="text-align: center" class="mb-4">Только в нашем банке у вас есть персональный финансовый консультант, который подскажет Вам, куда в текущей ситуации
+                        лучше инвестировать Ваши деньги.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 h-100"
+                     style="max-height: 700px;"
+                     src="https://img.freepik.com/free-photo/stock-market-chart-technology-blue-background_53876-124650.jpg?t=st=1658508441~exp=1658509041~hmac=11543ebcd300e6983a9d24c164a1d5d2c9fe11062099084e58c6da00c7ab90d2&w=1060"
+                     alt="png2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><a href="/investments/make"  style="text-decoration: none">Архив </a></h5>
+                    <p style="text-align: center" class="mb-4"></p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 h-100"
+                     style="max-height: 700px;"
+                     src="https://img.freepik.com/premium-vector/stock-market-or-forex-trading-graph-in-graphic-concept_73426-431.jpg?w=1380"
+                     alt="png3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><a href="/investments/make"  style="text-decoration: none"> Драгоценные металлы?</a></h5>
+                    <p style="text-align: center" class="mb-4">Нет ничего проще! Мы поддерживаем торговлю основными металлами, и даже предоставляем
+                        персональную ячейку, если Вы захотите хранить их в Вашем личном пространстве!</p>
+                </div>
+            </div>
+        </div>
+        <a data-bs-target="#carouselControls2" class="carousel-control-prev" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a data-bs-target="#carouselControls2" class="carousel-control-next" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+    <div class="carousel slide d-flex flex-wrap carousel-fade mt-3 p-3 col-sm-8"  data-interval="false" style="max-width: 500px; height: 263px;" id="carouselControls3"> <!-- data-ride="carousel"  - автоматически запускает смену слайдов -->
+
+        <div class="carousel-inner"> <!-- в этом блоке располагаются все изображения -->
+            <div class="carousel-item active">  <!-- active - обязательно. Те это изображение показывается первым -->
+                <img class="d-block w-100 h-100"
+                     style="max-height: 700px;"
+                     src="https://img.freepik.com/premium-vector/financial-technology-graphic-concept-background_73426-141.jpg?w=1380"
+                     alt="png1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><a href="/investments/make"  style="text-decoration: none"> Инвестируйте грамотно!</a></h5>
+                    <p style="text-align: center" class="mb-4">Только в нашем банке у вас есть персональный финансовый консультант, который подскажет Вам, куда в текущей ситуации
+                        лучше инвестировать Ваши деньги.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 h-100"
+                     style="max-height: 700px;"
+                     src="https://img.freepik.com/free-photo/stock-market-chart-technology-blue-background_53876-124650.jpg?t=st=1658508441~exp=1658509041~hmac=11543ebcd300e6983a9d24c164a1d5d2c9fe11062099084e58c6da00c7ab90d2&w=1060"
+                     alt="png2">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><a href="/investments/make"  style="text-decoration: none">Архив</a></h5>
+                    <p style="text-align: center" class="mb-4"></p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 h-100"
+                     style="max-height: 700px;"
+                     src="https://img.freepik.com/premium-vector/stock-market-or-forex-trading-graph-in-graphic-concept_73426-431.jpg?w=1380"
+                     alt="png3">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><a href="/investments/make"  style="text-decoration: none"> Драгоценные металлы?</a></h5>
+                    <p style="text-align: center" class="mb-4">Нет ничего проще! Мы поддерживаем торговлю основными металлами, и даже предоставляем
+                        персональную ячейку, если Вы захотите хранить их в Вашем личном пространстве!</p>
+                </div>
+            </div>
+        </div>
+        <a data-bs-target="#carouselControls3" class="carousel-control-prev" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a data-bs-target="#carouselControls3" class="carousel-control-next" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+ </div>
+</div>
+
+<!--Модальное окно входящие-->
+<div class="modal fade" id="incomingTransactions" tabindex="-1" aria-labelledby="incomingTransactionsLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                               no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;">
+            <div class="model-header d-flex">
+                <h5 class="modal-title me-auto p-2" id="incomingTransactionsLabel">Входящие</h5>
+                <button class="btn-close"  data-bs-dismiss="modal" aria-label="close"></button>
+            </div>
+            <div class="modal-body w-40">
+                <form action="">
+                    <div class="form-floating mb-3">
+                        <div class="col-lg-12 d-flex">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Дата</th>
+                                    <th scope="col">Сумма</th>
+                                    <th scope="col">Отправитель</th>
+                                    <th scope="col">Телефон</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="transaction : ${incoming}">
+                                    <td th:text="${transaction.timestamp}" class="align-center"></td>
+                                    <td th:text="${transaction.sum}" class="align-center"></td>
+                                    <td th:text="${transaction.sender}" class="align-center"></td>
+                                    <td th:text="${transaction.sender.getPhoneNumber}" class="align-center"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Модальное окно входящие-->
+
+<!-- Модальное окно исходящие-->
+<div class="modal fade" id="outcomingTransactions" tabindex="-1" aria-labelledby="outcomingTransactionsLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                               no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;">
+            <div class="model-header d-flex">
+                <h5 class="modal-title me-auto p-2" id="outcomingTransactionsLabel">Исходящие</h5>
+                <button class="btn-close"  data-bs-dismiss="modal" aria-label="close"></button>
+            </div>
+            <div class="modal-body w-40">
+                <form action="">
+                    <div class="form-floating mb-3">
+                        <div class="col-lg-12 d-flex">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Дата</th>
+                                    <th scope="col">Сумма</th>
+                                    <th scope="col">Отправитель</th>
+                                    <th scope="col">Телефон</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="transaction : ${outcoming}">
+                                    <td th:text="${transaction.timestamp}" class="align-center"></td>
+                                    <td th:text="${transaction.sum}" class="align-center"></td>
+                                    <td th:text="${transaction.sender}" class="align-center"></td>
+                                    <td th:text="${transaction.recipient.getPhoneNumber}" class="align-center"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Модальное окно исходящие-->
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</body>
