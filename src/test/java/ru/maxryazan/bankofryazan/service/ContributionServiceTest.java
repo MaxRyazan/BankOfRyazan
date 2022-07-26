@@ -5,7 +5,7 @@ import org.mockito.Mockito;
 
 class ContributionServiceTest {
 
-    ContributionService contributionService = Mockito.mock(ContributionService.class);
+    ServiceClass serviceClass = Mockito.mock(ServiceClass.class);
 
     @Test
     void checkEndDateOfContributions() {
@@ -13,8 +13,7 @@ class ContributionServiceTest {
 
     @Test
     void generateDateOfEnd() {
-        Mockito.when(contributionService.generateDateOfEnd(5)).thenReturn("20-12-2022");
-        Mockito.when(contributionService.generateDateOfEnd(12)).thenReturn("20-07-2023");
+        Mockito.when(serviceClass.generateDateOfEnd(5)).thenReturn("20-12-2022");
+        Mockito.when(serviceClass.generateDateOfEnd(12)).thenReturn("20-07-2023");
     }
-
 }

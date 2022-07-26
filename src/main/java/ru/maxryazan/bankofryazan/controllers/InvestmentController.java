@@ -5,24 +5,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.maxryazan.bankofryazan.models.Rate;
-import ru.maxryazan.bankofryazan.service.CreditService;
 import ru.maxryazan.bankofryazan.service.RateService;
+import ru.maxryazan.bankofryazan.service.ServiceClass;
+
 
 @Controller
 @RequestMapping("/investments")
 public class InvestmentController {
-    private final CreditService creditService;
+    private final ServiceClass serviceClass;
 
     private final RateService rateService;
 
-    public InvestmentController(CreditService creditService, RateService rateService) {
-        this.creditService = creditService;
+    public InvestmentController(ServiceClass serviceClass, RateService rateService) {
+        this.serviceClass = serviceClass;
         this.rateService = rateService;
     }
 
     @GetMapping("/main")
     public String getMainInvestments(Model model){
-        Rate thisDayRate = rateService.showFromDB(creditService.generateDate());
+        Rate thisDayRate = rateService.showFromDB(serviceClass.generateDate());
         model.addAttribute("thisDayRate", thisDayRate);
         return "/investments/investments-main";
     }

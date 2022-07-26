@@ -3,13 +3,19 @@
 
 <form name="f" th:action="@{/manager/new-client}" method="post">
     <label>
-        <input type="text" name="firstName" placeholder="First name" class="form-control" required minlength="2">
+        <input type="text" name="firstName" placeholder="Имя" class="form-control" required minlength="2">
     </label>
     <label>
-        <input type="text" name="lastName" placeholder="Last name" class="form-control" required minlength="2">
+        <input type="text" name="lastName" placeholder="Фамилия" class="form-control" required minlength="2">
     </label>
     <label>
-        <input type="text" name="pinCode" placeholder="Pin Code" class="form-control" required minlength="10">
+        <input type="text" name="phoneNumber" placeholder="8 950 555 55 55" class="form-control" required minlength="11">
+    </label>
+    <label>
+        <input type="email" name="email" placeholder="mail@mail.ru" class="form-control" required minlength="4">
+    </label>
+    <label>
+        <input type="password" name="pinCode" placeholder="Пароль" class="form-control" required minlength="7">
     </label>
 <br>
     <button type="submit" class="btn btn-success">Confirm</button>

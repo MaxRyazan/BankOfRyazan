@@ -8,9 +8,6 @@ import ru.maxryazan.bankofryazan.models.Status;
 import ru.maxryazan.bankofryazan.repository.PayRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 @Service
@@ -20,10 +17,13 @@ public class PayService {
     private final CreditService creditService;
     private final ClientService clientService;
 
-    public PayService(PayRepository payRepository, CreditService creditService, ClientService clientService) {
+    private final ServiceClass serviceClass;
+
+    public PayService(PayRepository payRepository, CreditService creditService, ClientService clientService, ServiceClass serviceClass) {
         this.payRepository = payRepository;
         this.creditService = creditService;
         this.clientService = clientService;
+        this.serviceClass = serviceClass;
     }
 
 
@@ -41,7 +41,7 @@ public class PayService {
             if (client.getBalance() >= sum && sum > 0) {
                 if (credit.getRestOfCredit() >= sum) {
                     Pay pay = new Pay(
-                            creditService.generateDateWithHours(),
+                            serviceClass.generateDateWithHours(),
                             sum,
                             credit
                     );

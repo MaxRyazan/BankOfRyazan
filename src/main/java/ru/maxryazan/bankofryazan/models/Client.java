@@ -49,13 +49,13 @@ public class Client {
     @OneToMany(mappedBy = "contributor", fetch = FetchType.LAZY)
     private Set<Contribution> contributions;
 
-    public Client(String firstName, String lastName, String pinCode) {
+    public Client(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.pinCode = pinCode;
     }
-
-
 
     @Override
     public String toString() {

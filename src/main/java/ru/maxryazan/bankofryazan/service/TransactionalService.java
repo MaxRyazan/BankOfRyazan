@@ -14,12 +14,12 @@ public class TransactionalService {
 
     private final TransactionalRepository transactionalRepository;
     private final ClientService clientService;
-    private final CreditService creditService;
+    private final ServiceClass serviceClass;
 
-    public TransactionalService(TransactionalRepository transactionalRepository, ClientService clientService, CreditService creditService) {
+    public TransactionalService(TransactionalRepository transactionalRepository, ClientService clientService, ServiceClass serviceClass) {
         this.transactionalRepository = transactionalRepository;
         this.clientService = clientService;
-        this.creditService = creditService;
+        this.serviceClass = serviceClass;
     }
 
 
@@ -56,7 +56,7 @@ public class TransactionalService {
 
 
         if (sender.getBalance() >= sum) {
-            Transaction transaction = new Transaction(sender, recipient, sum, creditService.generateDateWithHours());
+            Transaction transaction = new Transaction(sender, recipient, sum, serviceClass.generateDateWithHours());
             sender.setBalance(sender.getBalance() - sum);
             recipient.setBalance(recipient.getBalance() + sum);
             transactionalRepository.save(transaction);

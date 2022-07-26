@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 public class RateService {
 
     private final RateRepository rateRepository;
-    private final CreditService creditService;
-    public RateService(RateRepository rateRepository, CreditService creditService) {
+    private final ServiceClass serviceClass;
+    public RateService(RateRepository rateRepository, ServiceClass serviceClass) {
         this.rateRepository = rateRepository;
-        this.creditService = creditService;
+        this.serviceClass = serviceClass;
     }
 
     public Rate getRateFromAPI() {
@@ -35,7 +35,7 @@ public class RateService {
                 final String METALS = "https://metals-api.com/api/latest?access_key=ymg6zgqfz0m5emiz9niyfcumi5otq3mhq30i7nr73a6gw6jt1l31739ci076&base=RUB&symbols=XAU%2CXAG%2CXPD%2CXPT%2CXRH";
                 MetalRate metals = mapper.readValue(new URL(METALS), MetalRate.class);
                Rate rate = metals.getRates();
-               rate.setDate(creditService.generateDate());
+               rate.setDate(serviceClass.generateDate());
                 rateRepository.save(rate);
                 return metals.getRates();
             } catch (Exception e) {

@@ -2,23 +2,22 @@ package ru.maxryazan.bankofryazan.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import ru.maxryazan.bankofryazan.models.Client;
-import ru.maxryazan.bankofryazan.models.Credit;
-import ru.maxryazan.bankofryazan.models.Pay;
-import ru.maxryazan.bankofryazan.models.Status;
+import ru.maxryazan.bankofryazan.models.*;
 import ru.maxryazan.bankofryazan.repository.CreditRepository;
-import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 @Service
 public class CreditService {
 
     private final CreditRepository creditRepository;
     private final ClientService clientService;
+    private final ServiceClass serviceClass;
 
-    public CreditService(CreditRepository creditRepository, ClientService clientService) {
+    public CreditService(CreditRepository creditRepository, ClientService clientService, ServiceClass serviceClass) {
         this.creditRepository = creditRepository;
         this.clientService = clientService;
+        this.serviceClass = serviceClass;
     }
 
 
@@ -34,19 +33,21 @@ public class CreditService {
         if (phoneNumber.isBlank() || sum <= 9999 || percent <= 5 || numberOfPays <= 1) {
             throw new IllegalArgumentException("Can borrow minimum 10 000, and minimum 2 pays");
         }
-
-
         Client borrower = clientService.findByPhoneNumber(phoneNumber);
 
         Set<Credit> thisBorrowerCredits = borrower.getCredits();
 
         Credit credit = new Credit();
-        credit.setNumberOfCreditContract(generateRandomUniqueNumber());
+        String num;
+        do {
+            num = serviceClass.generateRandomUniqueNumber();
+        }  while (!isUnique(num));
+        credit.setNumberOfCreditContract(num);
         credit.setSumOfCredit(sum);
         credit.setCreditPercent(percent);
-        credit.setDateOfBegin(generateDate());
-        credit.setEveryMonthPay(generateEveryMonthPay(sum, percent, numberOfPays));
-        credit.setSumWithPercents(generateSumWithPercent(sum, percent));
+        credit.setDateOfBegin(serviceClass.generateDate());
+        credit.setEveryMonthPay(serviceClass.generateEveryMonthPay(sum, percent, numberOfPays));
+        credit.setSumWithPercents(serviceClass.generateSumWithPercent(sum, percent));
         credit.setNumberOfPays(numberOfPays);
         credit.setBorrower(borrower);
         credit.setRestOfCredit(credit.getSumWithPercents());
@@ -56,40 +57,6 @@ public class CreditService {
 
     }
 
-    public String generateRandomUniqueNumber() {
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        do {
-            for (int i = 0; i < 8; i++) {
-                sb.append(random.nextInt(10));
-            }
-        } while (!isUnique(sb.toString()));
-        return sb.toString();
-    }
-
-
-
-    public double generateEveryMonthPay(int sum, double percent, int numberOfPays) {
-        long sumInKop = sum * 100L;
-        double result = (sumInKop * (percent * 0.01) + sumInKop) / numberOfPays;
-        int round = (int)result;
-        return  (double)round / 100;
-    }
-
-    private double generateSumWithPercent(int sum, double percent) {
-        long sumInKop = sum * 100L;
-        return (sumInKop + sumInKop * (percent / 100)) / 100;
-    }
-
-    public boolean isUnique(String str) {
-        List<Credit> allCredits = creditRepository.findAll();
-        for (Credit cr : allCredits) {
-            if (cr.getNumberOfCreditContract().equals(str)) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     public void save(Credit credit) {
         creditRepository.save(credit);
@@ -142,26 +109,20 @@ public class CreditService {
             model.addAttribute("numberOfPays", pays.size());
             model.addAttribute("ostPays", credit.getNumberOfPays() - pays.size());
             model.addAttribute("creditNumber", credit.getNumberOfCreditContract());
-            return "/credit-pays";
+            return "credit/credit-pays";
         } else {
             model.addAttribute("pays", pays);
             model.addAttribute("payd", payd);
             model.addAttribute("numberOfPays", pays.size());
         }
-        return "/credit-closed";
+        return "credit/credit-closed";
     }
 
-    public String generateDateWithHours(){
-        Date date = new Date();
-        String pattern = "dd-MM-yyyy HH:mm";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(date);
+
+    private boolean isUnique(String str) {
+       Credit credit = creditRepository.findAll().stream()
+               .filter(isUniqueCredit -> isUniqueCredit.getNumberOfCreditContract().equals(str)).findFirst().orElse(null);
+             return credit == null;
     }
 
-    public String generateDate(){
-        Date date = new Date();
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(date);
-    }
 }

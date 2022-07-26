@@ -34,16 +34,16 @@ public class ManagerController {
 
     @GetMapping("/manager/new-client")
     public String getAddNewClient(){
-        System.out.println("get");
         return "manager/new-client";
     }
 
     @PostMapping("/manager/new-client")
     public String postAddNewClient(@RequestParam String firstName,
                                    @RequestParam String lastName,
-                                   @RequestParam String phoneNumber){
-        System.out.println("post");
-        clientService.save(firstName, lastName, phoneNumber);
+                                   @RequestParam String phoneNumber,
+                                   @RequestParam String email,
+                                   @RequestParam String pinCode){
+        clientService.save(firstName, lastName, phoneNumber, email, pinCode);
         return "redirect:/manager";
     }
 
@@ -71,7 +71,7 @@ public class ManagerController {
                                       @RequestParam int sum,
                                       @RequestParam double percent,
                                       @RequestParam int duration) {
-        contributionService.addNewContribution(phoneNumber, sum, percent, duration);
+        clientService.addNewContribution(phoneNumber, sum, percent, duration);
         return "redirect:/manager/contribution";
     }
 
