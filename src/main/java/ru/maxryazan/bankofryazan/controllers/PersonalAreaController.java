@@ -17,7 +17,7 @@ public class PersonalAreaController {
     private final TransactionalService transactionalService;
 
     public PersonalAreaController(ClientService clientService, TransactionalService transactionalService) {
-        this.clientService = clientService;;
+        this.clientService = clientService;
         this.transactionalService = transactionalService;
     }
 
@@ -31,8 +31,8 @@ public class PersonalAreaController {
 
     @PostMapping("/main/personal-area")
     public String postTransaction(@RequestParam String recipientPhoneNumber, int sum, HttpServletRequest request) {
-        if(!recipientPhoneNumber.isBlank() && sum >= 1) {
-            transactionalService.createNewTransaction(recipientPhoneNumber, sum, request);
+        if(sum >= 1) {
+            transactionalService.createNewTransaction(clientService.validationPhoneNumber(recipientPhoneNumber), sum, request);
         }
         return "redirect:/main/personal-area";
     }

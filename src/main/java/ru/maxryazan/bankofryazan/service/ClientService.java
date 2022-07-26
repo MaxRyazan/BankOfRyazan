@@ -28,7 +28,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
         clientRepository.save(newClient);
     }
 
-    private String validationPhoneNumber(String phoneNumber){
+    public String validationPhoneNumber(String phoneNumber){
         String validatingPhone = phoneNumber.replace(" ", "");
         String regex = "\\d+";
         if(
@@ -36,7 +36,6 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
                 && (validatingPhone.length() == 11)
                 && (validatingPhone.startsWith("8"))
         ) {
-            System.out.println(validatingPhone + " 1");
             return validatingPhone;
         }
         throw  new IllegalArgumentException();
