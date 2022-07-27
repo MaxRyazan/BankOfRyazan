@@ -10,7 +10,7 @@
     <link type="Image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="icon">
     <title>Bank</title>
 </head>
-<body style="background-color: #3b3b3a">
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
@@ -104,56 +104,66 @@
 
 <table class="table table-hover table-sm mb-5">
     <thead>
-    <tr class="table-primary">
+    <tr class="table-dark text-center">
             <th>Металл</th>
             <th>Цена/унция</th>
             <th>Цена/грамм</th>
+            <th>Динамика за сутки</th>
             <th>Динамика за неделю</th>
             <th>Динамика за месяц</th>
            <th>Динамика за год</th>
     </tr>
-    <tr class="table-warning">
-            <td th:text="Gold"></td>
+    </thead>
+    <tbody>
+    <tr class="table-info text-center">
+            <td th:text="Золото"></td>
             <td th:text="${thisDayRate.gold}"></td>
             <td th:text="${goldPricePerGram}"></td>
-            <td th:text="${goldDynamicByWeek}"></td>
-            <td th:text="${goldDynamicByMonth}"></td>
-            <td th:text="${goldDynamicByYear}"></td>
+        <td  style ="color: red;"  th:style = "${goldDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByDay}]]</td>
+        <td  style ="color: red;"  th:style = "${goldDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByWeek}]]</td>
+        <td  style ="color: red;"  th:style = "${goldDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByMonth}]]</td>
+        <td  style ="color: red;"  th:style = "${goldDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByYear}]]</td>
     </tr>
-    <tr class="table-secondary">
-        <td th:text="Silver"></td>
+    <tr class="table-light text-center">
+        <td th:text="Серебро"></td>
         <td th:text="${thisDayRate.silver}"></td>
         <td th:text="${silverPricePerGram}"></td>
-        <td th:text="${silverDynamicByWeek}"></td>
-        <td th:text="${silverDynamicByMonth}"></td>
-        <td th:text="${silverDynamicByYear}"></td>
+        <td  style ="color: red;"  th:style = "${silverDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByDay}]]</td>
+        <td  style ="color: red;"  th:style = "${silverDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByWeek}]]</td>
+        <td  style ="color: red;"  th:style = "${silverDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByMonth}]]</td>
+        <td  style ="color: red;"  th:style = "${silverDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByYear}]]</td>
+
     </tr>
-    <tr class="table-warning">
-        <td th:text="Palladium"></td>
+    <tr class="table-info text-center">
+        <td th:text="Палладий"></td>
         <td th:text="${thisDayRate.palladium}"></td>
         <td th:text="${palladiumPricePerGram}"></td>
-        <td th:text="${palladiumDynamicByWeek}"></td>
-        <td th:text="${palladiumDynamicByMonth}"></td>
-        <td th:text="${palladiumDynamicByYear}"></td>
+        <td  style ="color: red;"  th:style = "${palladiumDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByDay}]]</td>
+        <td  style ="color: red;"  th:style = "${palladiumDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByWeek}]]</td>
+        <td  style ="color: red;"  th:style = "${palladiumDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByMonth}]]</td>
+        <td  style ="color: red;"  th:style = "${palladiumDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByYear}]]</td>
     </tr>
-    <tr class="table-secondary">
-        <td th:text="Platinum"></td>
+    <tr class="table-light text-center">
+        <td th:text="Платина"></td>
         <td th:text="${thisDayRate.platinum}"></td>
         <td th:text="${platinumPricePerGram}"></td>
-        <td th:text="${platinumDynamicByWeek}"></td>
-        <td th:text="${platinumDynamicByMonth}"></td>
-        <td th:text="${platinumDynamicByYear}"></td>
+        <td  style ="color: red;"  th:style = "${platinumDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByDay}]]</td>
+        <td  style ="color: red;"  th:style = "${platinumDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByWeek}]]</td>
+        <td  style ="color: red;"  th:style = "${platinumDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByMonth}]]</td>
+        <td  style ="color: red;"  th:style = "${platinumDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByYear}]]</td>
     </tr>
-    <tr class="table-warning">
-        <td th:text="Rhodium"></td>
+    <tr class="table-info text-center">
+        <td th:text="Родий"></td>
         <td th:text="${thisDayRate.rhodium}"></td>
         <td th:text="${rhodiumPricePerGram}"></td>
-        <td th:text="${rhodiumDynamicByWeek}"></td>
-        <td th:text="${rhodiumDynamicByMonth}"></td>
-        <td th:text="${rhodiumDynamicByYear}"></td>
+        <td  style ="color: red;"  th:style = "${rhodiumDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByDay}]]</td>
+        <td  style ="color: red;"  th:style = "${rhodiumDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByWeek}]]</td>
+        <td  style ="color: red;"  th:style = "${rhodiumDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByMonth}]]</td>
+        <td  style ="color: red;"  th:style = "${rhodiumDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByYear}]]</td>
     </tr>
-    </thead>
+    </tbody>
 </table>
+
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom mt-0">

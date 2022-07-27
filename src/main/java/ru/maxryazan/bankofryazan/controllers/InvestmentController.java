@@ -8,11 +8,6 @@ import ru.maxryazan.bankofryazan.models.Rate;
 import ru.maxryazan.bankofryazan.service.RateService;
 import ru.maxryazan.bankofryazan.service.ServiceClass;
 
-import javax.xml.crypto.Data;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -41,44 +36,58 @@ public class InvestmentController {
         model.addAttribute("platinumPricePerGram", createPricePerGram(thisDayRate.getPlatinum()));
         model.addAttribute("rhodiumPricePerGram", createPricePerGram(thisDayRate.getRhodium()));
 
-        String stringDateMinusWeek = serviceClass.generateDateOfEnd(-7);
-        String stringDateMinusMonth = serviceClass.generateDateOfEnd(-31);
-        String stringDateMinusYear = serviceClass.generateDateOfEnd(-365);
+        String stringDateMinusDay = serviceClass.generateDateOfEndInDays(-1);
+        String stringDateMinusWeek = serviceClass.generateDateOfEndInDays(-7);
+        String stringDateMinusMonth = serviceClass.generateDateOfEndInDays(-31);
+        String stringDateMinusYear = serviceClass.generateDateOfEndInDays(-365);
 
+
+        Rate rateADayAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusDay)).findFirst().orElse(rates.get(0));
         Rate rateAWeekAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusWeek)).findFirst().orElse(rates.get(0));
         Rate rateAMonthAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusMonth)).findFirst().orElse(rates.get(0));
         Rate rateAYearAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusYear)).findFirst().orElse(rates.get(0));
 
-        for (Rate rateWeek : rates) {
-            if (rateWeek.getDate().equals(rateAWeekAgo.getDate())) {
-                model.addAttribute("goldDynamicByWeek", rateAWeekAgo.getGold() - thisDayRate.getGold());
-                model.addAttribute("silverDynamicByWeek", rateAWeekAgo.getSilver() - thisDayRate.getSilver());
-                model.addAttribute("palladiumDynamicByWeek", rateAWeekAgo.getPalladium() - thisDayRate.getPalladium());
-                model.addAttribute("platinumDynamicByWeek", rateAWeekAgo.getPlatinum() - thisDayRate.getPlatinum());
-                model.addAttribute("rhodiumDynamicByWeek", rateAWeekAgo.getRhodium() - thisDayRate.getRhodium());
+
+        for (Rate rateDay : rates) {
+            if (rateDay.getDate().equals(rateADayAgo.getDate())) {
+                model.addAttribute("goldDynamicByDay",thisDayRate.getGold() - rateADayAgo.getGold());
+                model.addAttribute("silverDynamicByDay", thisDayRate.getSilver() - rateADayAgo.getSilver());
+                model.addAttribute("palladiumDynamicByDay", thisDayRate.getPalladium() - rateADayAgo.getPalladium());
+                model.addAttribute("platinumDynamicByDay", thisDayRate.getPlatinum() - rateADayAgo.getPlatinum());
+                model.addAttribute("rhodiumDynamicByDay", thisDayRate.getRhodium() - rateADayAgo.getRhodium());
             }
-            for (Rate rateMonth : rates) {
-                if (rateMonth.getDate().equals(rateAMonthAgo.getDate())) {
-                    model.addAttribute("goldDynamicByMonth", rateAMonthAgo.getGold() - thisDayRate.getGold());
-                    model.addAttribute("silverDynamicByMonth", rateAMonthAgo.getSilver() - thisDayRate.getSilver());
-                    model.addAttribute("palladiumDynamicByMonth", rateAMonthAgo.getPalladium() - thisDayRate.getPalladium());
-                    model.addAttribute("platinumDynamicByMonth", rateAMonthAgo.getPlatinum() - thisDayRate.getPlatinum());
-                    model.addAttribute("rhodiumDynamicByMonth", rateAMonthAgo.getRhodium() - thisDayRate.getRhodium());
+            for (Rate rateWeek : rates) {
+                if (rateWeek.getDate().equals(rateAWeekAgo.getDate())) {
+                    model.addAttribute("goldDynamicByWeek", thisDayRate.getGold() - rateAWeekAgo.getGold());
+                    model.addAttribute("silverDynamicByWeek",thisDayRate.getSilver() - rateAWeekAgo.getSilver());
+                    model.addAttribute("palladiumDynamicByWeek", thisDayRate.getPalladium() - rateAWeekAgo.getPalladium());
+                    model.addAttribute("platinumDynamicByWeek",thisDayRate.getPlatinum() - rateAWeekAgo.getPlatinum());
+                    model.addAttribute("rhodiumDynamicByWeek", thisDayRate.getRhodium() - rateAWeekAgo.getRhodium());
                 }
-                for (Rate rateYear : rates) {
-                    if (rateYear.getDate().equals(rateAYearAgo.getDate())) {
-                        model.addAttribute("goldDynamicByYear", rateAYearAgo.getGold() - thisDayRate.getGold());
-                        model.addAttribute("silverDynamicByYear", rateAYearAgo.getSilver() - thisDayRate.getSilver());
-                        model.addAttribute("palladiumDynamicByYear", rateAYearAgo.getPalladium() - thisDayRate.getPalladium());
-                        model.addAttribute("platinumDynamicByYear", rateAYearAgo.getPlatinum() - thisDayRate.getPlatinum());
-                        model.addAttribute("rhodiumDynamicByYear", rateAYearAgo.getRhodium() - thisDayRate.getRhodium());
+                for (Rate rateMonth : rates) {
+                    if (rateMonth.getDate().equals(rateAMonthAgo.getDate())) {
+                        model.addAttribute("goldDynamicByMonth", thisDayRate.getGold() - rateAMonthAgo.getGold());
+                        model.addAttribute("silverDynamicByMonth", thisDayRate.getSilver() - rateAMonthAgo.getSilver());
+                        model.addAttribute("palladiumDynamicByMonth",thisDayRate.getPalladium() - rateAMonthAgo.getPalladium());
+                        model.addAttribute("platinumDynamicByMonth", thisDayRate.getPlatinum() - rateAMonthAgo.getPlatinum());
+                        model.addAttribute("rhodiumDynamicByMonth", thisDayRate.getRhodium() - rateAMonthAgo.getRhodium());
+                    }
+                    for (Rate rateYear : rates) {
+                        if (rateYear.getDate().equals(rateAYearAgo.getDate())) {
+                            model.addAttribute("goldDynamicByYear", thisDayRate.getGold() - rateAYearAgo.getGold());
+                            model.addAttribute("silverDynamicByYear", thisDayRate.getSilver() - rateAYearAgo.getSilver());
+                            model.addAttribute("palladiumDynamicByYear",  thisDayRate.getPalladium() - rateAYearAgo.getPalladium());
+                            model.addAttribute("platinumDynamicByYear",thisDayRate.getPlatinum() - rateAYearAgo.getPlatinum());
+                            model.addAttribute("rhodiumDynamicByYear",thisDayRate.getRhodium() - rateAYearAgo.getRhodium());
+                        }
                     }
                 }
             }
         }
-
         return "/investments/investments-main";
     }
+
+
 
     @GetMapping("/make")
     public String getMakeInvestment(){

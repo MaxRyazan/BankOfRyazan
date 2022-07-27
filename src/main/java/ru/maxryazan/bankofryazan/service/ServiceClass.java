@@ -49,13 +49,29 @@ public class ServiceClass {
         return sum + sum * percentByThisContributionDependsOfDuration;
     }
 
-    public String generateDateOfEnd(int duration) {
+    public String generateDateOfEndInMonth(int duration) {
         String dateOfBeginFromDB = generateDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calendar = Calendar.getInstance();
         try {
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
             calendar.add(Calendar.MONTH, duration);
+            System.out.println(calendar.getTime());
+            return simpleDateFormat.format(calendar.getTime());
+        } catch (IllegalArgumentException | ParseException e) {
+            e.printStackTrace();
+        }
+        throw  new IllegalArgumentException();
+    }
+
+    public String generateDateOfEndInDays(int duration) {
+        String dateOfBeginFromDB = generateDate();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
+            calendar.add(Calendar.DAY_OF_WEEK, duration);
+            System.out.println(calendar.getTime());
             return simpleDateFormat.format(calendar.getTime());
         } catch (IllegalArgumentException | ParseException e) {
             e.printStackTrace();

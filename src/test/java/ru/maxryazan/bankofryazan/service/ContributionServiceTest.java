@@ -13,7 +13,7 @@ class ContributionServiceTest {
 
     @Test
     void generateDateOfEnd() {
-        Mockito.when(serviceClass.generateDateOfEnd(5)).thenReturn("20-12-2022");
-        Mockito.when(serviceClass.generateDateOfEnd(12)).thenReturn("20-07-2023");
+        Mockito.when(serviceClass.generateDateOfEndInMonth(5)).thenReturn("20-12-2022");
+        Mockito.when(serviceClass.generateDateOfEndInMonth(12)).thenReturn("20-07-2023");
     }
 }

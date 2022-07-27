@@ -5,13 +5,11 @@ import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.MetalRate;
 import ru.maxryazan.bankofryazan.models.Rate;
 import ru.maxryazan.bankofryazan.repository.RateRepository;
-
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class RateService {

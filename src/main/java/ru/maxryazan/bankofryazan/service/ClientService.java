@@ -122,7 +122,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
             contribution.setDurationOfContributionInYears(duration);
             contribution.setDateOfBegin(serviceClass.generateDate());
             contribution.setSumWithPercent(serviceClass.generateSumWithPercent(sum, percent, duration));
-            contribution.setDateOfEnd(serviceClass.generateDateOfEnd(duration));
+            contribution.setDateOfEnd(serviceClass.generateDateOfEndInMonth(duration));
             contribution.setStatus(Status.ACTIVE);
             contribution.setContributor(client);
             contributionService.save(contribution);
