@@ -56,7 +56,6 @@ public class ServiceClass {
         try {
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
             calendar.add(Calendar.MONTH, duration);
-            System.out.println(calendar.getTime());
             return simpleDateFormat.format(calendar.getTime());
         } catch (IllegalArgumentException | ParseException e) {
             e.printStackTrace();
@@ -71,7 +70,6 @@ public class ServiceClass {
         try {
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
             calendar.add(Calendar.DAY_OF_WEEK, duration);
-            System.out.println(calendar.getTime());
             return simpleDateFormat.format(calendar.getTime());
         } catch (IllegalArgumentException | ParseException e) {
             e.printStackTrace();
@@ -79,4 +77,7 @@ public class ServiceClass {
         throw  new IllegalArgumentException();
     }
 
+    public double roundToDoubleWIthThreeSymbolsAfterDot(double number){
+        return (double)((int)(number*1000)) / 1000;
+    }
 }

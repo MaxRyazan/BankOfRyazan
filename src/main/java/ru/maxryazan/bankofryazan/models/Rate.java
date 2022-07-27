@@ -42,5 +42,11 @@ public class Rate {
     @Column(name = "date")
     private String date;
 
-
+    public Rate(float silver, float gold, float palladium, float platinum, float rhodium) {
+        this.silver = silver;
+        this.gold = gold;
+        this.palladium = palladium;
+        this.platinum = platinum;
+        this.rhodium = rhodium;
+    }
 }

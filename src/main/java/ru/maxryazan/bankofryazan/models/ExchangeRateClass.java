@@ -31,6 +31,11 @@ public class ExchangeRateClass {
     @Column(name = "course_of_USD")
     private double course_USD;
 
+    public ExchangeRateClass(double course_EUR, double course_USD) {
+        this.course_EUR = course_EUR;
+        this.course_USD = course_USD;
+    }
+
     @Override
     public String toString() {
         return "ExchangeRateClass{" +

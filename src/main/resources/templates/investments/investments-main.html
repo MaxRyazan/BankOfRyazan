@@ -72,7 +72,7 @@
                 src="https://img.freepik.com/free-photo/stock-market-chart-technology-blue-background_53876-124650.jpg?t=st=1658508441~exp=1658509041~hmac=11543ebcd300e6983a9d24c164a1d5d2c9fe11062099084e58c6da00c7ab90d2&w=1060"
                      alt="png2">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5><a href="/investments/make"  style="text-decoration: none">Архив волатильности основных мировых валют</a></h5>
+                    <h5><a href="#money"  style="text-decoration: none">Архив волатильности основных мировых валют</a></h5>
                     <p style="text-align: center" class="mb-4">Поможет Вам составить цельную картину финансовых рисков. Прибыль, получаемая
                     разницей курсов валют всегда была прерогативой узкого круга специалистов - однако, у Вас есть возможность консультироваться
                     с Вашим персональным менеджером, который является профессионалом в отслеживании котировок мировых валют. Прогнозы, которые
@@ -85,7 +85,7 @@
                      src="https://img.freepik.com/premium-vector/stock-market-or-forex-trading-graph-in-graphic-concept_73426-431.jpg?w=1380"
                      alt="png3">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5><a href="/investments/make"  style="text-decoration: none"> Драгоценные металлы?</a></h5>
+                    <h5><a href="#metals"  style="text-decoration: none"> Драгоценные металлы?</a></h5>
                     <p style="text-align: center" class="mb-4">Нет ничего проще! Мы поддерживаем торговлю основными металлами, и даже предоставляем
                     персональную ячейку, если Вы захотите хранить их в Вашем личном пространстве!</p>
                 </div>
@@ -100,14 +100,15 @@
     </div>
 
 </div>
-
-
+<div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+</div>
+<div id="metals">
 <table class="table table-hover table-sm mb-5">
     <thead>
     <tr class="table-dark text-center">
             <th>Металл</th>
             <th>Цена/унция</th>
-            <th>Цена/грамм</th>
             <th>Динамика за сутки</th>
             <th>Динамика за неделю</th>
             <th>Динамика за месяц</th>
@@ -118,52 +119,80 @@
     <tr class="table-info text-center">
             <td th:text="Золото"></td>
             <td th:text="${thisDayRate.gold}"></td>
-            <td th:text="${goldPricePerGram}"></td>
-        <td  style ="color: red;"  th:style = "${goldDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByDay}]]</td>
-        <td  style ="color: red;"  th:style = "${goldDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByWeek}]]</td>
-        <td  style ="color: red;"  th:style = "${goldDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByMonth}]]</td>
-        <td  style ="color: red;"  th:style = "${goldDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${goldDynamicByYear}]]</td>
+        <td  style ="color: red;"  th:style = "${dayRate.gold < 0} ? 'color: red' : 'color: green' ">[[${dayRate.gold}]]</td>
+        <td  style ="color: red;"  th:style = "${weekRate.gold < 0} ? 'color: red' : 'color: green' ">[[${weekRate.gold}]]</td>
+        <td  style ="color: red;"  th:style = "${monthRate.gold < 0} ? 'color: red' : 'color: green' ">[[${monthRate.gold}]]</td>
+        <td  style ="color: red;"  th:style = "${yearRate.gold < 0} ? 'color: red' : 'color: green' ">[[${yearRate.gold}]]</td>
     </tr>
     <tr class="table-light text-center">
         <td th:text="Серебро"></td>
         <td th:text="${thisDayRate.silver}"></td>
-        <td th:text="${silverPricePerGram}"></td>
-        <td  style ="color: red;"  th:style = "${silverDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByDay}]]</td>
-        <td  style ="color: red;"  th:style = "${silverDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByWeek}]]</td>
-        <td  style ="color: red;"  th:style = "${silverDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByMonth}]]</td>
-        <td  style ="color: red;"  th:style = "${silverDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${silverDynamicByYear}]]</td>
+        <td  style ="color: red;"  th:style = "${dayRate.silver < 0} ? 'color: red' : 'color: green' ">[[${dayRate.silver}]]</td>
+        <td  style ="color: red;"  th:style = "${weekRate.silver < 0} ? 'color: red' : 'color: green' ">[[${weekRate.silver}]]</td>
+        <td  style ="color: red;"  th:style = "${monthRate.silver < 0} ? 'color: red' : 'color: green' ">[[${monthRate.silver}]]</td>
+        <td  style ="color: red;"  th:style = "${yearRate.silver < 0} ? 'color: red' : 'color: green' ">[[${yearRate.silver}]]</td>
 
     </tr>
     <tr class="table-info text-center">
         <td th:text="Палладий"></td>
         <td th:text="${thisDayRate.palladium}"></td>
-        <td th:text="${palladiumPricePerGram}"></td>
-        <td  style ="color: red;"  th:style = "${palladiumDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByDay}]]</td>
-        <td  style ="color: red;"  th:style = "${palladiumDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByWeek}]]</td>
-        <td  style ="color: red;"  th:style = "${palladiumDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByMonth}]]</td>
-        <td  style ="color: red;"  th:style = "${palladiumDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${palladiumDynamicByYear}]]</td>
+        <td  style ="color: red;"  th:style = "${dayRate.palladium < 0} ? 'color: red' : 'color: green' ">[[${dayRate.palladium}]]</td>
+        <td  style ="color: red;"  th:style = "${weekRate.palladium < 0} ? 'color: red' : 'color: green' ">[[${weekRate.palladium}]]</td>
+        <td  style ="color: red;"  th:style = "${monthRate.palladium < 0} ? 'color: red' : 'color: green' ">[[${monthRate.palladium}]]</td>
+        <td  style ="color: red;"  th:style = "${yearRate.palladium < 0} ? 'color: red' : 'color: green' ">[[${yearRate.palladium}]]</td>
     </tr>
     <tr class="table-light text-center">
         <td th:text="Платина"></td>
         <td th:text="${thisDayRate.platinum}"></td>
-        <td th:text="${platinumPricePerGram}"></td>
-        <td  style ="color: red;"  th:style = "${platinumDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByDay}]]</td>
-        <td  style ="color: red;"  th:style = "${platinumDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByWeek}]]</td>
-        <td  style ="color: red;"  th:style = "${platinumDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByMonth}]]</td>
-        <td  style ="color: red;"  th:style = "${platinumDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${platinumDynamicByYear}]]</td>
+        <td  style ="color: red;"  th:style = "${dayRate.platinum < 0} ? 'color: red' : 'color: green' ">[[${dayRate.platinum}]]</td>
+        <td  style ="color: red;"  th:style = "${weekRate.platinum < 0} ? 'color: red' : 'color: green' ">[[${weekRate.platinum}]]</td>
+        <td  style ="color: red;"  th:style = "${monthRate.platinum < 0} ? 'color: red' : 'color: green' ">[[${monthRate.platinum}]]</td>
+        <td  style ="color: red;"  th:style = "${yearRate.platinum < 0} ? 'color: red' : 'color: green' ">[[${yearRate.platinum}]]</td>
     </tr>
     <tr class="table-info text-center">
         <td th:text="Родий"></td>
         <td th:text="${thisDayRate.rhodium}"></td>
-        <td th:text="${rhodiumPricePerGram}"></td>
-        <td  style ="color: red;"  th:style = "${rhodiumDynamicByDay < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByDay}]]</td>
-        <td  style ="color: red;"  th:style = "${rhodiumDynamicByWeek < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByWeek}]]</td>
-        <td  style ="color: red;"  th:style = "${rhodiumDynamicByMonth < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByMonth}]]</td>
-        <td  style ="color: red;"  th:style = "${rhodiumDynamicByYear < 0} ? 'color: red' : 'color: green' ">[[${rhodiumDynamicByYear}]]</td>
+        <td  style ="color: red;"  th:style = "${dayRate.rhodium < 0} ? 'color: red' : 'color: green' ">[[${dayRate.rhodium}]]</td>
+        <td  style ="color: red;"  th:style = "${weekRate.rhodium < 0} ? 'color: red' : 'color: green' ">[[${weekRate.rhodium}]]</td>
+        <td  style ="color: red;"  th:style = "${monthRate.rhodium < 0} ? 'color: red' : 'color: green' ">[[${monthRate.rhodium}]]</td>
+        <td  style ="color: red;"  th:style = "${yearRate.rhodium < 0} ? 'color: red' : 'color: green' ">[[${yearRate.rhodium}]]</td>
     </tr>
     </tbody>
 </table>
-
+</div>
+<br>
+<div id="money">
+    <table class="table table-hover table-sm mb-5">
+        <thead>
+        <tr class="table-dark text-center">
+            <th>Валюта</th>
+            <th>Актуальный курс</th>
+            <th>Динамика за сутки</th>
+            <th>Динамика за неделю</th>
+            <th>Динамика за месяц</th>
+            <th>Динамика за год</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="table-info text-center">
+            <td th:text="Американский_доллар"></td>
+            <td th:text="${todayExchangeRate.course_USD}"></td>
+            <td  style ="color: red;"  th:style = "${dayExchange.course_USD < 0} ? 'color: red' : 'color: green' ">[[${dayExchange.course_USD}]]</td>
+            <td  style ="color: red;"  th:style = "${weekExchange.course_USD < 0} ? 'color: red' : 'color: green' ">[[${weekExchange.course_USD}]]</td>
+            <td  style ="color: red;"  th:style = "${monthExchange.course_USD < 0} ? 'color: red' : 'color: green' ">[[${monthExchange.course_USD}]]</td>
+            <td  style ="color: red;"  th:style = "${yearExchange.course_USD < 0} ? 'color: red' : 'color: green' ">[[${yearExchange.course_USD}]]</td>
+        </tr>
+        <tr class="table-light text-center">
+            <td th:text="Евро"></td>
+            <td th:text="${todayExchangeRate.course_EUR}"></td>
+            <td  style ="color: red;"  th:style = "${dayExchange.course_EUR < 0} ? 'color: red' : 'color: green' ">[[${dayExchange.course_EUR}]]</td>
+            <td  style ="color: red;"  th:style = "${weekExchange.course_EUR < 0} ? 'color: red' : 'color: green' ">[[${weekExchange.course_EUR}]]</td>
+            <td  style ="color: red;"  th:style = "${monthExchange.course_EUR < 0} ? 'color: red' : 'color: green' ">[[${monthExchange.course_EUR}]]</td>
+            <td  style ="color: red;"  th:style = "${yearExchange.course_EUR < 0} ? 'color: red' : 'color: green' ">[[${yearExchange.course_EUR}]]</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom mt-0">

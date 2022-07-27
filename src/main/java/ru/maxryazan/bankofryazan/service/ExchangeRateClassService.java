@@ -65,4 +65,8 @@ public class ExchangeRateClassService {
     private double round(double a) {
         return (double) Math.round(a * 100) / 100;
     }
+
+    public List<ExchangeRateClass> findAll() {
+        return rateRepository.findAll();
+    }
 }
