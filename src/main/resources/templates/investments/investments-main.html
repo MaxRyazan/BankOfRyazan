@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -102,6 +102,58 @@
 </div>
 
 
+<table class="table table-hover table-sm mb-5">
+    <thead>
+    <tr class="table-primary">
+            <th>Металл</th>
+            <th>Цена/унция</th>
+            <th>Цена/грамм</th>
+            <th>Динамика за неделю</th>
+            <th>Динамика за месяц</th>
+           <th>Динамика за год</th>
+    </tr>
+    <tr class="table-warning">
+            <td th:text="Gold"></td>
+            <td th:text="${thisDayRate.gold}"></td>
+            <td th:text="${goldPricePerGram}"></td>
+            <td th:text="${goldDynamicByWeek}"></td>
+            <td th:text="${goldDynamicByMonth}"></td>
+            <td th:text="${goldDynamicByYear}"></td>
+    </tr>
+    <tr class="table-secondary">
+        <td th:text="Silver"></td>
+        <td th:text="${thisDayRate.silver}"></td>
+        <td th:text="${silverPricePerGram}"></td>
+        <td th:text="${silverDynamicByWeek}"></td>
+        <td th:text="${silverDynamicByMonth}"></td>
+        <td th:text="${silverDynamicByYear}"></td>
+    </tr>
+    <tr class="table-warning">
+        <td th:text="Palladium"></td>
+        <td th:text="${thisDayRate.palladium}"></td>
+        <td th:text="${palladiumPricePerGram}"></td>
+        <td th:text="${palladiumDynamicByWeek}"></td>
+        <td th:text="${palladiumDynamicByMonth}"></td>
+        <td th:text="${palladiumDynamicByYear}"></td>
+    </tr>
+    <tr class="table-secondary">
+        <td th:text="Platinum"></td>
+        <td th:text="${thisDayRate.platinum}"></td>
+        <td th:text="${platinumPricePerGram}"></td>
+        <td th:text="${platinumDynamicByWeek}"></td>
+        <td th:text="${platinumDynamicByMonth}"></td>
+        <td th:text="${platinumDynamicByYear}"></td>
+    </tr>
+    <tr class="table-warning">
+        <td th:text="Rhodium"></td>
+        <td th:text="${thisDayRate.rhodium}"></td>
+        <td th:text="${rhodiumPricePerGram}"></td>
+        <td th:text="${rhodiumDynamicByWeek}"></td>
+        <td th:text="${rhodiumDynamicByMonth}"></td>
+        <td th:text="${rhodiumDynamicByYear}"></td>
+    </tr>
+    </thead>
+</table>
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom mt-0">

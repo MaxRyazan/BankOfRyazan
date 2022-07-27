@@ -54,4 +54,7 @@ public class RateService {
         return thisRate.orElseGet(this::getRateFromAPI);
     }
 
+    public List<Rate> findAll() {
+     return rateRepository.findAll();
+    }
 }
