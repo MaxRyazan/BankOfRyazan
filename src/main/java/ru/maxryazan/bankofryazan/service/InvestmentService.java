@@ -18,85 +18,75 @@ public class InvestmentService {
         this.exchangeRateClassService = exchangeRateClassService;
     }
 
+
+
     public String createMainPage(Model model) {
         Rate thisDayRate = rateService.showFromDB(serviceClass.generateDate());
-        model.addAttribute("thisDayRate", thisDayRate);
-
         ExchangeRateClass todayExchangeRate = exchangeRateClassService.getRateFromAPI();
-        model.addAttribute("todayExchangeRate", todayExchangeRate);
+          model.addAttribute("thisDayRate", thisDayRate);
+          model.addAttribute("todayExchangeRate", todayExchangeRate);
 
-        ExchangeRateClass exchangeRateADayAgo = exchangeRateClassService.findAll().stream()
-                .filter(exchangeRateClass -> exchangeRateClass.getDate().equals(serviceClass.generateDateOfEndInDays(-1)))
-                .findFirst().orElse(exchangeRateClassService.findAll().get(0)) ;
-        ExchangeRateClass exchangeRateAWeekAgo = exchangeRateClassService.findAll().stream()
-                .filter(exchangeRateClass -> exchangeRateClass.getDate().equals(serviceClass.generateDateOfEndInDays(-7)))
-                .findFirst().orElse(exchangeRateClassService.findAll().get(0)) ;
-        ExchangeRateClass exchangeRateAMonthAgo = exchangeRateClassService.findAll().stream()
-                .filter(exchangeRateClass -> exchangeRateClass.getDate().equals(serviceClass.generateDateOfEndInDays(-31)))
-                .findFirst().orElse(exchangeRateClassService.findAll().get(0)) ;
-        ExchangeRateClass exchangeRateAYearAgo = exchangeRateClassService.findAll().stream()
-                .filter(exchangeRateClass -> exchangeRateClass.getDate().equals(serviceClass.generateDateOfEndInDays(-365)))
-                .findFirst().orElse(exchangeRateClassService.findAll().get(0)) ;
-
-        ExchangeRateClass tempExchangeDay = new ExchangeRateClass(
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_USD() - exchangeRateADayAgo.getCourse_USD()),
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_EUR() - exchangeRateADayAgo.getCourse_EUR()));
-                model.addAttribute("dayExchange", tempExchangeDay);
-        ExchangeRateClass tempExchangeWeek = new ExchangeRateClass(
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_USD() - exchangeRateAWeekAgo.getCourse_USD()),
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_EUR() - exchangeRateAWeekAgo.getCourse_EUR()));
-                model.addAttribute("weekExchange", tempExchangeWeek);
-        ExchangeRateClass tempExchangeMonth = new ExchangeRateClass(
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_USD() - exchangeRateAMonthAgo.getCourse_USD()),
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_EUR() - exchangeRateAMonthAgo.getCourse_EUR()));
-                model.addAttribute("monthExchange", tempExchangeMonth);
-        ExchangeRateClass tempExchangeYear = new ExchangeRateClass(
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_USD() - exchangeRateAYearAgo.getCourse_USD()),
-                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayExchangeRate.getCourse_EUR() - exchangeRateAYearAgo.getCourse_EUR()));
-                model.addAttribute("yearExchange", tempExchangeYear);
+        ExchangeRateClass exchangeRateADayAgo = createExchangeRateClass(-1);
+        ExchangeRateClass exchangeRateAWeekAgo = createExchangeRateClass(-7);
+        ExchangeRateClass exchangeRateAMonthAgo = createExchangeRateClass(-31);
+        ExchangeRateClass exchangeRateAYearAgo = createExchangeRateClass(-365);
 
 
+        ExchangeRateClass tempExchangeDay = createTempExchangeRateClass(todayExchangeRate, exchangeRateADayAgo);
+        ExchangeRateClass tempExchangeWeek = createTempExchangeRateClass(todayExchangeRate, exchangeRateAWeekAgo);
+        ExchangeRateClass tempExchangeMonth = createTempExchangeRateClass(todayExchangeRate, exchangeRateAMonthAgo);
+        ExchangeRateClass tempExchangeYear = createTempExchangeRateClass(todayExchangeRate, exchangeRateAYearAgo);
+          model.addAttribute("dayExchange", tempExchangeDay);
+          model.addAttribute("weekExchange", tempExchangeWeek);
+          model.addAttribute("monthExchange", tempExchangeMonth);
+          model.addAttribute("yearExchange", tempExchangeYear);
 
-        List<Rate> rates = rateService.findAll();
 
-        Rate rateADayAgo = rates.stream().filter(rate -> rate.getDate().equals(serviceClass.generateDateOfEndInDays(-1))).findFirst().orElse(rates.get(0));
-        Rate rateAWeekAgo = rates.stream().filter(rate -> rate.getDate().equals(serviceClass.generateDateOfEndInDays(-7))).findFirst().orElse(rates.get(0));
-        Rate rateAMonthAgo = rates.stream().filter(rate -> rate.getDate().equals(serviceClass.generateDateOfEndInDays(-31))).findFirst().orElse(rates.get(0));
-        Rate rateAYearAgo = rates.stream().filter(rate -> rate.getDate().equals(serviceClass.generateDateOfEndInDays(-365))).findFirst().orElse(rates.get(0));
+        Rate rateADayAgo = createRate(-1);
+        Rate rateAWeekAgo = createRate(-7);
+        Rate rateAMonthAgo = createRate(-31);
+        Rate rateAYearAgo = createRate(-365);
 
-        Rate tempRateDay = new Rate(
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getSilver() - rateADayAgo.getSilver()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getGold() - rateADayAgo.getGold()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPalladium() - rateADayAgo.getPalladium()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPlatinum() - rateADayAgo.getPlatinum()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getRhodium() - rateADayAgo.getRhodium()));
-        model.addAttribute("dayRate", tempRateDay);
 
-        Rate tempRateWeek = new Rate(
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getSilver() - rateAWeekAgo.getSilver()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getGold() - rateAWeekAgo.getGold()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPalladium() - rateAWeekAgo.getPalladium()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPlatinum() - rateAWeekAgo.getPlatinum()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getRhodium() - rateAWeekAgo.getRhodium()));
-        model.addAttribute("weekRate", tempRateWeek);
-
-        Rate tempRateMonth = new Rate(
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getSilver() - rateAMonthAgo.getSilver()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getGold() - rateAMonthAgo.getGold()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPalladium() - rateAMonthAgo.getPalladium()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPlatinum() - rateAMonthAgo.getPlatinum()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getRhodium() - rateAMonthAgo.getRhodium()));
-        model.addAttribute("monthRate", tempRateMonth);
-
-        Rate tempRateYear = new Rate(
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getSilver() - rateAYearAgo.getSilver()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getGold() - rateAYearAgo.getGold()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPalladium() - rateAYearAgo.getPalladium()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getPlatinum() - rateAYearAgo.getPlatinum()),
-                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(thisDayRate.getRhodium() - rateAYearAgo.getRhodium()));
-        model.addAttribute("yearRate", tempRateYear);
+        Rate tempRateDay = createTempRate(thisDayRate, rateADayAgo);
+        Rate tempRateWeek = createTempRate(thisDayRate, rateAWeekAgo);
+        Rate tempRateMonth = createTempRate(thisDayRate, rateAMonthAgo);
+        Rate tempRateYear = createTempRate(thisDayRate, rateAYearAgo);
+          model.addAttribute("dayRate", tempRateDay);
+          model.addAttribute("weekRate", tempRateWeek);
+          model.addAttribute("monthRate", tempRateMonth);
+          model.addAttribute("yearRate", tempRateYear);
 
         return "/investments/investments-main";
 
+    }
+
+    private ExchangeRateClass createExchangeRateClass(int duration){
+        return exchangeRateClassService.findAll().stream()
+                .filter(exchangeRateClass -> exchangeRateClass.getDate().equals(serviceClass.generateDateOfEndInDays(duration)))
+                .findFirst().orElse(exchangeRateClassService.findAll().get(0)) ;
+    }
+    private Rate createRate(int duration){
+        List<Rate> rates = rateService.findAll();
+        return rates.stream().filter(rate -> rate.getDate().equals(serviceClass.generateDateOfEndInDays(duration)))
+                .findFirst().orElse(rates.get(0));
+    }
+
+    private ExchangeRateClass createTempExchangeRateClass(ExchangeRateClass todayRate, ExchangeRateClass lastRate){
+        ExchangeRateClass exchangeRateClass = new ExchangeRateClass();
+        exchangeRateClass.setCourse_USD(
+                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getCourse_USD() - lastRate.getCourse_USD()));
+        exchangeRateClass.setCourse_EUR(
+                serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getCourse_EUR() - lastRate.getCourse_EUR()));
+        return exchangeRateClass;
+    }
+
+    private Rate createTempRate(Rate todayRate, Rate lastRate){
+        return new Rate(
+                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getSilver() - lastRate.getSilver()),
+                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getGold() - lastRate.getGold()),
+                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getPalladium() - lastRate.getPalladium()),
+                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getPlatinum() - lastRate.getPlatinum()),
+                (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getRhodium() - lastRate.getRhodium()));
     }
 }

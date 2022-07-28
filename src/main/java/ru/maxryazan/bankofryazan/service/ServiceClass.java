@@ -78,6 +78,6 @@ public class ServiceClass {
     }
 
     public double roundToDoubleWIthThreeSymbolsAfterDot(double number){
-        return (double)((int)(number*1000)) / 1000;
+        return ((double)((int)(number * 1000))) / 1000;
     }
 }
