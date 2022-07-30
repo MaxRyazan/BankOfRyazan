@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 
 @Service
 public record ClientService(ClientRepository clientRepository, BCryptPasswordEncoder passwordEncoder,
-                            ServiceClass serviceClass, ContributionService contributionService) {
+                            ServiceClass serviceClass, ContributionService contributionService, InvestmentService investmentService) {
 
     public void save(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
         Client newClient = new Client(firstName, lastName,  validationPhoneNumber(phoneNumber), email, passwordEncoder.encode(pinCode));
-        System.out.println("validatingPhone" + " 2");
         newClient.setBalance(0);
+        newClient.setBalanceUSD(0);
+        newClient.setBalanceEUR(0);
         clientRepository.save(newClient);
     }
 
@@ -67,7 +68,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
 
     public String getPersonalPageArea(Model model, HttpServletRequest request) {
         Client client = findByRequest(request);
-
+        investmentService.checkCurrPriceOfInvestment(client);
         for(Contribution cn : client.getContributions()) {
             if(cn.getStatus().equals(Status.ACTIVE)) {
                 if (cn.getDateOfEnd().equals(serviceClass.generateDate())) {
@@ -83,6 +84,8 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
         model.addAttribute("lastName", client.getLastName());
         model.addAttribute("phone", client.getPhoneNumber());
         model.addAttribute("balance", ((double)((int)(client.getBalance() * 100))) / 100);
+        model.addAttribute("balanceUSD", ((double)((int)(client.getBalanceUSD() * 100))) / 100);
+        model.addAttribute("balanceEUR", ((double)((int)(client.getBalanceEUR() * 100))) / 100);
         model.addAttribute("incoming", client.getInComingTransactions());
         model.addAttribute("outcoming", client.getOutComingTransactions());
         model.addAttribute("investments", client.getInvestments());

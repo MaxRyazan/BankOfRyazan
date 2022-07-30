@@ -3,9 +3,17 @@ package ru.maxryazan.bankofryazan.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.maxryazan.bankofryazan.models.Client;
+import ru.maxryazan.bankofryazan.models.Investment;
+import ru.maxryazan.bankofryazan.service.ClientService;
 import ru.maxryazan.bankofryazan.service.InvestmentService;
-import ru.maxryazan.bankofryazan.service.RateService;
+import ru.maxryazan.bankofryazan.service.ServiceClass;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @Controller
@@ -13,78 +21,43 @@ import ru.maxryazan.bankofryazan.service.RateService;
 public class InvestmentController {
 
     private final InvestmentService investmentService;
+    private final ClientService clientService;
+    private final ServiceClass serviceClass;
 
-    public InvestmentController(InvestmentService investmentService) {
+    public InvestmentController(InvestmentService investmentService, ClientService clientService, ServiceClass serviceClass) {
         this.investmentService = investmentService;
+        this.clientService = clientService;
+        this.serviceClass = serviceClass;
     }
 
-//    @GetMapping("/main")
-//    public String getMainInvestments(Model model) {
-//        List<Rate> rates = rateService.findAll();
-//
-//        Rate thisDayRate = rateService.showFromDB(serviceClass.generateDate());
-//
-//        model.addAttribute("thisDayRate", thisDayRate);
-//        model.addAttribute("goldPricePerGram", createPricePerGram(thisDayRate.getGold()));
-//        model.addAttribute("silverPricePerGram", createPricePerGram(thisDayRate.getSilver()));
-//        model.addAttribute("palladiumPricePerGram", createPricePerGram(thisDayRate.getPalladium()));
-//        model.addAttribute("platinumPricePerGram", createPricePerGram(thisDayRate.getPlatinum()));
-//        model.addAttribute("rhodiumPricePerGram", createPricePerGram(thisDayRate.getRhodium()));
-//
-//        String stringDateMinusDay = serviceClass.generateDateOfEndInDays(-1);
-//        String stringDateMinusWeek = serviceClass.generateDateOfEndInDays(-7);
-//        String stringDateMinusMonth = serviceClass.generateDateOfEndInDays(-31);
-//        String stringDateMinusYear = serviceClass.generateDateOfEndInDays(-365);
-//
-//
-//        Rate rateADayAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusDay)).findFirst().orElse(rates.get(0));
-//        Rate rateAWeekAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusWeek)).findFirst().orElse(rates.get(0));
-//        Rate rateAMonthAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusMonth)).findFirst().orElse(rates.get(0));
-//        Rate rateAYearAgo = rates.stream().filter(rate -> rate.getDate().equals(stringDateMinusYear)).findFirst().orElse(rates.get(0));
-//
-//
-//        for (Rate rateDay : rates) {
-//            if (rateDay.getDate().equals(rateADayAgo.getDate())) {
-//                model.addAttribute("goldDynamicByDay",thisDayRate.getGold() - rateADayAgo.getGold());
-//                model.addAttribute("silverDynamicByDay", thisDayRate.getSilver() - rateADayAgo.getSilver());
-//                model.addAttribute("palladiumDynamicByDay", thisDayRate.getPalladium() - rateADayAgo.getPalladium());
-//                model.addAttribute("platinumDynamicByDay", thisDayRate.getPlatinum() - rateADayAgo.getPlatinum());
-//                model.addAttribute("rhodiumDynamicByDay", thisDayRate.getRhodium() - rateADayAgo.getRhodium());
-//            }
-//            for (Rate rateWeek : rates) {
-//                if (rateWeek.getDate().equals(rateAWeekAgo.getDate())) {
-//                    model.addAttribute("goldDynamicByWeek", thisDayRate.getGold() - rateAWeekAgo.getGold());
-//                    model.addAttribute("silverDynamicByWeek",thisDayRate.getSilver() - rateAWeekAgo.getSilver());
-//                    model.addAttribute("palladiumDynamicByWeek", thisDayRate.getPalladium() - rateAWeekAgo.getPalladium());
-//                    model.addAttribute("platinumDynamicByWeek",thisDayRate.getPlatinum() - rateAWeekAgo.getPlatinum());
-//                    model.addAttribute("rhodiumDynamicByWeek", thisDayRate.getRhodium() - rateAWeekAgo.getRhodium());
-//                }
-//                for (Rate rateMonth : rates) {
-//                    if (rateMonth.getDate().equals(rateAMonthAgo.getDate())) {
-//                        model.addAttribute("goldDynamicByMonth", thisDayRate.getGold() - rateAMonthAgo.getGold());
-//                        model.addAttribute("silverDynamicByMonth", thisDayRate.getSilver() - rateAMonthAgo.getSilver());
-//                        model.addAttribute("palladiumDynamicByMonth",thisDayRate.getPalladium() - rateAMonthAgo.getPalladium());
-//                        model.addAttribute("platinumDynamicByMonth", thisDayRate.getPlatinum() - rateAMonthAgo.getPlatinum());
-//                        model.addAttribute("rhodiumDynamicByMonth", thisDayRate.getRhodium() - rateAMonthAgo.getRhodium());
-//                    }
-//                    for (Rate rateYear : rates) {
-//                        if (rateYear.getDate().equals(rateAYearAgo.getDate())) {
-//                            model.addAttribute("goldDynamicByYear", thisDayRate.getGold() - rateAYearAgo.getGold());
-//                            model.addAttribute("silverDynamicByYear", thisDayRate.getSilver() - rateAYearAgo.getSilver());
-//                            model.addAttribute("palladiumDynamicByYear",  thisDayRate.getPalladium() - rateAYearAgo.getPalladium());
-//                            model.addAttribute("platinumDynamicByYear",thisDayRate.getPlatinum() - rateAYearAgo.getPlatinum());
-//                            model.addAttribute("rhodiumDynamicByYear",thisDayRate.getRhodium() - rateAYearAgo.getRhodium());
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return "/investments/investments-main";
-//    }
 
     @GetMapping("/main")
-    public String getMainInvestments(Model model) {
+    public String getMainInvestments(Model model, HttpServletRequest request) {
+     request.getSession();
      return investmentService.createMainPage(model);
+    }
+
+    @PostMapping("/main")
+    public String postMainInvestments(@RequestParam String type,
+                                      @RequestParam String amount,
+                                      HttpServletRequest request) {
+        Client client = clientService.findByRequest(request);
+        if(client.getBalance() > investmentService.setPriceOfInvestment(investmentService.changeType(type), amount)) {
+            Investment investment = new Investment();
+            String typeOfInvestment = investmentService.changeType(type);
+            investment.setInvestor(client);
+            investment.setDateOfInvestment(serviceClass.generateDate());
+            investment.setType(typeOfInvestment);
+            investment.setInvestmentSizeByUnits(Double.parseDouble(amount));
+            investment.setBasePriceOfInvestment(investmentService.setPriceOfInvestment(typeOfInvestment, amount));
+            investment.setCurrPriceOfInvestment(investmentService.setPriceOfInvestment(typeOfInvestment, amount));
+            investmentService.save(investment);
+            client.getInvestments().add(investment);
+            client.setBalance(client.getBalance() - investment.getBasePriceOfInvestment());
+            clientService.save(client);
+            return "redirect:/investments/main";
+        }
+       throw  new IllegalArgumentException("not enough money for investment");
     }
 
 

@@ -19,22 +19,22 @@ public class Investment {
     private long id;
 
     @Column(name = "type", nullable = false)
-    private String type;                        //gold, silver
-
-    @Column(name = "unit_of_this_type_investment")
-    private String unit;                        //gram, kilogram, piece
-
-    @Column(name = "price_per_unit", nullable = false)
-    double pricePerUnit;                         // 500 rouble per gram
-
-    @Column(name = "investment_size_")
-    private double investmentSizeByUnits;       // 1200 gram
-
-    @Column(name = "price_of_investment")
-    double priceOfInvestment;                   // 500 * 1200 = 600 000 roubles
+    private String type;
 
     @Column(name = "date_of_investment")
     private String dateOfInvestment;
+
+    @Column(name = "price_per_unit", nullable = false)
+    double pricePerUnit;
+
+    @Column(name = "investment_size_")
+    private double investmentSizeByUnits;
+
+    @Column(name = "base_price_of_investment")
+    double basePriceOfInvestment;
+
+    @Column(name = "curr_price_of_investment")
+    double currPriceOfInvestment;
 
     @ManyToOne
     @JoinColumn(name = "investment_id")

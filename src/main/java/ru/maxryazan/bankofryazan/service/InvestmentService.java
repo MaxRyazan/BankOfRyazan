@@ -2,8 +2,11 @@ package ru.maxryazan.bankofryazan.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
+import ru.maxryazan.bankofryazan.models.Investment;
 import ru.maxryazan.bankofryazan.models.Rate;
+import ru.maxryazan.bankofryazan.repository.InvestmentRepository;
 import java.util.List;
 
 @Service
@@ -12,10 +15,13 @@ public class InvestmentService {
     private final ServiceClass serviceClass;
     private final RateService rateService;
     private final ExchangeRateClassService exchangeRateClassService;
-    public InvestmentService(ServiceClass serviceClass, RateService rateService, ExchangeRateClassService exchangeRateClassService) {
+    private final InvestmentRepository investmentRepository;
+    public InvestmentService(ServiceClass serviceClass, RateService rateService, ExchangeRateClassService exchangeRateClassService, InvestmentRepository investmentRepository) {
         this.serviceClass = serviceClass;
+
         this.rateService = rateService;
         this.exchangeRateClassService = exchangeRateClassService;
+        this.investmentRepository = investmentRepository;
     }
 
 
@@ -25,6 +31,8 @@ public class InvestmentService {
         ExchangeRateClass todayExchangeRate = exchangeRateClassService.getRateFromAPI();
           model.addAttribute("thisDayRate", thisDayRate);
           model.addAttribute("todayExchangeRate", todayExchangeRate);
+          model.addAttribute("silver", "silver");
+
 
         ExchangeRateClass exchangeRateADayAgo = createExchangeRateClass(-1);
         ExchangeRateClass exchangeRateAWeekAgo = createExchangeRateClass(-7);
@@ -88,5 +96,60 @@ public class InvestmentService {
                 (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getPalladium() - lastRate.getPalladium()),
                 (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getPlatinum() - lastRate.getPlatinum()),
                 (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getRhodium() - lastRate.getRhodium()));
+    }
+
+    public void save(Investment investment) {
+            investmentRepository.save(investment);
+    }
+
+    public Rate findByDate(String date) {
+        return rateService.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst().orElse(null);
+    }
+
+    public String changeType(String type){
+        switch (type) {
+            case "Золото" -> {
+                return "gold";
+            }
+            case "Серебро" -> {
+                return "silver";
+            }
+            case "Палладий" -> {
+                return "palladium";
+            }
+            case "Платина" -> {
+                return "platinum";
+            }
+            case "Родий" -> {
+                return "rhodium";
+            }
+        }
+        throw  new IllegalArgumentException();
+    }
+    public double setPriceOfInvestment(String metal, String amount){
+        switch (metal) {
+            case "gold" -> {
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getGold() * (Double.parseDouble(amount) / 28.349));
+            }
+            case "silver" -> {
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getSilver() * (Double.parseDouble(amount) / 28.349));
+            }
+            case "platinum" -> {
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getPlatinum()  *(Double.parseDouble(amount) / 28.349));
+            }
+            case "palladium" -> {
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getPalladium() * (Double.parseDouble(amount) / 28.349));
+            }
+            case "rhodium" -> {
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getRhodium()  * (Double.parseDouble(amount) / 28.349));
+            }
+        }
+        throw  new IllegalArgumentException();
+    }
+    public void checkCurrPriceOfInvestment(Client client){
+        for(Investment inv : client.getInvestments()){
+            setPriceOfInvestment(inv.getType(), Double.toString(inv.getInvestmentSizeByUnits()));
+            save(inv);
+        }
     }
 }

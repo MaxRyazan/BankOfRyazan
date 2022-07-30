@@ -28,7 +28,9 @@ url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIz
                     <h6><span th:text="${firstName}"></span> <span th:text="${lastName}"></span></h6>
                 </li>
                 <li class="nav-item d-flex p-auto ms-4" style="color: lightgray">
-                    <h6><span th:text="${balance}"></span> рублей</h6>
+                    <h6><span th:text="${balance}"></span> &#8381</h6>
+                    <h6 th:if="${balanceUSD > 0}" class="ms-4"><span th:text="${balanceUSD}"></span> &#36</h6>
+                    <h6 th:if="${balanceEUR > 0}" class="ms-4"><span th:text="${balanceEUR}"></span> &#8364</h6>
                 </li>
             </ul>
             <ul class="navbar-nav d-flex ms-auto p-2">
@@ -36,7 +38,7 @@ url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIz
                     <a href="/investments/main" class="nav-link">Инвестиции</a>
                 </li>
             </ul>
-        </div>
+        </div>&#36
     </div>
 </nav>
 <br><br>
@@ -431,17 +433,17 @@ width: 50%;">
                                <thead>
                                 <tr>
                                     <th class="align-center">Вид инвестиции</th>
-                                    <th class="align-center">Единица</th>
-                                    <th class="align-center">Цена за ед.</th>
-                                    <th class="align-center">Объём инвестиции</th>
+                                    <th class="align-center">Объём инвестиции(гр)</th>
+                                    <th class="align-center">Начальная стоимость</th>
                                     <th class="align-center">Текущая стоимость</th>
+                                    <th class="align-center">Баланс инвестиции</th>
                                 </tr>
                                 <tr th:each="investment : ${investments}">
                                     <td th:text="${investment.type}" class="align-center"></td>
-                                    <td th:text="${investment.unit}" class="align-center"></td>
-                                    <td th:text="${investment.pricePerUnit}" class="align-center"></td>
                                     <td th:text="${investment.investmentSizeByUnits}" class="align-center"></td>
-                                    <td th:text="${investment.priceOfInvestment}" class="align-center"></td>
+                                    <td th:text="${investment.basePriceOfInvestment}" class="align-center"></td>
+                                    <td th:text="${investment.currPriceOfInvestment}" class="align-center"></td>
+                                    <td style ="color: red;" th:style="${investment.basePriceOfInvestment - investment.currPriceOfInvestment < 0} ? 'color: red' : 'color: green' " class="align-center">[[${investment.basePriceOfInvestment - investment.currPriceOfInvestment}]]</td>
                                 </tr>
                                </thead>
                             </table>

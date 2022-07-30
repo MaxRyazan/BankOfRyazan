@@ -31,6 +31,12 @@ public class Client {
     @Column(name = "balance", nullable = false)
     private double balance = 0;
 
+    @Column(name = "balance_usd", nullable = false)
+    private double balanceUSD = 0;
+
+    @Column(name = "balance_eur", nullable = false)
+    private double balanceEUR = 0;
+
     @Column(name = "hash_pin", nullable = false)
     private String pinCode;
 
