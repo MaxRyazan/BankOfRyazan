@@ -143,4 +143,12 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
         }
         return true;
     }
+
+    public void selfRegistration(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
+        Client client = new Client(firstName, lastName, phoneNumber, email, passwordEncoder.encode(pinCode));
+        client.setBalance(0);
+        client.setBalanceUSD(0);
+        client.setBalanceEUR(0);
+        clientRepository.save(client);
+    }
 }

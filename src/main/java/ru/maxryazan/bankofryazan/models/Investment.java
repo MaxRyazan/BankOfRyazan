@@ -1,11 +1,8 @@
 package ru.maxryazan.bankofryazan.models;
 
-
-import ch.qos.logback.core.joran.spi.NoAutoStart;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 
 @Entity

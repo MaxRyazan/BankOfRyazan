@@ -105,6 +105,9 @@ public class InvestmentService {
     public Rate findByDate(String date) {
         return rateService.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst().orElse(null);
     }
+    public ExchangeRateClass findByDateMoney(String date) {
+        return exchangeRateClassService.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst().orElse(null);
+    }
 
     public String changeType(String type){
         switch (type) {
@@ -123,11 +126,18 @@ public class InvestmentService {
             case "Родий" -> {
                 return "rhodium";
             }
+            case "Доллар США" -> {
+                return "USD";
+            }
+            case "Евро" -> {
+                return "EUR";
+            }
         }
         throw  new IllegalArgumentException();
     }
-    public double setPriceOfInvestment(String metal, String amount){
-        switch (metal) {
+
+    public double setPriceOfInvestment(String investment, String amount){
+        switch (investment) {
             case "gold" -> {
                 return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getGold() * (Double.parseDouble(amount) / 28.349));
             }
@@ -135,7 +145,7 @@ public class InvestmentService {
                 return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getSilver() * (Double.parseDouble(amount) / 28.349));
             }
             case "platinum" -> {
-                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getPlatinum()  *(Double.parseDouble(amount) / 28.349));
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getPlatinum() * (Double.parseDouble(amount) / 28.349));
             }
             case "palladium" -> {
                 return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getPalladium() * (Double.parseDouble(amount) / 28.349));
@@ -143,9 +153,16 @@ public class InvestmentService {
             case "rhodium" -> {
                 return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getRhodium()  * (Double.parseDouble(amount) / 28.349));
             }
+            case "USD" -> {
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDateMoney(serviceClass.generateDate()).getCourse_USD()  * (Double.parseDouble(amount)));
+            }
+            case "EUR" -> {
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDateMoney(serviceClass.generateDate()).getCourse_EUR()  * (Double.parseDouble(amount)));
+            }
         }
         throw  new IllegalArgumentException();
     }
+
     public void checkCurrPriceOfInvestment(Client client){
         for(Investment inv : client.getInvestments()){
             setPriceOfInvestment(inv.getType(), Double.toString(inv.getInvestmentSizeByUnits()));

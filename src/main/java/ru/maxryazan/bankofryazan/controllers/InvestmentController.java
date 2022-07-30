@@ -66,7 +66,4 @@ public class InvestmentController {
         return "/investments/investments-make";
     }
 
-    public float createPricePerGram(float pricePerOunce){
-        return  ((float)((int)(pricePerOunce / 28.3495 * 100000))) / 100000;
-    }
 }

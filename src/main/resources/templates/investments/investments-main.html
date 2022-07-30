@@ -93,7 +93,7 @@
             </ul>
             <ul class="navbar-nav d-flex ms-auto p-2">
                 <li class="nav-item">
-                    <a href="/investments/make" class="nav-link">Инвестировать</a>
+                    <a href="/main/registration" class="nav-link">Стать клиентом</a>
                 </li>
                 <li class="nav-item">
                     <a href="/main/personal-area" class="nav-link">Личный кабинет</a>
@@ -117,7 +117,7 @@
                      src="https://img.freepik.com/premium-vector/financial-technology-graphic-concept-background_73426-141.jpg?w=1380"
                      alt="png1">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5><a href="/investments/make"  style="text-decoration: none"> Инвестируйте грамотно!</a></h5>
+                    <h5><a style="text-decoration: none"> Инвестируйте грамотно!</a></h5>
                     <p style="text-align: center" class="mb-4">Только в нашем банке у вас есть персональный финансовый консультант, который подскажет Вам, куда в текущей ситуации
                     лучше инвестировать Ваши деньги.</p>
                 </div>
@@ -233,7 +233,7 @@
         </thead>
         <tbody>
         <tr class="table-info text-center">
-            <td><a style="text-decoration: none">Доллар США</a></td>
+            <td><a href="#investment" style="text-decoration: none" onclick="showModalWin()" title="Вы можете инвестировать после регистрации!">Доллар США</a></td>
             <td th:text="${todayExchangeRate.course_USD}"></td>
             <td  style ="color: red;"  th:style = "${dayExchange.course_USD < 0} ? 'color: red' : 'color: green' ">[[${dayExchange.course_USD}]]</td>
             <td  style ="color: red;"  th:style = "${weekExchange.course_USD < 0} ? 'color: red' : 'color: green' ">[[${weekExchange.course_USD}]]</td>
@@ -241,7 +241,7 @@
             <td  style ="color: red;"  th:style = "${yearExchange.course_USD < 0} ? 'color: red' : 'color: green' ">[[${yearExchange.course_USD}]]</td>
         </tr>
         <tr class="table-light text-center">
-            <td><a style="text-decoration: none">Евро</a></td>
+            <td><a href="#investment" style="text-decoration: none" onclick="showModalWin()" title="Вы можете инвестировать после регистрации!">Евро</a></td>
             <td th:text="${todayExchangeRate.course_EUR}"></td>
             <td  style ="color: red;"  th:style = "${dayExchange.course_EUR < 0} ? 'color: red' : 'color: green' ">[[${dayExchange.course_EUR}]]</td>
             <td  style ="color: red;"  th:style = "${weekExchange.course_EUR < 0} ? 'color: red' : 'color: green' ">[[${weekExchange.course_EUR}]]</td>
@@ -265,10 +265,12 @@
             <option>Платина</option>
             <option>Палладий</option>
             <option>Родий</option>
+            <option>Доллар США</option>
+            <option>Евро</option>
         </select>
     </label>
     <label>
-        <input type="number" name="amount" placeholder="Количество" class="form-control" min="1">
+        <input type="number" name="amount" placeholder="Количество в граммах или валюте" class="form-control" min="1">
     </label>
     <br><br>
     <button type="submit" class="btn btn-outline-info btn-sm">Продолжить</button>
@@ -276,8 +278,6 @@
         </form>
 </div>
 <!--Всплывающее окно инвестиций-->
-
-
 
 
 
