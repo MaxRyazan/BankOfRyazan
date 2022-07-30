@@ -93,7 +93,7 @@
             </ul>
             <ul class="navbar-nav d-flex ms-auto p-2">
                 <li class="nav-item">
-                    <a href="/main/registration" class="nav-link">Стать клиентом</a>
+                    <a href="/main/registration" class="nav-link" sec:authorize="isAnonymous()">Стать клиентом</a>
                 </li>
                 <li class="nav-item">
                     <a href="/main/personal-area" class="nav-link">Личный кабинет</a>
