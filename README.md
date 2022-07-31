@@ -54,6 +54,9 @@
 Есть готовая страница ИНВЕСТИЦИЙ в самом банке:
 ![ии1](https://user-images.githubusercontent.com/97405800/182045338-50de82fb-864a-49c3-96b6-9117584b375b.jpg)  
 ![ии2](https://user-images.githubusercontent.com/97405800/182045365-cb540e89-caf0-40cd-b36e-2605bed715c4.jpg)  
+![ии3](https://user-images.githubusercontent.com/97405800/182045441-458c9113-6110-404a-a8ef-109399c24106.jpg)  
+Инвестировать можно прямо здесь, через модальное окно и POST контроллер Srping MVC  
+![ии4](https://user-images.githubusercontent.com/97405800/182045478-8d482acc-e437-4db5-a9fb-3ea3ab9f49e5.jpg)  
 Данные в таблицах автоматически обновляются и пересчитываются.  
 
 Проект в стадии разработки, активно расширяется и улучшается.
