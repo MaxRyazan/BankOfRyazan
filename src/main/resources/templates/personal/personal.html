@@ -446,7 +446,7 @@ width: 50%;">
                                     <td th:text="${investment.investmentSizeByUnits}" class="align-center"></td>
                                     <td th:text="${investment.basePriceOfInvestment}" class="align-center"></td>
                                     <td th:text="${investment.currPriceOfInvestment}" class="align-center"></td>
-                                    <td style ="color: red;" th:style="${investment.basePriceOfInvestment - investment.currPriceOfInvestment < 0} ? 'color: red' : 'color: green' " class="align-center">[[${investment.basePriceOfInvestment - investment.currPriceOfInvestment}]]</td>
+                                    <td style ="color: red;" th:style="${investment.margin < 0} ? 'color: red' : 'color: green' " class="align-center">[[${investment.margin}]]</td>
                                 </tr>
                                </thead>
                             </table>

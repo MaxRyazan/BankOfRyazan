@@ -28,10 +28,15 @@ public class Investment {
     private double investmentSizeByUnits;
 
     @Column(name = "base_price_of_investment")
-    double basePriceOfInvestment;
+    private double basePriceOfInvestment;
 
     @Column(name = "curr_price_of_investment")
-    double currPriceOfInvestment;
+    private double currPriceOfInvestment;
+
+    @Column(name = "margin")
+    private double margin;
+
+
 
     @ManyToOne
     @JoinColumn(name = "investment_id")

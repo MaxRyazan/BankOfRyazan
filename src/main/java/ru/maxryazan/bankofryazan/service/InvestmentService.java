@@ -165,8 +165,9 @@ public class InvestmentService {
 
     public void checkCurrPriceOfInvestment(Client client){
         for(Investment inv : client.getInvestments()){
-            setPriceOfInvestment(inv.getType(), Double.toString(inv.getInvestmentSizeByUnits()));
-            save(inv);
+           inv.setCurrPriceOfInvestment(setPriceOfInvestment(inv.getType(), Double.toString(inv.getInvestmentSizeByUnits())));
+           inv.setMargin(serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(inv.getCurrPriceOfInvestment() - inv.getBasePriceOfInvestment()));
+           save(inv);
         }
     }
 }

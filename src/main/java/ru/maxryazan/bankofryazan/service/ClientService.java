@@ -69,6 +69,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
     public String getPersonalPageArea(Model model, HttpServletRequest request) {
         Client client = findByRequest(request);
         investmentService.checkCurrPriceOfInvestment(client);
+
         for(Contribution cn : client.getContributions()) {
             if(cn.getStatus().equals(Status.ACTIVE)) {
                 if (cn.getDateOfEnd().equals(serviceClass.generateDate())) {
