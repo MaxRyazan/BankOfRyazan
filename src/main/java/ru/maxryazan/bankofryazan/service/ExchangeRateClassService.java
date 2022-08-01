@@ -5,22 +5,21 @@ import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.repository.ExchangeRateRepository;
 
-import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class ExchangeRateClassService {
 
     private final ExchangeRateRepository rateRepository;
+    private final ServiceClass serviceClass;
 
-    public ExchangeRateClassService(ExchangeRateRepository rateRepository) {
+    public ExchangeRateClassService(ExchangeRateRepository rateRepository, ServiceClass serviceClass) {
         this.rateRepository = rateRepository;
+        this.serviceClass = serviceClass;
     }
 
 
@@ -55,7 +54,7 @@ public class ExchangeRateClassService {
                     e.printStackTrace();
                 }
             } else {
-                if(all.get(all.size()-1).getDate().equals(simpleDateFormat.format(date))) {
+                if(all.get(all.size()- 1).getDate().equals(simpleDateFormat.format(date))) {
                     return all.get(all.size() -1);
                 }
             }
@@ -68,5 +67,10 @@ public class ExchangeRateClassService {
 
     public List<ExchangeRateClass> findAll() {
         return rateRepository.findAll();
+    }
+
+    public ExchangeRateClass findByDate(String date){
+        return  rateRepository.findAll().stream()
+                .filter(rateClass -> rateClass.getDate().equals(serviceClass.generateDate())).findFirst().orElse(null);
     }
 }

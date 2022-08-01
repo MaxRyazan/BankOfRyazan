@@ -23,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
               //  .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/main/personal-area")
                 .and()
                 .httpBasic();

@@ -1,0 +1,63 @@
+<div th:insert="blocks/head"></div>
+<style>
+    .registrationForm {
+        max-width: 40%;
+        max-height: 580px;
+        background-color: #e6e6ff;
+        border: solid lightslategrey 2px;
+        font-size: 14px;
+        grid-gap: 5px;
+        grid-template-columns: 100px 100px;
+        grid-template-rows: 50px 50px;
+        padding: 15px;
+        position: center;
+        margin: auto;
+    }
+    .picture {
+        width: 200px;
+        max-width: 200px;
+        height: 200px;
+        max-height: 200px;
+    }
+    .buttons {
+        grid-template-columns: 200px 200px;
+        grid-gap: 5px;
+    }
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top mb-5">
+    <div class="container">
+        <h4 style="color: white; margin-left: 42%">Добро пожаловать!</h4>
+    </div>
+</nav>
+<br><br>
+<div style="text-align: center" class="registrationForm mt-5">
+    <img src="/static/img/avatar.png" th:src="@{img/avatar.png}" alt="picture.png" class="picture"/>
+    <br><br>
+    <form name="f" th:action="@{/login}" method="post">
+        <label>
+            <input type="text" name="username" placeholder="Введите логин" class="form-control">
+        </label>
+        <label>
+            <input type="text" name="password" placeholder="Введите пароль" class="form-control">
+        </label>
+
+        <br><br>
+        <div class="buttons">
+        <button type="submit" class="btn btn-outline-success btn-sm" style="width: 200px; padding: 5px;">Продолжить</button>
+        <input type="button" value="Отмена"  class="btn btn-outline-danger btn-sm"  style="width: 200px; padding: 5px;"  onclick="history.back()">
+        </div>
+    </form>
+    <br><br><br><br>
+    <div style="display: inline-block;">
+    <a href="/main/registration" style="float:left; text-decoration: none; color: darkgreen; margin-right: 25px">Нет аккаунта?</a>
+    <a href="" style="float:right; text-decoration: none; color: darkred; margin-left: 45px">Забыли пароль?</a>
+    </div>
+    <br><br>
+</div>
+<br><br><br>
+<div>
+  <input type="button" value="Перейти на главную страницу" class="btn btn-outline-danger btn-sm me-2" style="width: 210px; float:right;" onclick=location.href="/main">
+</div>
+<br><br>
+</body>
