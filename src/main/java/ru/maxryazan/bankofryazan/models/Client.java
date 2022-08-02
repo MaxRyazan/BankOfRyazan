@@ -2,6 +2,7 @@ package ru.maxryazan.bankofryazan.models;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,6 +40,9 @@ public class Client {
 
     @Column(name = "hash_pin", nullable = false)
     private String pinCode;
+
+    @OneToMany(mappedBy = "passRestorer", fetch = FetchType.LAZY)
+    private List<EmailCodeSender> emailCodes;
 
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
     private Set<Transaction> outComingTransactions;

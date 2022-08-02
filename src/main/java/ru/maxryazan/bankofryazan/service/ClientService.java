@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public record ClientService(ClientRepository clientRepository, BCryptPasswordEncoder passwordEncoder,
-                            ServiceClass serviceClass, ContributionService contributionService, InvestmentService investmentService) {
+                            ServiceClass serviceClass, ContributionService contributionService,
+                            InvestmentService investmentService) {
 
     public void save(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
         Client newClient = new Client(firstName, lastName,  validationPhoneNumber(phoneNumber), email, passwordEncoder.encode(pinCode));
@@ -44,13 +45,15 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
 
     public Client findByPhoneNumber(String phoneNumber) {
         List<Client> allClients = clientRepository.findAll();
+        String checkedPhone = phoneNumber.replace(" ", "");
         Optional<Client> cl = allClients.stream().filter(
-                client -> client.getPhoneNumber().equals(phoneNumber)).findFirst();
+                client -> client.getPhoneNumber().equals(checkedPhone)).findFirst();
         if (cl.isPresent()) {
             return cl.get();
         }
         throw new IllegalArgumentException("User with phone number: '" + phoneNumber + "' not found");
     }
+
 
     public List<Client> findAll() {
         return clientRepository.findAll();
@@ -69,7 +72,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
     public String getPersonalPageArea(Model model, HttpServletRequest request) {
         Client client = findByRequest(request);
         investmentService.checkCurrPriceOfInvestment(client);
-
+        client.getEmailCodes().clear();
         for(Contribution cn : client.getContributions()) {
             if(cn.getStatus().equals(Status.ACTIVE)) {
                 if (cn.getDateOfEnd().equals(serviceClass.generateDate())) {
@@ -101,6 +104,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
                 .filter(contribution -> contribution.getStatus().equals(Status.ACTIVE)).collect(Collectors.toSet());
 
         model.addAttribute("contributions", contributions);
+        save(client);
         return "personal/personal";
     }
 
