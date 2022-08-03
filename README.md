@@ -103,7 +103,7 @@ UPD 03.08.22 <a href="#03.08.22">03.08.22</a>
 ![5](https://user-images.githubusercontent.com/97405800/182604665-c05a1ab8-fe9f-426e-bc24-79bec4c43d32.jpg)
     - Сам метод, генерирующий код выглядит так:  
     
-```  
+```java  
         public String generateCode(String someString) {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
