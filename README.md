@@ -102,20 +102,21 @@ UPD 03.08.22 <a href="#03.08.22">03.08.22</a>
     - Здесь мы видим debug отчет об удачной отправке сообщения с проверчным кодом:  
 ![5](https://user-images.githubusercontent.com/97405800/182604665-c05a1ab8-fe9f-426e-bc24-79bec4c43d32.jpg)
     - Сам метод, генерирующий код выглядит так:  
-    ```
+    
+```  
         public String generateCode(String someString) {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
         char[] array = someString.toCharArray();
         for (int i = 0; i < 6; i++) {
-            sb.append(random.nextInt(10));
-            if (i == random.nextInt(6)) {
-                String up = String.valueOf(array[random.nextInt(array.length)]);
-                sb.append(up.toUpperCase());
-            } else {
-                sb.append(array[random.nextInt(array.length)]);
-            }
+        sb.append(random.nextInt(10));
+        if (i == random.nextInt(6)) {
+        String up = String.valueOf(array[random.nextInt(array.length)]);
+        sb.append(up.toUpperCase());
+        } else {
+        sb.append(array[random.nextInt(array.length)]);
+        }
         }
         return sb.toString();
-    }
+        }  
 ```
