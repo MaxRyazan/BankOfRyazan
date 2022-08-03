@@ -91,4 +91,30 @@ UPD 03.08.22 <a href="#03.08.22">03.08.22</a>
 
 ##### - <a name="03.08.22">UPD 03.08.22</a>
      - Добавлен сервис восстановления пароля по генерируему секретному коду, высылаемому на email пользователя:  
+        # Все изображения уменьшены на 50% (для удобства)
+        # Страницы выполнены в едином стиле
+        # Функционал полностью проверен на корректность ввода данных
+        # Данные валидируются  
+![11](https://user-images.githubusercontent.com/97405800/182603773-77679719-168c-4dc1-9582-86eff42db233.jpg)
+![22](https://user-images.githubusercontent.com/97405800/182603839-6598e64a-a77b-49fd-85b0-7dc49e2ae4a9.jpg)
+![33](https://user-images.githubusercontent.com/97405800/182603846-29b3ad8d-4e16-4107-b066-a001ed14b008.jpg)
+![44](https://user-images.githubusercontent.com/97405800/182603849-b1b86274-a097-4ff9-99dc-bf910b193852.jpg)
 
+    - Здесь мы видим debug отчет об удачной отправке сообщения с проверчным кодом:  
+![5](https://user-images.githubusercontent.com/97405800/182604665-c05a1ab8-fe9f-426e-bc24-79bec4c43d32.jpg)
+    - Сам метод, генерирующий код выглядит так:  
+        public String generateCode(String someString) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        char[] array = someString.toCharArray();
+        for (int i = 0; i < 6; i++) {
+            sb.append(random.nextInt(10));
+            if (i == random.nextInt(6)) {
+                String up = String.valueOf(array[random.nextInt(array.length)]);
+                sb.append(up.toUpperCase());
+            } else {
+                sb.append(array[random.nextInt(array.length)]);
+            }
+        }
+        return sb.toString();
+    }
