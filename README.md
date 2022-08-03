@@ -111,7 +111,7 @@ UPD 03.08.22 <a href="#03.08.22">03.08.22</a>
            char[] array = someString.toCharArray();
            for (int i = 0; i < 6; i++) {
                sb.append(random.nextInt(10));
-               if (i == random.nextInt(6)) {
+               (i == random.nextInt(6) || i == random.nextInt(6)) {   // логическое ИЛИ добавлено с целью повышения шанса получить загл. букву
                    String up = String.valueOf(array[random.nextInt(array.length)]);
                    sb.append(up.toUpperCase());
                } else {
