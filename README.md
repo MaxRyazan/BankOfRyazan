@@ -105,18 +105,18 @@ UPD 03.08.22 <a href="#03.08.22">03.08.22</a>
     
 ```java  
         public String generateCode(String someString) {
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        char[] array = someString.toCharArray();
-        for (int i = 0; i < 6; i++) {
-        sb.append(random.nextInt(10));
-        if (i == random.nextInt(6)) {
-        String up = String.valueOf(array[random.nextInt(array.length)]);
-        sb.append(up.toUpperCase());
-        } else {
-        sb.append(array[random.nextInt(array.length)]);
-        }
-        }
-        return sb.toString();
-        }  
+           Random random = new Random();
+           StringBuilder sb = new StringBuilder();
+           char[] array = someString.toCharArray();
+           for (int i = 0; i < 6; i++) {
+               sb.append(random.nextInt(10));
+               if (i == random.nextInt(6)) {
+                   String up = String.valueOf(array[random.nextInt(array.length)]);
+                   sb.append(up.toUpperCase());
+               } else {
+                   sb.append(array[random.nextInt(array.length)]);
+               }
+           }
+           return sb.toString();
+       } 
 ```
