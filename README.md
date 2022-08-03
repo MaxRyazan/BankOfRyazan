@@ -100,9 +100,9 @@ UPD 03.08.22 <a href="#03.08.22">03.08.22</a>
 ![44](https://user-images.githubusercontent.com/97405800/182603849-b1b86274-a097-4ff9-99dc-bf910b193852.jpg)
 
     - Здесь мы видим debug отчет об удачной отправке сообщения с проверчным кодом:  
-![5](https://user-images.githubusercontent.com/97405800/182604665-c05a1ab8-fe9f-426e-bc24-79bec4c43d32.jpg)
+![5](https://user-images.githubusercontent.com/97405800/182604665-c05a1ab8-fe9f-426e-bc24-79bec4c43d32.jpg)  
     - Сам метод, генерирующий код выглядит так:  
-    
+        # Генерируются строчные и заглавные буквы а также цифры.
 ```java  
         public String generateCode(String someString) {
            Random random = new Random();
