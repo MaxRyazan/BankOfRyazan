@@ -9,6 +9,7 @@ import java.util.Random;
 
 @Service
 public class ServiceClass {
+
     public double generateEveryMonthPay(int sum, double percent, int numberOfPays) {
         long sumInKop = sum * 100L;
         double result = (sumInKop * (percent * 0.01) + sumInKop) / numberOfPays;
@@ -21,8 +22,7 @@ public class ServiceClass {
         return (sumInKop + sumInKop * (percent / 100)) / 100;
     }
 
-    public String generateRandomUniqueNumber() {
-        Random random = new Random();
+    public String generateRandomUniqueNumber(Random random) {
         StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 8; i++) {
                 sb.append(random.nextInt(10));
@@ -30,8 +30,7 @@ public class ServiceClass {
         return sb.toString();
     }
 
-    public String generateDateWithHours(){
-        Date date = new Date();
+    public String generateDateWithHours(Date date ){
         String pattern = "dd-MM-yyyy HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
@@ -81,5 +80,8 @@ public class ServiceClass {
         return ((double)((int)(number * 1000))) / 1000;
     }
 
+    public double roundToDoubleWithTwoSymbolsAfterDot(double a) {
+        return (double) Math.round(a * 100) / 100;
+    }
 
 }

@@ -45,19 +45,19 @@ public class Client {
     private List<EmailCodeSender> emailCodes;
 
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
-    private Set<Transaction> outComingTransactions;
+    private List<Transaction> outComingTransactions;
 
     @OneToMany(mappedBy = "recipient", fetch = FetchType.LAZY)
-    private Set<Transaction> inComingTransactions;
+    private List<Transaction> inComingTransactions;
 
     @OneToMany(mappedBy = "borrower", fetch = FetchType.LAZY)
-    private Set<Credit> credits;
+    private List<Credit> credits;
 
     @OneToMany(mappedBy = "investor", fetch = FetchType.LAZY)
-    private Set<Investment> investments;
+    private List<Investment> investments;
 
     @OneToMany(mappedBy = "contributor", fetch = FetchType.LAZY)
-    private Set<Contribution> contributions;
+    private List<Contribution> contributions;
 
     public Client(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
         this.firstName = firstName;

@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table (name = "email_code_sender")
 public class EmailCodeSender {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

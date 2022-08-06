@@ -1,4 +1,4 @@
-package ru.maxryazan.bankofryazan.service;
+package ru.maxryazan.bankofryazan.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

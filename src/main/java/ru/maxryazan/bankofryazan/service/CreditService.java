@@ -30,17 +30,18 @@ public class CreditService {
     }
 
     public void addNewCredit(String phoneNumber, int sum, double percent, int numberOfPays) {
-        if (phoneNumber.isBlank() || sum <= 9999 || percent <= 5 || numberOfPays <= 1) {
-            throw new IllegalArgumentException("Can borrow minimum 10 000, and minimum 2 pays");
+        if (phoneNumber.isBlank() || sum <= 9999 || percent <= 2 || numberOfPays <= 1) {
+            throw new IllegalArgumentException("Can borrow minimum 10 000, min 2%,  and minimum 2 pays");
         }
         Client borrower = clientService.findByPhoneNumber(phoneNumber);
 
-        Set<Credit> thisBorrowerCredits = borrower.getCredits();
+        List<Credit> thisBorrowerCredits = borrower.getCredits();
 
         Credit credit = new Credit();
         String num;
         do {
-            num = serviceClass.generateRandomUniqueNumber();
+            Random random = new Random();
+            num = serviceClass.generateRandomUniqueNumber(random);
         }  while (!isUnique(num));
         credit.setNumberOfCreditContract(num);
         credit.setSumOfCredit(sum);
@@ -72,7 +73,7 @@ public class CreditService {
            for(Pay pp : credit.getPays()) {
                sumOfPays += pp.getSum();
            }
-           double temp = credit.getSumWithPercents() - (double)((int)(sumOfPays * 100) / 100);
+           double temp = credit.getSumWithPercents() - serviceClass.roundToDoubleWithTwoSymbolsAfterDot(sumOfPays);
 
                 credit.setRestOfCredit(temp);
                 save(credit);

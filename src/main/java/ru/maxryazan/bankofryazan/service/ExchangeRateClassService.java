@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.repository.ExchangeRateRepository;
-
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ExchangeRateClassService {
@@ -21,16 +20,6 @@ public class ExchangeRateClassService {
         this.rateRepository = rateRepository;
         this.serviceClass = serviceClass;
     }
-
-
-    public ExchangeRateClass findById(long id){
-      Optional<ExchangeRateClass> exchangeRate =  rateRepository.findById(id);
-      if(exchangeRate.isPresent()) {
-          return exchangeRate.get();
-      }
-      throw new IllegalArgumentException();
-    }
-
 
     public ExchangeRateClass getRateFromAPI() {
         ExchangeRateClass exchangeRateClass = new ExchangeRateClass();
@@ -45,8 +34,8 @@ public class ExchangeRateClassService {
                     final String URL_USD = "https://free.currconv.com/api/v7/convert?q=USD_RUB&compact=ultra&apiKey=f197b54334ada744011e";
                     ExchangeRateClass EUR_exchange = mapper.readValue(new URL(URL_EUR), ExchangeRateClass.class);
                     ExchangeRateClass USD_exchange = mapper.readValue(new URL(URL_USD), ExchangeRateClass.class);
-                    exchangeRateClass.setCourse_EUR(round(EUR_exchange.getCourse_EUR()));
-                    exchangeRateClass.setCourse_USD(round(USD_exchange.getCourse_USD()));
+                    exchangeRateClass.setCourse_EUR(serviceClass.roundToDoubleWithTwoSymbolsAfterDot(EUR_exchange.getCourse_EUR()));
+                    exchangeRateClass.setCourse_USD(serviceClass.roundToDoubleWithTwoSymbolsAfterDot(USD_exchange.getCourse_USD()));
                     exchangeRateClass.setDate(simpleDateFormat.format(date));
                     rateRepository.save(exchangeRateClass);
                     return exchangeRateClass;
@@ -61,16 +50,9 @@ public class ExchangeRateClassService {
             return null;
     }
 
-    private double round(double a) {
-        return (double) Math.round(a * 100) / 100;
-    }
 
     public List<ExchangeRateClass> findAll() {
         return rateRepository.findAll();
     }
 
-    public ExchangeRateClass findByDate(String date){
-        return  rateRepository.findAll().stream()
-                .filter(rateClass -> rateClass.getDate().equals(serviceClass.generateDate())).findFirst().orElse(null);
-    }
 }

@@ -8,6 +8,7 @@ import ru.maxryazan.bankofryazan.models.Status;
 import ru.maxryazan.bankofryazan.repository.PayRepository;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 
 @Service
@@ -40,8 +41,9 @@ public class PayService {
         if(credit.getStatus().equals(Status.ACTIVE)) {
             if (client.getBalance() >= sum && sum > 0) {
                 if (credit.getRestOfCredit() >= sum) {
+                    Date date = new Date();
                     Pay pay = new Pay(
-                            serviceClass.generateDateWithHours(),
+                            serviceClass.generateDateWithHours(date),
                             sum,
                             credit
                     );

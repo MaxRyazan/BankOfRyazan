@@ -5,10 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.service.ClientService;
-import ru.maxryazan.bankofryazan.service.ExchangeRateClassService;
-import ru.maxryazan.bankofryazan.service.ServiceClass;
 import ru.maxryazan.bankofryazan.service.TransactionalService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class PersonalAreaController {
     private final ClientService clientService;
-    private final ExchangeRateClassService exchangeRateService;
-    private final ServiceClass serviceClass;
+
     private final TransactionalService transactionalService;
 
-    public PersonalAreaController(ClientService clientService, ExchangeRateClassService exchangeRateService, ServiceClass serviceClass, TransactionalService transactionalService) {
+    public PersonalAreaController(ClientService clientService, TransactionalService transactionalService) {
         this.clientService = clientService;
-        this.exchangeRateService = exchangeRateService;
-        this.serviceClass = serviceClass;
         this.transactionalService = transactionalService;
     }
 

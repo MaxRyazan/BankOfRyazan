@@ -6,8 +6,8 @@ import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Transaction;
 import ru.maxryazan.bankofryazan.repository.TransactionalRepository;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.*;
+
 
 @Service
 public class TransactionalService {
@@ -24,39 +24,33 @@ public class TransactionalService {
 
 
 
-    public Set<Transaction> findAllTransactionalWithRecipient(String recipientLastName, HttpServletRequest request) {
-        Set<Transaction> setOfTransactions = new HashSet<>();
-        Principal principal = request.getUserPrincipal();
+    public List<Transaction> findAllTransactionalWithRecipient(String recipientLastName, HttpServletRequest request) {
+        Client sender = clientService.findByRequest(request);
 
-        String  senderEmail = principal.getName();
+        List<Transaction> listOfTransactions = new ArrayList<>(sender.getOutComingTransactions().stream()
+                .filter(transaction -> transaction.getRecipient().getLastName().equals(recipientLastName)).toList());
 
-        Client sender = clientService.findByPhoneNumber(senderEmail);
-        List<Client> allClients = clientService.findAll();
-        Optional<Client> recipient = allClients.stream().filter(client -> client.getLastName().equals(recipientLastName)).findFirst();
-        if(recipient.isPresent()) {
-            for(Transaction tr: recipient.get().getInComingTransactions()) {
-                if((tr.getSender().getLastName()).equals(sender.getLastName())){
-                    setOfTransactions.add(tr);
-                }
-            }
-        }
-        return setOfTransactions;
+        listOfTransactions.addAll(sender.getInComingTransactions().stream()
+                .filter(transaction -> transaction.getSender().getLastName().equals(recipientLastName)).toList());
+
+        return listOfTransactions;
     }
+
+
+
 
     public void save(Transaction transaction) {
         transactionalRepository.save(transaction);
     }
 
     public void createNewTransaction(String recipientPhoneNumber, int sum, HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        String senderLastName = principal.getName();
 
-        Client sender = clientService.findByPhoneNumber(senderLastName);
+        Client sender = clientService.findByRequest(request);
         Client recipient = clientService.findByPhoneNumber(recipientPhoneNumber);
 
-
         if (sender.getBalance() >= sum) {
-            Transaction transaction = new Transaction(sender, recipient, sum, serviceClass.generateDateWithHours());
+            Date date = new Date();
+            Transaction transaction = new Transaction(sender, recipient, sum, serviceClass.generateDateWithHours(date));
             sender.setBalance(sender.getBalance() - sum);
             recipient.setBalance(recipient.getBalance() + sum);
             transactionalRepository.save(transaction);

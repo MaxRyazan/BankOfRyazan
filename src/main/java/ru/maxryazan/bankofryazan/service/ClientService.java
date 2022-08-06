@@ -4,23 +4,30 @@ package ru.maxryazan.bankofryazan.service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import ru.maxryazan.bankofryazan.models.Client;
-import ru.maxryazan.bankofryazan.models.Contribution;
-import ru.maxryazan.bankofryazan.models.Credit;
-import ru.maxryazan.bankofryazan.models.Status;
+import ru.maxryazan.bankofryazan.models.*;
 import ru.maxryazan.bankofryazan.repository.ClientRepository;
-
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public record ClientService(ClientRepository clientRepository, BCryptPasswordEncoder passwordEncoder,
-                            ServiceClass serviceClass, ContributionService contributionService,
-                            InvestmentService investmentService) {
+public class ClientService {
+    private final ClientRepository clientRepository;
+    public final BCryptPasswordEncoder passwordEncoder;
+    private final ServiceClass serviceClass;
+    private final ContributionService contributionService;
+    private final InvestmentService investmentService;
+
+    public ClientService(ClientRepository clientRepository,
+                         BCryptPasswordEncoder passwordEncoder, ServiceClass serviceClass,
+                         ContributionService contributionService, InvestmentService investmentService) {
+        this.clientRepository = clientRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.serviceClass = serviceClass;
+        this.contributionService = contributionService;
+        this.investmentService = investmentService;
+    }
 
     public void save(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
         Client newClient = new Client(firstName, lastName,  validationPhoneNumber(phoneNumber), email, passwordEncoder.encode(pinCode));
@@ -54,7 +61,6 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
         throw new IllegalArgumentException("User with phone number: '" + phoneNumber + "' not found");
     }
 
-
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
@@ -75,7 +81,7 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
         client.getEmailCodes().clear();
         for(Contribution cn : client.getContributions()) {
             if(cn.getStatus().equals(Status.ACTIVE)) {
-                if (cn.getDateOfEnd().equals(serviceClass.generateDate())) {
+                if (cn.getDateOfEnd().equals(serviceClass.generateDate())) {  //TODO добавить условие (дата ПОЗЖЕ чем текущая)
                     cn.setStatus(Status.CLOSED);
                     contributionService.save(cn);
                     cn.getContributor().setBalance(cn.getContributor().getBalance() + cn.getSumWithPercent());
@@ -84,24 +90,28 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
             }
         }
 
+        Collections.reverse(client.getInComingTransactions());
+        Collections.reverse(client.getOutComingTransactions());
+
         model.addAttribute("firstName", client.getFirstName());
         model.addAttribute("lastName", client.getLastName());
         model.addAttribute("phone", client.getPhoneNumber());
-        model.addAttribute("balance", ((double)((int)(client.getBalance() * 100))) / 100);
-        model.addAttribute("balanceUSD", ((double)((int)(client.getBalanceUSD() * 100))) / 100);
-        model.addAttribute("balanceEUR", ((double)((int)(client.getBalanceEUR() * 100))) / 100);
+        model.addAttribute("balance", serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalance()));
+        model.addAttribute("balanceUSD",  serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceUSD()));
+        model.addAttribute("balanceEUR",  serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceEUR()));
         model.addAttribute("incoming", client.getInComingTransactions());
         model.addAttribute("outcoming", client.getOutComingTransactions());
         model.addAttribute("investments", client.getInvestments());
-        Set<Credit> closed = client.getCredits().stream()
-                .filter(credit -> credit.getStatus().equals(Status.CLOSED)).collect(Collectors.toSet());
-        Set<Credit> active = client.getCredits().stream()
-                .filter(credit -> credit.getStatus().equals(Status.ACTIVE)).collect(Collectors.toSet());
+
+        List<Credit> closed = client.getCredits().stream()
+                .filter(credit -> credit.getStatus().equals(Status.CLOSED)).collect(Collectors.toList());
+        List<Credit> active = client.getCredits().stream()
+                .filter(credit -> credit.getStatus().equals(Status.ACTIVE)).collect(Collectors.toList());
         model.addAttribute("closedCredits", closed);
         model.addAttribute("activeCredits", active);
 
-        Set<Contribution> contributions = client.getContributions().stream()
-                .filter(contribution -> contribution.getStatus().equals(Status.ACTIVE)).collect(Collectors.toSet());
+        List<Contribution> contributions = client.getContributions().stream()
+                .filter(contribution -> contribution.getStatus().equals(Status.ACTIVE)).collect(Collectors.toList());
 
         model.addAttribute("contributions", contributions);
         save(client);
@@ -122,7 +132,8 @@ public record ClientService(ClientRepository clientRepository, BCryptPasswordEnc
             Contribution contribution = new Contribution();
             String number;
             do {
-                number = serviceClass.generateRandomUniqueNumber();
+                Random random = new Random();
+                number = serviceClass.generateRandomUniqueNumber(random);
             }while (isUnique(number));
             contribution.setNumberOfContribution(number);
             contribution.setSumOfContribution(sum);

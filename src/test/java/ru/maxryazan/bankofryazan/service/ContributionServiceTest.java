@@ -7,9 +7,6 @@ class ContributionServiceTest {
 
     ServiceClass serviceClass = Mockito.mock(ServiceClass.class);
 
-    @Test
-    void checkEndDateOfContributions() {
-    }
 
     @Test
     void generateDateOfEnd() {
