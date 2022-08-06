@@ -134,13 +134,13 @@ public class ClientService {
         Client client = findByPhoneNumber(phoneNumber);
 
         if(client.getBalance() >= sum) {
-
             Contribution contribution = new Contribution();
             Random random = new Random();
             String number;
             do {
                 number = serviceClass.generateRandomUniqueNumber(random);
             } while (!isUnique(number));
+
             contribution.setNumberOfContribution(number);
             contribution.setSumOfContribution(sum);
             contribution.setPercentByContribution(percent);
@@ -157,13 +157,9 @@ public class ClientService {
             throw new IllegalArgumentException("not enough money");
         }
     }
+
     private boolean isUnique(String str) {
-        for (Contribution cr : contributionService.findAll()) {
-            if (cr.getNumberOfContribution().equals(str)) {
-                return false;
-            }
-        }
-        return true;
+        return contributionService.findAll().stream().noneMatch(contribution -> contribution.getNumberOfContribution().equals(str));
     }
 
     public void selfRegistration(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
