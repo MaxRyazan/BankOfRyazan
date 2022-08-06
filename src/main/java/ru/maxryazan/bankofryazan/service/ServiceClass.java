@@ -45,7 +45,7 @@ public class ServiceClass {
 
     public double generateSumWithPercent(int sum, double percent, int duration) {
         double percentByThisContributionDependsOfDuration = percent / 12 * duration * 0.01;
-        return sum + sum * percentByThisContributionDependsOfDuration;
+        return roundToDoubleWithTwoSymbolsAfterDot(sum + sum * percentByThisContributionDependsOfDuration);
     }
 
     public String generateDateOfEndInMonth(int duration) {

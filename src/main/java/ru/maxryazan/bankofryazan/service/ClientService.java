@@ -107,11 +107,17 @@ public class ClientService {
                 .filter(credit -> credit.getStatus().equals(Status.CLOSED)).collect(Collectors.toList());
         List<Credit> active = client.getCredits().stream()
                 .filter(credit -> credit.getStatus().equals(Status.ACTIVE)).collect(Collectors.toList());
+
+        Collections.reverse(closed);
+        Collections.reverse(active);
+
         model.addAttribute("closedCredits", closed);
         model.addAttribute("activeCredits", active);
 
         List<Contribution> contributions = client.getContributions().stream()
                 .filter(contribution -> contribution.getStatus().equals(Status.ACTIVE)).collect(Collectors.toList());
+
+        Collections.reverse(contributions);
 
         model.addAttribute("contributions", contributions);
         save(client);
@@ -130,11 +136,11 @@ public class ClientService {
         if(client.getBalance() >= sum) {
 
             Contribution contribution = new Contribution();
+            Random random = new Random();
             String number;
             do {
-                Random random = new Random();
                 number = serviceClass.generateRandomUniqueNumber(random);
-            }while (isUnique(number));
+            } while (!isUnique(number));
             contribution.setNumberOfContribution(number);
             contribution.setSumOfContribution(sum);
             contribution.setPercentByContribution(percent);

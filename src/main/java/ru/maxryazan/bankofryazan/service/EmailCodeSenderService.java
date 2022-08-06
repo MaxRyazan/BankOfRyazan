@@ -4,10 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.EmailCodeSender;
 import ru.maxryazan.bankofryazan.repository.EmailCodeSenderRepository;
-
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 
 @Service

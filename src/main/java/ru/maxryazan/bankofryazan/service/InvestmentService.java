@@ -16,22 +16,22 @@ public class InvestmentService {
     private final RateService rateService;
     private final ExchangeRateClassService exchangeRateClassService;
     private final InvestmentRepository investmentRepository;
-    public InvestmentService(ServiceClass serviceClass, RateService rateService, ExchangeRateClassService exchangeRateClassService, InvestmentRepository investmentRepository) {
-        this.serviceClass = serviceClass;
 
+    public InvestmentService(ServiceClass serviceClass, RateService rateService,
+                             ExchangeRateClassService exchangeRateClassService, InvestmentRepository investmentRepository) {
+        this.serviceClass = serviceClass;
         this.rateService = rateService;
         this.exchangeRateClassService = exchangeRateClassService;
         this.investmentRepository = investmentRepository;
     }
 
 
-
     public String createMainPage(Model model) {
         Rate thisDayRate = rateService.showFromDB(serviceClass.generateDate());
         ExchangeRateClass todayExchangeRate = exchangeRateClassService.getRateFromAPI();
-          model.addAttribute("thisDayRate", thisDayRate);
-          model.addAttribute("todayExchangeRate", todayExchangeRate);
-          model.addAttribute("silver", "silver");
+        model.addAttribute("thisDayRate", thisDayRate);
+        model.addAttribute("todayExchangeRate", todayExchangeRate);
+        model.addAttribute("silver", "silver");
 
 
         ExchangeRateClass exchangeRateADayAgo = createExchangeRateClass(-1);
@@ -44,10 +44,10 @@ public class InvestmentService {
         ExchangeRateClass tempExchangeWeek = createTempExchangeRateClass(todayExchangeRate, exchangeRateAWeekAgo);
         ExchangeRateClass tempExchangeMonth = createTempExchangeRateClass(todayExchangeRate, exchangeRateAMonthAgo);
         ExchangeRateClass tempExchangeYear = createTempExchangeRateClass(todayExchangeRate, exchangeRateAYearAgo);
-          model.addAttribute("dayExchange", tempExchangeDay);
-          model.addAttribute("weekExchange", tempExchangeWeek);
-          model.addAttribute("monthExchange", tempExchangeMonth);
-          model.addAttribute("yearExchange", tempExchangeYear);
+        model.addAttribute("dayExchange", tempExchangeDay);
+        model.addAttribute("weekExchange", tempExchangeWeek);
+        model.addAttribute("monthExchange", tempExchangeMonth);
+        model.addAttribute("yearExchange", tempExchangeYear);
 
 
         Rate rateADayAgo = createRate(-1);
@@ -60,27 +60,28 @@ public class InvestmentService {
         Rate tempRateWeek = createTempRate(thisDayRate, rateAWeekAgo);
         Rate tempRateMonth = createTempRate(thisDayRate, rateAMonthAgo);
         Rate tempRateYear = createTempRate(thisDayRate, rateAYearAgo);
-          model.addAttribute("dayRate", tempRateDay);
-          model.addAttribute("weekRate", tempRateWeek);
-          model.addAttribute("monthRate", tempRateMonth);
-          model.addAttribute("yearRate", tempRateYear);
+        model.addAttribute("dayRate", tempRateDay);
+        model.addAttribute("weekRate", tempRateWeek);
+        model.addAttribute("monthRate", tempRateMonth);
+        model.addAttribute("yearRate", tempRateYear);
 
         return "/investments/investments-main";
 
     }
 
-    private ExchangeRateClass createExchangeRateClass(int duration){
+    private ExchangeRateClass createExchangeRateClass(int duration) {
         return exchangeRateClassService.findAll().stream()
                 .filter(exchangeRateClass -> exchangeRateClass.getDate().equals(serviceClass.generateDateOfEndInDays(duration)))
-                .findFirst().orElse(exchangeRateClassService.findAll().get(0)) ;
+                .findFirst().orElse(exchangeRateClassService.findAll().get(0));
     }
-    private Rate createRate(int duration){
+
+    private Rate createRate(int duration) {
         List<Rate> rates = rateService.findAll();
         return rates.stream().filter(rate -> rate.getDate().equals(serviceClass.generateDateOfEndInDays(duration)))
                 .findFirst().orElse(rates.get(0));
     }
 
-    private ExchangeRateClass createTempExchangeRateClass(ExchangeRateClass todayRate, ExchangeRateClass lastRate){
+    private ExchangeRateClass createTempExchangeRateClass(ExchangeRateClass todayRate, ExchangeRateClass lastRate) {
         ExchangeRateClass exchangeRateClass = new ExchangeRateClass();
         exchangeRateClass.setCourse_USD(
                 serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getCourse_USD() - lastRate.getCourse_USD()));
@@ -89,7 +90,7 @@ public class InvestmentService {
         return exchangeRateClass;
     }
 
-    private Rate createTempRate(Rate todayRate, Rate lastRate){
+    private Rate createTempRate(Rate todayRate, Rate lastRate) {
         return new Rate(
                 (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getSilver() - lastRate.getSilver()),
                 (float) serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(todayRate.getGold() - lastRate.getGold()),
@@ -99,17 +100,18 @@ public class InvestmentService {
     }
 
     public void save(Investment investment) {
-            investmentRepository.save(investment);
+        investmentRepository.save(investment);
     }
 
     public Rate findByDate(String date) {
         return rateService.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst().orElse(null);
     }
+
     public ExchangeRateClass findByDateMoney(String date) {
         return exchangeRateClassService.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst().orElse(null);
     }
 
-    public String changeType(String type){
+    public String changeType(String type) {
         switch (type) {
             case "Золото" -> {
                 return "gold";
@@ -133,10 +135,10 @@ public class InvestmentService {
                 return "EUR";
             }
         }
-        throw  new IllegalArgumentException();
+        throw new IllegalArgumentException();
     }
 
-    public double setPriceOfInvestment(String investment, String amount){
+    public double setPriceOfInvestment(String investment, String amount) {
         switch (investment) {
             case "gold" -> {
                 return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getGold() * (Double.parseDouble(amount) / 28.349));
@@ -151,23 +153,41 @@ public class InvestmentService {
                 return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getPalladium() * (Double.parseDouble(amount) / 28.349));
             }
             case "rhodium" -> {
-                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getRhodium()  * (Double.parseDouble(amount) / 28.349));
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDate(serviceClass.generateDate()).getRhodium() * (Double.parseDouble(amount) / 28.349));
             }
             case "USD" -> {
-                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDateMoney(serviceClass.generateDate()).getCourse_USD()  * (Double.parseDouble(amount)));
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDateMoney(serviceClass.generateDate()).getCourse_USD() * (Double.parseDouble(amount)));
             }
             case "EUR" -> {
-                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDateMoney(serviceClass.generateDate()).getCourse_EUR()  * (Double.parseDouble(amount)));
+                return serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(findByDateMoney(serviceClass.generateDate()).getCourse_EUR() * (Double.parseDouble(amount)));
             }
         }
-        throw  new IllegalArgumentException();
+        throw new IllegalArgumentException();
     }
 
-    public void checkCurrPriceOfInvestment(Client client){
-        for(Investment inv : client.getInvestments()){
-           inv.setCurrPriceOfInvestment(setPriceOfInvestment(inv.getType(), Double.toString(inv.getInvestmentSizeByUnits())));
-           inv.setMargin(serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(inv.getCurrPriceOfInvestment() - inv.getBasePriceOfInvestment()));
-           save(inv);
+    public void checkCurrPriceOfInvestment(Client client) {
+        for (Investment inv : client.getInvestments()) {
+            inv.setCurrPriceOfInvestment(setPriceOfInvestment(inv.getType(), Double.toString(inv.getInvestmentSizeByUnits())));
+            inv.setMargin(serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(inv.getCurrPriceOfInvestment() - inv.getBasePriceOfInvestment()));
+            save(inv);
+        }
+    }
+
+    public void createInvestment(String type, String amount, Client client) {
+        if (client.getBalance() > setPriceOfInvestment(changeType(type), amount)) {
+            Investment investment = new Investment();
+            String typeOfInvestment = changeType(type);
+            investment.setInvestor(client);
+            investment.setDateOfInvestment(serviceClass.generateDate());
+            investment.setType(typeOfInvestment);
+            investment.setInvestmentSizeByUnits(Double.parseDouble(amount));
+            investment.setBasePriceOfInvestment(setPriceOfInvestment(typeOfInvestment, amount));
+            investment.setCurrPriceOfInvestment(setPriceOfInvestment(typeOfInvestment, amount));
+            save(investment);
+            client.getInvestments().add(investment);
+            client.setBalance(client.getBalance() - investment.getBasePriceOfInvestment());
+        } else {
+            throw new IllegalArgumentException("not enough money");
         }
     }
 }
