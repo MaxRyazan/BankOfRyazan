@@ -6,8 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.maxryazan.bankofryazan.models.Client;
-import ru.maxryazan.bankofryazan.models.EmailCodeSender;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.models.Rate;
 import ru.maxryazan.bankofryazan.service.*;
@@ -58,7 +56,7 @@ public class BankMainPageController {
                                        @RequestParam String phoneNumber,
                                        @RequestParam String email,
                                        @RequestParam String pinCode){
-        clientService.selfRegistration(firstName, lastName, phoneNumber, email, pinCode);
+        clientService.save(firstName, lastName, phoneNumber, email, pinCode);
         return "redirect:/main/personal-area";
     }
 

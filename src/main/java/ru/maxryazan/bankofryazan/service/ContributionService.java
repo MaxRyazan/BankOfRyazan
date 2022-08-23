@@ -22,7 +22,7 @@ public class ContributionService {
     }
 
 
-    public List<Contribution> findAll() {
-        return contributionRepository.findAll();
+    public boolean existByNumberOfContribution(String number){
+        return contributionRepository.existsByNumberOfContribution(number);
     }
 }

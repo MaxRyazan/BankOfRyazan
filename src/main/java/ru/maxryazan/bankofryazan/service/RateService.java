@@ -6,9 +6,6 @@ import ru.maxryazan.bankofryazan.models.MetalRate;
 import ru.maxryazan.bankofryazan.models.Rate;
 import ru.maxryazan.bankofryazan.repository.RateRepository;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,36 +20,35 @@ public class RateService {
 
     public Rate getRateFromAPI() {
         ObjectMapper mapper = new ObjectMapper();
-        Date date = new Date();
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        List<Rate> all = rateRepository.findAll();
-
-        if (all.isEmpty() || !(all.get(all.size() - 1).getDate().equals(simpleDateFormat.format(date)))) {
+        if (rateRepository.findByDate(serviceClass.generateDate()) == null) {
             try {
                 final String METALS = "https://metals-api.com/api/latest?access_key=ymg6zgqfz0m5emiz9niyfcumi5otq3mhq30i7nr73a6gw6jt1l31739ci076&base=RUB&symbols=XAU%2CXAG%2CXPD%2CXPT%2CXRH";
                 MetalRate metals = mapper.readValue(new URL(METALS), MetalRate.class);
-               Rate rate = metals.getRates();
-               rate.setDate(serviceClass.generateDate());
+                Rate rate = metals.getRates();
+                rate.setDate(serviceClass.generateDate());
                 rateRepository.save(rate);
                 return metals.getRates();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            if(all.get(all.size()-1).getDate().equals(simpleDateFormat.format(date))) {
-                return all.get(all.size() - 1);
-            }
         }
-        return null;
+        return rateRepository.findByDate(serviceClass.generateDate());
     }
 
     public Rate showFromDB(String date){
-        Optional<Rate> thisRate = rateRepository.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst();
-        return thisRate.orElseGet(this::getRateFromAPI);
+        if(rateRepository.findByDate(date) == null){
+            return getRateFromAPI();
+        }
+    return rateRepository.findByDate(date);
     }
 
-    public List<Rate> findAll() {
-     return rateRepository.findAll();
+
+    public Rate findByDate(String date) {
+      return rateRepository.findByDate(date);
+    }
+
+    public Rate findFirst(){
+        Optional<Rate> rate = rateRepository.findById(rateRepository.findFirst());
+        return rate.orElse(null);
     }
 }

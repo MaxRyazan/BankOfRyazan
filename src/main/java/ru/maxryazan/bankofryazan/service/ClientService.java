@@ -8,6 +8,8 @@ import ru.maxryazan.bankofryazan.models.*;
 import ru.maxryazan.bankofryazan.repository.ClientRepository;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,40 +32,38 @@ public class ClientService {
     }
 
     public void save(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
-        Client newClient = new Client(firstName, lastName,  validationPhoneNumber(phoneNumber), email, passwordEncoder.encode(pinCode));
-        newClient.setBalance(0);
-        newClient.setBalanceUSD(0);
-        newClient.setBalanceEUR(0);
-        clientRepository.save(newClient);
+        if (clientRepository.findByPhoneNumber(validationPhoneNumber(phoneNumber)) == null) {
+            Client client = new Client(firstName, lastName, phoneNumber, email, passwordEncoder.encode(pinCode));
+            client.setBalance(0);
+            client.setBalanceUSD(0);
+            client.setBalanceEUR(0);
+            clientRepository.save(client);
+        } else {
+            throw new IllegalArgumentException("клиент с таким номером телефона уже зарегистрирован!");
+        }
     }
 
-    public String validationPhoneNumber(String phoneNumber){
+    public String validationPhoneNumber(String phoneNumber) {
         String validatingPhone = phoneNumber.replace(" ", "");
         String regex = "\\d+";
-        if(
+        if (
                 validatingPhone.matches(regex)
-                && (validatingPhone.length() == 11)
-                && (validatingPhone.startsWith("8"))
+                        && (validatingPhone.length() == 11)
+                        && (validatingPhone.startsWith("8"))
         ) {
             return validatingPhone;
         }
-        throw  new IllegalArgumentException();
+        throw new IllegalArgumentException();
     }
 
     public Client findByPhoneNumber(String phoneNumber) {
-        List<Client> allClients = clientRepository.findAll();
-        String checkedPhone = phoneNumber.replace(" ", "");
-        Optional<Client> cl = allClients.stream().filter(
-                client -> client.getPhoneNumber().equals(checkedPhone)).findFirst();
-        if (cl.isPresent()) {
-            return cl.get();
+        Client client = clientRepository.findByPhoneNumber(validationPhoneNumber(phoneNumber));
+        if (client == null) {
+            throw new IllegalArgumentException("User with phone number: '" + phoneNumber + "' not found");
         }
-        throw new IllegalArgumentException("User with phone number: '" + phoneNumber + "' not found");
+        return client;
     }
 
-    public List<Client> findAll() {
-        return clientRepository.findAll();
-    }
 
     public void save(Client client) {
         clientRepository.save(client);
@@ -79,9 +79,9 @@ public class ClientService {
         Client client = findByRequest(request);
         investmentService.checkCurrPriceOfInvestment(client);
         client.getEmailCodes().clear();
-        for(Contribution cn : client.getContributions()) {
-            if(cn.getStatus().equals(Status.ACTIVE)) {
-                if (cn.getDateOfEnd().equals(serviceClass.generateDate())) {  //TODO добавить условие (дата ПОЗЖЕ чем текущая)
+        for (Contribution cn : client.getContributions()) {
+            if (cn.getStatus().equals(Status.ACTIVE)) {
+                if (cn.getDateOfEnd().equals(serviceClass.generateDate()) || afterDateOfEnd(cn.getDateOfEnd())) {
                     cn.setStatus(Status.CLOSED);
                     contributionService.save(cn);
                     cn.getContributor().setBalance(cn.getContributor().getBalance() + cn.getSumWithPercent());
@@ -97,8 +97,8 @@ public class ClientService {
         model.addAttribute("lastName", client.getLastName());
         model.addAttribute("phone", client.getPhoneNumber());
         model.addAttribute("balance", serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalance()));
-        model.addAttribute("balanceUSD",  serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceUSD()));
-        model.addAttribute("balanceEUR",  serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceEUR()));
+        model.addAttribute("balanceUSD", serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceUSD()));
+        model.addAttribute("balanceEUR", serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceEUR()));
         model.addAttribute("incoming", client.getInComingTransactions());
         model.addAttribute("outcoming", client.getOutComingTransactions());
         model.addAttribute("investments", client.getInvestments());
@@ -124,16 +124,29 @@ public class ClientService {
         return "personal/personal";
     }
 
+    private boolean afterDateOfEnd(String dateOfEnd) {
+        Date now = new Date();
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        try {
+            Date endDate = dateFormat.parse(dateOfEnd);
+            return endDate.before(now);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /**
      * @param phoneNumber of current contributor
-     * @param sum of contribution in roubles
-     * @param percent of contribution
-     * @param duration in MONTHS
+     * @param sum         of contribution in roubles
+     * @param percent     of contribution
+     * @param duration    in MONTHS
      */
     public void addNewContribution(String phoneNumber, int sum, double percent, int duration) {
         Client client = findByPhoneNumber(phoneNumber);
 
-        if(client.getBalance() >= sum) {
+        if (client.getBalance() >= sum) {
             Contribution contribution = new Contribution();
             Random random = new Random();
             String number;
@@ -159,14 +172,6 @@ public class ClientService {
     }
 
     private boolean isUnique(String str) {
-        return contributionService.findAll().stream().noneMatch(contribution -> contribution.getNumberOfContribution().equals(str));
-    }
-
-    public void selfRegistration(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
-        Client client = new Client(firstName, lastName, phoneNumber, email, passwordEncoder.encode(pinCode));
-        client.setBalance(0);
-        client.setBalanceUSD(0);
-        client.setBalanceEUR(0);
-        clientRepository.save(client);
+        return !contributionService.existByNumberOfContribution(str);
     }
 }

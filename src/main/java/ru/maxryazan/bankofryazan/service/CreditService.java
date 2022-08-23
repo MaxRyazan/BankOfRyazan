@@ -33,7 +33,7 @@ public class CreditService {
         if (phoneNumber.isBlank() || sum <= 9999 || percent <= 2 || numberOfPays <= 1) {
             throw new IllegalArgumentException("Can borrow minimum 10 000, min 2%,  and minimum 2 pays");
         }
-        Client borrower = clientService.findByPhoneNumber(phoneNumber);
+        Client borrower = clientService.findByPhoneNumber(clientService.validationPhoneNumber(phoneNumber));
 
         List<Credit> thisBorrowerCredits = borrower.getCredits();
 
@@ -83,13 +83,14 @@ public class CreditService {
 
 
     public Credit findByNumberOfCreditContract(String numberOfCreditContract) {
-      Optional<Credit> cr  = creditRepository.findAll().stream().filter(
-              credit -> credit.getNumberOfCreditContract().equals(numberOfCreditContract)).findFirst();
-        if(cr.isPresent()){
-            return cr.get();
+        Credit credit = creditRepository.findByNumberOfCreditContract(numberOfCreditContract);
+        if (credit == null) {
+            throw new IllegalArgumentException();
+        } else {
+            return credit;
         }
-        throw  new IllegalArgumentException();
     }
+
 
     public String checkRestOfCredit(Credit credit, Model model) {
         List<Pay> pays = credit.getPays();
@@ -121,9 +122,7 @@ public class CreditService {
 
 
     private boolean isUnique(String str) {
-       Credit credit = creditRepository.findAll().stream()
-               .filter(isUniqueCredit -> isUniqueCredit.getNumberOfCreditContract().equals(str)).findFirst().orElse(null);
-             return credit == null;
+     return !creditRepository.existsByNumberOfCreditContract(str);
     }
 
 }

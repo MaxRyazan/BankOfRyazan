@@ -32,7 +32,8 @@ public class CreditController {
 
 
     @PostMapping("/credit-pays")
-    public String addPay(@RequestParam double sum, @RequestParam String numberOfCreditContract, HttpServletRequest request){
+    public String addPay(@RequestParam double sum, @RequestParam String numberOfCreditContract,
+                         HttpServletRequest request){
     return payService.addNewPay(sum, numberOfCreditContract, request);
     }
 }

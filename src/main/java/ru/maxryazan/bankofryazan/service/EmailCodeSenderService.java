@@ -43,11 +43,7 @@ public class EmailCodeSenderService {
         codeRepository.save(codeSender);
     }
 
-    public void deleteAll(Client client) {
-        for (EmailCodeSender ecs : codeRepository.findAll()) {
-            if (ecs.getPassRestorer().getId() == client.getId()) {
-                codeRepository.delete(ecs);
-            }
-        }
+    public void deleteAllCodesOFThisRestorer(Client client) {
+      codeRepository.deleteAllCodesOFThisRestorer(client);
     }
 }

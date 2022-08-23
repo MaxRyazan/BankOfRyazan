@@ -8,6 +8,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -24,11 +25,7 @@ public class ExchangeRateClassService {
     public ExchangeRateClass getRateFromAPI() {
         ExchangeRateClass exchangeRateClass = new ExchangeRateClass();
         ObjectMapper mapper = new ObjectMapper();
-        Date date = new Date();
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        List<ExchangeRateClass> all = rateRepository.findAll();
-            if (all.isEmpty() || !(all.get(all.size()-1).getDate().equals(simpleDateFormat.format(date)))) {
+            if (rateRepository.findByDate(serviceClass.generateDate()) == null) {
                 try {
                     final String URL_EUR = "https://free.currconv.com/api/v7/convert?q=EUR_RUB&compact=ultra&apiKey=f197b54334ada744011e";
                     final String URL_USD = "https://free.currconv.com/api/v7/convert?q=USD_RUB&compact=ultra&apiKey=f197b54334ada744011e";
@@ -36,23 +33,24 @@ public class ExchangeRateClassService {
                     ExchangeRateClass USD_exchange = mapper.readValue(new URL(URL_USD), ExchangeRateClass.class);
                     exchangeRateClass.setCourse_EUR(serviceClass.roundToDoubleWithTwoSymbolsAfterDot(EUR_exchange.getCourse_EUR()));
                     exchangeRateClass.setCourse_USD(serviceClass.roundToDoubleWithTwoSymbolsAfterDot(USD_exchange.getCourse_USD()));
-                    exchangeRateClass.setDate(simpleDateFormat.format(date));
+                    exchangeRateClass.setDate(serviceClass.generateDate());
                     rateRepository.save(exchangeRateClass);
                     return exchangeRateClass;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else {
-                if(all.get(all.size()- 1).getDate().equals(simpleDateFormat.format(date))) {
-                    return all.get(all.size() -1);
-                }
             }
-            return null;
+            return rateRepository.findByDate(serviceClass.generateDate());
     }
 
 
-    public List<ExchangeRateClass> findAll() {
-        return rateRepository.findAll();
+    ExchangeRateClass findByDate(String date){
+       return rateRepository.findByDate(date);
+    }
+
+    ExchangeRateClass findFirst(){
+        Optional<ExchangeRateClass> rateClass =  rateRepository.findById(rateRepository.findFirst());
+        return rateClass.orElse(null);
     }
 
 }

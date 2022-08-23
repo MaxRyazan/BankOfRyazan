@@ -70,15 +70,19 @@ public class InvestmentService {
     }
 
     private ExchangeRateClass createExchangeRateClass(int duration) {
-        return exchangeRateClassService.findAll().stream()
-                .filter(exchangeRateClass -> exchangeRateClass.getDate().equals(serviceClass.generateDateOfEndInDays(duration)))
-                .findFirst().orElse(exchangeRateClassService.findAll().get(0));
+        ExchangeRateClass rateClass = exchangeRateClassService.findByDate(serviceClass.generateDateOfEndInDays(duration));
+        if(rateClass == null) {
+            return exchangeRateClassService.findFirst();
+        }
+        return rateClass;
     }
 
     private Rate createRate(int duration) {
-        List<Rate> rates = rateService.findAll();
-        return rates.stream().filter(rate -> rate.getDate().equals(serviceClass.generateDateOfEndInDays(duration)))
-                .findFirst().orElse(rates.get(0));
+        Rate rate = rateService.findByDate(serviceClass.generateDateOfEndInDays(duration));
+        if (rate == null) {
+            return rateService.findFirst();
+        }
+        return rate;
     }
 
     private ExchangeRateClass createTempExchangeRateClass(ExchangeRateClass todayRate, ExchangeRateClass lastRate) {
@@ -104,11 +108,11 @@ public class InvestmentService {
     }
 
     public Rate findByDate(String date) {
-        return rateService.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst().orElse(null);
+        return rateService.findByDate(date);
     }
 
     public ExchangeRateClass findByDateMoney(String date) {
-        return exchangeRateClassService.findAll().stream().filter(rate -> rate.getDate().equals(date)).findFirst().orElse(null);
+        return exchangeRateClassService.findByDate(date);
     }
 
     public String changeType(String type) {
