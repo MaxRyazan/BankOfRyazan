@@ -27,6 +27,7 @@ public class ExchangeRateClassService {
         ObjectMapper mapper = new ObjectMapper();
             if (rateRepository.findByDate(serviceClass.generateDate()) == null) {
                 try {
+//                    final String URL = "https://openexchangerates.org/api/latest.json?app_id=5893314b8b434e2b932b101821c225fd";
                     final String URL_EUR = "https://free.currconv.com/api/v7/convert?q=EUR_RUB&compact=ultra&apiKey=f197b54334ada744011e";
                     final String URL_USD = "https://free.currconv.com/api/v7/convert?q=USD_RUB&compact=ultra&apiKey=f197b54334ada744011e";
                     ExchangeRateClass EUR_exchange = mapper.readValue(new URL(URL_EUR), ExchangeRateClass.class);

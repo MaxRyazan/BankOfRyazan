@@ -23,22 +23,6 @@ public class TransactionalService {
     }
 
 
-
-    public List<Transaction> findAllTransactionalWithRecipient(String recipientLastName, HttpServletRequest request) {
-        Client sender = clientService.findByRequest(request);
-
-        List<Transaction> listOfTransactions = new ArrayList<>(sender.getOutComingTransactions().stream()
-                .filter(transaction -> transaction.getRecipient().getLastName().equals(recipientLastName)).toList());
-
-        listOfTransactions.addAll(sender.getInComingTransactions().stream()
-                .filter(transaction -> transaction.getSender().getLastName().equals(recipientLastName)).toList());
-
-        return listOfTransactions;
-    }
-
-
-
-
     public void save(Transaction transaction) {
         transactionalRepository.save(transaction);
     }

@@ -1,75 +1,125 @@
 package ru.maxryazan.bankofryazan.service;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceClassTest {
 
-    ServiceClass serviceClass = Mockito.mock(ServiceClass.class);
-
+    ServiceClass serviceClass = new ServiceClass();
     @Test
     void generateEveryMonthPay() {
-        Mockito.when(serviceClass.generateEveryMonthPay(1000, 5, 10)).thenReturn(105.0);
-        Mockito.when(serviceClass.generateEveryMonthPay(1000, 5.5, 5)).thenReturn(211.0);
-        Mockito.when(serviceClass.generateEveryMonthPay(1000, 10.15, 2)).thenReturn(550.75);
-        Mockito.when(serviceClass.generateEveryMonthPay(1000000, 11.7, 36)).thenReturn(3027.78);
+        int sum = 10000;
+        double percent = 5d;
+        int numbersOfPays = 10;
+        double result = serviceClass.generateEveryMonthPay(sum, percent, numbersOfPays);
+        assertThat(result).isEqualTo(1050.00);
+          int sum2 = 11111;
+          double percent2 = 7.1;
+          int numbersOfPays2 = 7;
+        double result2 = serviceClass.generateEveryMonthPay(sum2, percent2, numbersOfPays2);
+        assertThat(result2).isEqualTo(1699.98);
     }
 
     @Test
     void generateSumWithPercent() {
-        Mockito.when(serviceClass.generateSumWithPercent(1000, 5)).thenReturn(1050d);
-        Mockito.when(serviceClass.generateSumWithPercent(2217, 5.11)).thenReturn(2330.29);
-        Mockito.when(serviceClass.generateSumWithPercent(10000, 11.3)).thenReturn(11130d);
-        Mockito.when(serviceClass.generateSumWithPercent(1000000, 12.5)).thenReturn(1125000d);
+        int sum1 = 7000;
+        double percent1 = 5.3;
+             int sum2 = 17010;
+             double percent2 = 7.3;
+        double result1 = serviceClass.generateSumWithPercent(sum1, percent1);
+        double result2 = serviceClass.generateSumWithPercent(sum2, percent2);
+        assertThat(result1).isEqualTo(7371d);
+        assertThat(result2).isEqualTo(18251.73);
     }
 
     @Test
     void generateRandomUniqueNumber() {
+        Random random = new Random();
+        String pattern = "\\d+";
 
-        class TestRandom extends Random{
-        int base = 0;
-        TestRandom(){
-            super();
-        }
-        public int nextInt(){
-            return base++;
-        }
-   }
-
-        TestRandom testRandom = new TestRandom();
-        Mockito.when(serviceClass.generateRandomUniqueNumber(testRandom)).thenReturn("01234567");
-        testRandom.base = 1;
-        Mockito.when(serviceClass.generateRandomUniqueNumber(testRandom)).thenReturn("12345678");
+        String result = serviceClass.generateRandomUniqueNumber(random);
+        assertThat(result.length()).isEqualTo(8);
+        assertThat(result).matches(pattern);
     }
 
     @Test
     void generateDateWithHours() {
-    Date date = new Date(1659564000000L);
-    Mockito.when(serviceClass.generateDateWithHours(date)).thenReturn("03-08-2022 22:00");
+        String pattern = "dd-MM-yyyy HH:mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        String result = serviceClass.generateDateWithHours(new Date());
+        assertThat(result).isEqualTo(simpleDateFormat.format(new Date()));
     }
 
+    @Test
+    void generateDate() {
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        String result = serviceClass.generateDate();
+        assertThat(result).isEqualTo(simpleDateFormat.format(new Date()));
+    }
 
     @Test
     void testGenerateSumWithPercent() {
-        Mockito.when(serviceClass.generateSumWithPercent(10000, 6.2)).thenReturn(10620d);
-        Mockito.when(serviceClass.generateSumWithPercent(100000, 10)).thenReturn(110000d);
+        int sum1 = 10000;
+        double percent1 = 7.1;
+        int duration1 = 6;
+           int sum2 = 11111;
+           double percent2 = 7.1;
+           int duration2 = 7;
+
+        double result1 = serviceClass.generateSumWithPercent(sum1, percent1, duration1);
+        double result2 = serviceClass.generateSumWithPercent(sum2, percent2, duration2);
+         assertThat(result1).isEqualTo(10355d);
+         assertThat(result2).isEqualTo(11571.18);
     }
 
     @Test
-    void generateDateOfEndInMonth() {
+    void generateDateOfEndInMonth() throws ParseException {
+        int duration = 1;
+        String dateOfBeginFromDB = serviceClass.generateDate();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
+        calendar.add(Calendar.MONTH, duration);
+
+        assertThat(serviceClass.generateDateOfEndInMonth(duration))
+                .isEqualTo(simpleDateFormat.format(calendar.getTime()));
     }
 
     @Test
-    void generateDateOfEndInDays() {
+    void generateDateOfEndInDays() throws ParseException {
+        int duration = 1;
+        String dateOfBeginFromDB = serviceClass.generateDate();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
+        calendar.add(Calendar.DAY_OF_WEEK, duration);
+
+        assertThat(serviceClass.generateDateOfEndInDays(duration))
+                .isEqualTo(simpleDateFormat.format(calendar.getTime()));
     }
 
     @Test
     void roundToDoubleWIthThreeSymbolsAfterDot() {
-        Mockito.when(serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(10.44444444)).thenReturn(10.444);
-        Mockito.when(serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(10.7777777)).thenReturn(10.778);
+        double num =  10.1234;
+
+        double result = serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(num);
+        assertThat(result).isEqualTo(10.123);
+    }
+
+    @Test
+    void roundToDoubleWithTwoSymbolsAfterDot() {
+        double num = 10.1234;
+
+        double result = serviceClass.roundToDoubleWithTwoSymbolsAfterDot(num);
+        assertThat(result).isEqualTo(10.12);
     }
 }
