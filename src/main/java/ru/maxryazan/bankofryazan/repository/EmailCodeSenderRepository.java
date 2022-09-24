@@ -7,11 +7,12 @@ import org.springframework.stereotype.Repository;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.EmailCodeSender;
 
+import java.util.List;
+
 
 @Repository
 public interface EmailCodeSenderRepository extends JpaRepository<EmailCodeSender, Long> {
 
-    @Modifying
-    @Query("delete from EmailCodeSender c where c.passRestorer = :restorer")
-    void deleteAllCodesOFThisRestorer(Client restorer);
+    void deleteByPassRestorer(Client client);
+
 }

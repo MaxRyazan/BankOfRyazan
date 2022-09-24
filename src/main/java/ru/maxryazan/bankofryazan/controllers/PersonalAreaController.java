@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.service.ClientService;
+import ru.maxryazan.bankofryazan.service.EmailCodeSenderService;
 import ru.maxryazan.bankofryazan.service.ServiceClass;
 import ru.maxryazan.bankofryazan.service.TransactionalService;
 import javax.servlet.http.HttpServletRequest;
@@ -16,17 +18,20 @@ public class PersonalAreaController {
     private final ClientService clientService;
     private final ServiceClass serviceClass;
     private final TransactionalService transactionalService;
+    private final EmailCodeSenderService codeSenderService;
 
-    public PersonalAreaController(ClientService clientService, ServiceClass serviceClass, TransactionalService transactionalService) {
+    public PersonalAreaController(ClientService clientService, ServiceClass serviceClass, TransactionalService transactionalService, EmailCodeSenderService codeSenderService) {
         this.clientService = clientService;
         this.serviceClass = serviceClass;
         this.transactionalService = transactionalService;
+        this.codeSenderService = codeSenderService;
     }
 
 
     @GetMapping("/main/personal-area")
     public String openPersonalArea(Model model, HttpServletRequest request, @ModelAttribute String error) {
-      return  clientService.getPersonalPageArea(model, request);
+      Client client = clientService.findByRequest(request);
+      return  clientService.getPersonalPageArea(model, client);
     }
 
 

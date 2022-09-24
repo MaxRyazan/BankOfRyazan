@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.service.*;
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class BankMainPageController {
     private final ExchangeRateClassService exchangeRate;
     private final ClientService clientService;
     private final MailSender mailSender;
-
+    private final EmailCodeSenderService codeSenderService;
     private final CreditService creditService;
     private final ServiceClass serviceClass;
 
@@ -25,11 +24,12 @@ public class BankMainPageController {
 
     public BankMainPageController(ExchangeRateClassService exchangeRate,
                                   ClientService clientService,
-                                  MailSender mailSender, CreditService creditService, ServiceClass serviceClass,
+                                  MailSender mailSender, EmailCodeSenderService codeSenderService, CreditService creditService, ServiceClass serviceClass,
                                   BCryptPasswordEncoder passwordEncoder) {
         this.exchangeRate = exchangeRate;
         this.clientService = clientService;
         this.mailSender = mailSender;
+        this.codeSenderService = codeSenderService;
         this.creditService = creditService;
         this.serviceClass = serviceClass;
         this.passwordEncoder = passwordEncoder;
@@ -41,8 +41,7 @@ public class BankMainPageController {
     }
 
     @GetMapping("/main")
-    public String showMainPage(Model model, @ModelAttribute String result, HttpServletRequest request) {
-        request.getSession();
+    public String showMainPage(Model model, @ModelAttribute String result) {
         try {
             ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
             model.addAttribute("USD", exchangeRateClass.getCourse_USD());

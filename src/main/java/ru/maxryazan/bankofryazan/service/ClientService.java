@@ -28,6 +28,7 @@ public class ClientService {
         this.serviceClass = serviceClass;
         this.contributionService = contributionService;
         this.investmentService = investmentService;
+
     }
 
     public void save(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
@@ -77,10 +78,8 @@ public class ClientService {
         return findByPhoneNumber(authClientPhoneNumber);
     }
 
-    public String getPersonalPageArea(Model model, HttpServletRequest request) {
-        Client client = findByRequest(request);
+    public String getPersonalPageArea(Model model, Client client) {
         investmentService.checkCurrPriceOfInvestment(client);
-        client.getEmailCodes().clear();
         checkDateOfContributions(client);
 
         Collections.reverse(client.getInComingTransactions());
@@ -190,7 +189,7 @@ public class ClientService {
 
     public boolean ifCodeFromEmailNotValid(String phoneNumber, String codeFromEmail) {
         Client client = findByPhoneNumber(phoneNumber);
-        String actualCode = client.getEmailCodes().get(0).getValue();
+        String actualCode = client.getEmailCodes().get(client.getEmailCodes().size() - 1).getValue();
         return !actualCode.equals(codeFromEmail);
     }
 
