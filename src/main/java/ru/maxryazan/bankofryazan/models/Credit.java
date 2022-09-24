@@ -54,6 +54,21 @@ public class Credit {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
+    public Credit(String num, int sum, double percent, String dateOfBegin,
+                  double everyMonthPay, double sumWithPercents,
+                  int numberOfPays, Client borrower, double restOfCredit, Status status) {
+        this.numberOfCreditContract = num;
+        this.sumOfCredit = sum;
+        this.creditPercent = percent;
+        this.dateOfBegin = dateOfBegin;
+        this.everyMonthPay = everyMonthPay;
+        this.sumWithPercents = sumWithPercents;
+        this.numberOfPays = numberOfPays;
+        this.borrower = borrower;
+        this.restOfCredit = restOfCredit;
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Credit{" +

@@ -49,15 +49,10 @@ public class MailSender {
         }
     }
 
-    public void resetPassword(String codeFromEmail, String phoneNumber, String password, String confirmPassword) {
+    public void resetPassword(String phoneNumber, String password) {
         Client client = clientService.findByPhoneNumber(phoneNumber);
-        String codeFromDB = emailCodeSenderService.findByPhoneNumber(phoneNumber);
-        if(codeFromEmail.equals(codeFromDB) && password.equals(confirmPassword)){
             client.setPinCode(clientService.passwordEncoder.encode(password));
             clientService.save(client);
             emailCodeSenderService.deleteAllCodesOFThisRestorer(client);
-        } else {
-            throw  new IllegalArgumentException();
-        }
     }
 }

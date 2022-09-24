@@ -7,4 +7,5 @@ import ru.maxryazan.bankofryazan.models.Contribution;
 public interface ContributionRepository extends JpaRepository<Contribution, Long> {
 
      boolean existsByNumberOfContribution(String number);
+
 }

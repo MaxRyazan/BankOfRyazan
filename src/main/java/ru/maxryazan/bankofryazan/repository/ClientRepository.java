@@ -12,4 +12,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Query("select c from Client c where c.phoneNumber = :phoneNumber")
     Client findByPhoneNumber(String phoneNumber);
 
+    boolean existsByPhoneNumber(String phone);
+
+    boolean existsByEmail(String email);
 }

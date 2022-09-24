@@ -11,4 +11,8 @@ public interface CreditRepository extends JpaRepository<Credit, Long> {
     Credit findByNumberOfCreditContract(String contract);
 
     boolean existsByNumberOfCreditContract(String number);
+
+    boolean existsById(long id);
+
+    Credit findById(long id);
 }

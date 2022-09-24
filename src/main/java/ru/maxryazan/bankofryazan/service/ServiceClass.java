@@ -1,11 +1,14 @@
 package ru.maxryazan.bankofryazan.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.function.Function;
 
 @Service
 public class ServiceClass {
@@ -22,7 +25,8 @@ public class ServiceClass {
         return (sumInKop + sumInKop * (percent / 100)) / 100;
     }
 
-    public String generateRandomUniqueNumber(Random random) {
+    public String generateRandomUniqueNumber() {
+        Random random = new Random();
         StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 8; i++) {
                 sb.append(random.nextInt(10));
@@ -45,7 +49,8 @@ public class ServiceClass {
 
     public double generateSumWithPercent(int sum, double percent, int duration) {
         double percentByThisContributionDependsOfDuration = percent / 12 * duration * 0.01;
-        return roundToDoubleWithTwoSymbolsAfterDot(sum + sum * percentByThisContributionDependsOfDuration);
+        double result = sum + sum * percentByThisContributionDependsOfDuration;
+            return (double) Math.round(result * 100) / 100;
     }
 
     public String generateDateOfEndInMonth(int duration) {
@@ -76,12 +81,17 @@ public class ServiceClass {
         throw  new IllegalArgumentException();
     }
 
-    public double roundToDoubleWIthThreeSymbolsAfterDot(double number){
-        return ((double)((int)(number * 1000))) / 1000;
+
+    public double round(double number){
+        return (double)((int)(number * 100)) / 100;
+    }
+    public float roundFloat(double number){
+        return (float)((int)(number * 100)) / 100;
     }
 
-    public double roundToDoubleWithTwoSymbolsAfterDot(double a) {
-        return (double) Math.round(a * 100) / 100;
-    }
 
+    public String showErrorMessage(String message, String redirectTo, Model model){
+        model.addAttribute("error", message);
+        return redirectTo;
+    }
 }

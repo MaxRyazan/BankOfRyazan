@@ -2,16 +2,13 @@ package ru.maxryazan.bankofryazan.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.service.ClientService;
 import ru.maxryazan.bankofryazan.service.InvestmentService;
+import ru.maxryazan.bankofryazan.service.ServiceClass;
+
 import javax.servlet.http.HttpServletRequest;
-
-
 
 @Controller
 @RequestMapping("/investments")
@@ -20,24 +17,31 @@ public class InvestmentController {
     private final InvestmentService investmentService;
     private final ClientService clientService;
 
+    private final ServiceClass serviceClass;
 
-    public InvestmentController(InvestmentService investmentService, ClientService clientService) {
+
+    public InvestmentController(InvestmentService investmentService, ClientService clientService, ServiceClass serviceClass) {
         this.investmentService = investmentService;
         this.clientService = clientService;
+        this.serviceClass = serviceClass;
     }
 
 
     @GetMapping("/main")
-    public String getMainInvestments(Model model, HttpServletRequest request) {
-     request.getSession();
+    public String getMainInvestments(Model model, @ModelAttribute String error) {
      return investmentService.createMainPage(model);
     }
 
     @PostMapping("/main")
     public String postMainInvestments(@RequestParam String type,
                                       @RequestParam String amount,
-                                      HttpServletRequest request) {
+                                      HttpServletRequest request,
+                                      Model model) {
         Client client = clientService.findByRequest(request);
+        if(client.getBalance() < investmentService.calculatePriceOfInvestment(investmentService.changeType(type), amount)){
+           investmentService.createMainPage(model);
+           return serviceClass.showErrorMessage("Недостаточно денег!", "investments/investments-main", model);
+        }
         investmentService.createInvestment(type, amount, client);
         clientService.save(client);
             return "redirect:/investments/main";

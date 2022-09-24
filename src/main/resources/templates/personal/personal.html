@@ -8,6 +8,7 @@
     <link type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="shortcut icon">
     <link type="Image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="icon">
     <link rel="stylesheet" href="/templates/style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/self-reg-styles.css}" href="/styles/self-reg-styles.css.css">
     <title>Bank</title>
 </head>
 <style>
@@ -82,16 +83,16 @@ url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIz
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav d-flex ms-0 p-2">
                 <li class="nav-item d-flex p-auto" style="color: lightgray">
-                    <h6><span th:text="${firstName}"></span> <span th:text="${lastName}"></span></h6>
+                    <h6><span th:text="${client.firstName}"></span> <span th:text="${client.lastName}"></span></h6>
                 </li>
                 <li class="nav-item d-flex p-auto ms-4" style="color: lightgray">
-                    <h6><span th:text="${balance}"></span>
+                    <h6><span th:text="${client.balance}"></span>
                         <a href="" style="text-decoration: none"> &#8381</a>
                     </h6>
-                    <h6 th:if="${balanceUSD > 0}" class="ms-4"><span th:text="${balanceUSD}"></span>
+                    <h6 th:if="${client.balanceUSD > 0}" class="ms-4"><span th:text="${client.balanceUSD}"></span>
                         <a href="" style="text-decoration: none"> &#36</a>
                     </h6>
-                    <h6 th:if="${balanceEUR > 0}" class="ms-4"><span th:text="${balanceEUR}"></span>
+                    <h6 th:if="${client.balanceEUR > 0}" class="ms-4"><span th:text="${client.balanceEUR}"></span>
                         <a href="" style="text-decoration: none"> &#8364</a>
                     </h6>
                 </li>
@@ -119,7 +120,7 @@ url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIz
                 <div class="carousel-caption d-none d-md-block">
                 <form  name="f" th:action="@{/main/personal-area}" method="post"  class=" justify-content-center mb-2">
                     <div class="col-sm">
-                        <input type="text" name="recipientPhoneNumber" placeholder="Получатель" minlength="11"
+                        <input type="number" name="recipientPhoneNumber" placeholder="Получатель" required
                                class="form-control form-control-sm"
                                style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
                                no-repeat center center fixed;
@@ -129,7 +130,7 @@ url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIz
         background-size: cover; width: 84%;">
                     </div>
                     <div class="col-sm d-flex mt-1">
-                        <input type="text" name="sum" placeholder="Сумма" min="1"
+                        <input type="number" name="sum" placeholder="Сумма" min="1" required
                                class="form-control form-control-sm"
                                style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
                                no-repeat center center fixed;
@@ -145,6 +146,7 @@ width: 50%;">
         -o-background-size: cover;
         background-size: cover; color: dimgray">Перевести</button>
                     </div>
+                    <div class="error" th:text="${error}"></div>
                 </form>
                 </div>
             </div>
@@ -260,7 +262,7 @@ width: 50%;">
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr th:each="transaction : ${incoming}">
+                                <tr th:each="transaction : ${client.inComingTransactions}">
                                     <td th:text="${transaction.timestamp}" class="align-center"></td>
                                     <td th:text="${transaction.sum}" class="align-center"></td>
                                     <td th:text="${transaction.sender}" class="align-center"></td>
@@ -307,7 +309,7 @@ width: 50%;">
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr th:each="transaction : ${outcoming}">
+                                <tr th:each="transaction : ${client.outComingTransactions}">
                                     <td th:text="${transaction.timestamp}" class="align-center"></td>
                                     <td th:text="${transaction.sum}" class="align-center"></td>
                                     <td th:text="${transaction.recipient}" class="align-center"></td>
@@ -504,7 +506,7 @@ width: 50%;">
                                     <th class="align-center">Текущая стоимость</th>
                                     <th class="align-center">Баланс инвестиции</th>
                                 </tr>
-                                <tr th:each="investment : ${investments}">
+                                <tr th:each="investment : ${client.investments}">
                                     <td th:text="${investment.type}" class="align-center"></td>
                                     <td th:text="${investment.investmentSizeByUnits}" class="align-center"></td>
                                     <td th:text="${investment.basePriceOfInvestment}" class="align-center"></td>

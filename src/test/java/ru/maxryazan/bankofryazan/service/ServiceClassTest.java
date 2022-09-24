@@ -40,10 +40,9 @@ class ServiceClassTest {
 
     @Test
     void generateRandomUniqueNumber() {
-        Random random = new Random();
         String pattern = "\\d+";
 
-        String result = serviceClass.generateRandomUniqueNumber(random);
+        String result = serviceClass.generateRandomUniqueNumber();
         assertThat(result.length()).isEqualTo(8);
         assertThat(result).matches(pattern);
     }
@@ -105,21 +104,5 @@ class ServiceClassTest {
 
         assertThat(serviceClass.generateDateOfEndInDays(duration))
                 .isEqualTo(simpleDateFormat.format(calendar.getTime()));
-    }
-
-    @Test
-    void roundToDoubleWIthThreeSymbolsAfterDot() {
-        double num =  10.1234;
-
-        double result = serviceClass.roundToDoubleWIthThreeSymbolsAfterDot(num);
-        assertThat(result).isEqualTo(10.123);
-    }
-
-    @Test
-    void roundToDoubleWithTwoSymbolsAfterDot() {
-        double num = 10.1234;
-
-        double result = serviceClass.roundToDoubleWithTwoSymbolsAfterDot(num);
-        assertThat(result).isEqualTo(10.12);
     }
 }

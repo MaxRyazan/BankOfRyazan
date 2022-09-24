@@ -3,7 +3,6 @@ package ru.maxryazan.bankofryazan.models;
 import lombok.*;
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -19,6 +18,7 @@ public class Client {
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
+
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
@@ -59,17 +59,83 @@ public class Client {
     @OneToMany(mappedBy = "contributor", fetch = FetchType.LAZY)
     private List<Contribution> contributions;
 
-    public Client(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
+    public Client(String firstName, String lastName, String email, String phoneNumber,
+                  double balance, double balanceUSD, double balanceEUR, String pinCode) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
         this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.balance = balance;
+        this.balanceUSD = balanceUSD;
+        this.balanceEUR = balanceEUR;
         this.pinCode = pinCode;
+    }
+
+
+    public double getBalance() {
+        return (double) Math.round(balance * 100) / 100;
     }
 
     @Override
     public String toString() {
         return  firstName + " " + lastName;
+    }
+
+
+    public static class Builder{
+        private String firstName;
+        private String lastName;
+        private String email;
+        private String phoneNumber;
+        private double balance ;
+        private double balanceUSD;
+        private  double balanceEUR ;
+        private String pinCode;
+
+
+        public Builder firstName(final String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder lastName(final String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder email(final String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder phoneNumber(final String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public Builder balance() {
+            this.balance = 0;
+            return this;
+        }
+
+        public Builder balanceUSD() {
+            this.balanceUSD = 0;
+            return this;
+        }
+
+        public Builder balanceEUR() {
+            this.balanceEUR = 0;
+            return this;
+        }
+
+        public Builder pinCode(final String pinCode) {
+            this.pinCode = pinCode;
+            return this;
+        }
+
+        public Client build(){
+            return new Client();
+        }
     }
 }
 

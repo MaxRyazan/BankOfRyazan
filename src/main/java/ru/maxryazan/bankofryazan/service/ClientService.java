@@ -11,7 +11,6 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -32,36 +31,39 @@ public class ClientService {
     }
 
     public void save(String firstName, String lastName, String phoneNumber, String email, String pinCode) {
-        if (clientRepository.findByPhoneNumber(validationPhoneNumber(phoneNumber)) == null) {
-            Client client = new Client(firstName, lastName, phoneNumber, email, passwordEncoder.encode(pinCode));
-            client.setBalance(0);
-            client.setBalanceUSD(0);
-            client.setBalanceEUR(0);
-            clientRepository.save(client);
-        } else {
-            throw new IllegalArgumentException("клиент с таким номером телефона уже зарегистрирован!");
-        }
+        Client client = new Client.Builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .pinCode(passwordEncoder.encode(pinCode))
+                .build();
+        clientRepository.save(client);
     }
 
-    public String validationPhoneNumber(String phoneNumber) {
+    public boolean existsByPhoneNumber(String phone) {
+        return clientRepository.existsByPhoneNumber(phone);
+    }
+
+    public boolean existsByEmail(String email) {
+        return clientRepository.existsByEmail(email);
+    }
+
+
+    public boolean validationPhoneNumber(String phoneNumber) {
         String validatingPhone = phoneNumber.replace(" ", "");
         String regex = "\\d+";
-        if (
-                validatingPhone.matches(regex)
-                        && (validatingPhone.length() == 11)
-                        && (validatingPhone.startsWith("8"))
-        ) {
-            return validatingPhone;
-        }
-        throw new IllegalArgumentException();
+        return validatingPhone.matches(regex)
+                && (validatingPhone.length() == 11)
+                && (validatingPhone.startsWith("8"));
+
     }
 
     public Client findByPhoneNumber(String phoneNumber) {
-        Client client = clientRepository.findByPhoneNumber(validationPhoneNumber(phoneNumber));
-        if (client == null) {
-            throw new IllegalArgumentException("User with phone number: '" + phoneNumber + "' not found");
+        if (validationPhoneNumber(phoneNumber)) {
+            return clientRepository.findByPhoneNumber(phoneNumber);
         }
-        return client;
+        return null;
     }
 
 
@@ -79,49 +81,57 @@ public class ClientService {
         Client client = findByRequest(request);
         investmentService.checkCurrPriceOfInvestment(client);
         client.getEmailCodes().clear();
-        for (Contribution cn : client.getContributions()) {
-            if (cn.getStatus().equals(Status.ACTIVE)) {
-                if (cn.getDateOfEnd().equals(serviceClass.generateDate()) || afterDateOfEnd(cn.getDateOfEnd())) {
-                    cn.setStatus(Status.CLOSED);
-                    contributionService.save(cn);
-                    cn.getContributor().setBalance(cn.getContributor().getBalance() + cn.getSumWithPercent());
-                    save(cn.getContributor());
-                }
-            }
-        }
+        checkDateOfContributions(client);
 
         Collections.reverse(client.getInComingTransactions());
         Collections.reverse(client.getOutComingTransactions());
 
-        model.addAttribute("firstName", client.getFirstName());
-        model.addAttribute("lastName", client.getLastName());
-        model.addAttribute("phone", client.getPhoneNumber());
-        model.addAttribute("balance", serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalance()));
-        model.addAttribute("balanceUSD", serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceUSD()));
-        model.addAttribute("balanceEUR", serviceClass.roundToDoubleWithTwoSymbolsAfterDot(client.getBalanceEUR()));
-        model.addAttribute("incoming", client.getInComingTransactions());
-        model.addAttribute("outcoming", client.getOutComingTransactions());
-        model.addAttribute("investments", client.getInvestments());
-
-        List<Credit> closed = client.getCredits().stream()
-                .filter(credit -> credit.getStatus().equals(Status.CLOSED)).collect(Collectors.toList());
-        List<Credit> active = client.getCredits().stream()
-                .filter(credit -> credit.getStatus().equals(Status.ACTIVE)).collect(Collectors.toList());
-
-        Collections.reverse(closed);
-        Collections.reverse(active);
-
-        model.addAttribute("closedCredits", closed);
-        model.addAttribute("activeCredits", active);
-
-        List<Contribution> contributions = client.getContributions().stream()
-                .filter(contribution -> contribution.getStatus().equals(Status.ACTIVE)).collect(Collectors.toList());
-
-        Collections.reverse(contributions);
+        List<Credit> closed = sortCreditsByStatus(client, Status.CLOSED);
+        List<Credit> active = sortCreditsByStatus(client, Status.ACTIVE);
+        List<Contribution> contributions = getActiveContributions(client);
 
         model.addAttribute("contributions", contributions);
+        model.addAttribute("client", client);
+        model.addAttribute("closedCredits", closed);
+        model.addAttribute("activeCredits", active);
         save(client);
         return "personal/personal";
+    }
+
+    private List<Credit> sortCreditsByStatus(Client client, Status status) {
+        List<Credit> result = new ArrayList<>(
+                client.getCredits().stream().filter(credit -> credit.getStatus().equals(status)).toList()
+        );
+        Collections.reverse(result);
+        return result;
+    }
+
+    private List<Contribution> getActiveContributions(Client client) {
+        List<Contribution> result = new ArrayList<>(
+                client.getContributions().stream().filter(Contribution -> Contribution.getStatus().equals(Status.ACTIVE)).toList()
+        );
+        Collections.reverse(result);
+        return result;
+    }
+
+    private void checkDateOfContributions(Client client) {
+        client.getContributions().forEach(this::updateStatusAndBalance);
+    }
+
+    public void updateBalance(Client client, double sum) {
+        double newBalance = client.getBalance() + sum;
+        client.setBalance(newBalance);
+        save(client);
+    }
+
+    private void updateStatusAndBalance(Contribution cn) {
+        if (cn.getStatus().equals(Status.ACTIVE)) {
+            if (cn.getDateOfEnd().equals(serviceClass.generateDate()) || afterDateOfEnd(cn.getDateOfEnd())) {
+                cn.setStatus(Status.CLOSED);
+                contributionService.save(cn);
+                updateBalance(cn.getContributor(), cn.getSumWithPercent());
+            }
+        }
     }
 
     private boolean afterDateOfEnd(String dateOfEnd) {
@@ -145,33 +155,49 @@ public class ClientService {
      */
     public void addNewContribution(String phoneNumber, int sum, double percent, int duration) {
         Client client = findByPhoneNumber(phoneNumber);
-
-        if (client.getBalance() >= sum) {
-            Contribution contribution = new Contribution();
-            Random random = new Random();
             String number;
             do {
-                number = serviceClass.generateRandomUniqueNumber(random);
-            } while (!isUnique(number));
+                number = serviceClass.generateRandomUniqueNumber();
+            } while (isUnique(number));
 
-            contribution.setNumberOfContribution(number);
-            contribution.setSumOfContribution(sum);
-            contribution.setPercentByContribution(percent);
-            contribution.setDurationOfContributionInYears(duration);
-            contribution.setDateOfBegin(serviceClass.generateDate());
-            contribution.setSumWithPercent(serviceClass.generateSumWithPercent(sum, percent, duration));
-            contribution.setDateOfEnd(serviceClass.generateDateOfEndInMonth(duration));
-            contribution.setStatus(Status.ACTIVE);
-            contribution.setContributor(client);
+            Contribution contribution = new Contribution(
+                    number,
+                    sum,
+                    percent,
+                    serviceClass.generateDate(),
+                    serviceClass.generateDateOfEndInMonth(duration),
+                    duration,
+                    serviceClass.generateSumWithPercent(sum, percent, duration),
+                    Status.ACTIVE,
+                    client
+            );
+
             contributionService.save(contribution);
-            client.setBalance(client.getBalance() - sum);
-            save(client);
-        } else {
-            throw new IllegalArgumentException("not enough money");
-        }
+            updateBalance(client, -sum);
     }
 
     private boolean isUnique(String str) {
         return !contributionService.existByNumberOfContribution(str);
     }
+
+
+    public boolean existsByPhoneAndEmail(String phoneNumber, String email) {
+        if (validationPhoneNumber(phoneNumber)) {
+            return existsByPhoneNumber(phoneNumber) && existsByEmail(email);
+        }
+        return false;
+    }
+
+    public boolean ifCodeFromEmailNotValid(String phoneNumber, String codeFromEmail) {
+        Client client = findByPhoneNumber(phoneNumber);
+        String actualCode = client.getEmailCodes().get(0).getValue();
+        return !actualCode.equals(codeFromEmail);
+    }
+
+    public boolean ifSumNotValid(String phone, int sum) {
+        Client client = findByPhoneNumber(phone);
+        return client.getBalance() < sum;
+    }
 }
+
+

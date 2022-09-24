@@ -1,14 +1,248 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/style.css}" href="/styles/style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/style2.css}" href="/styles/style2.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/calculatorStyles.css}" href="/styles/calculatorStyles.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style2.css">
+    <link rel="stylesheet" type="text/css" href="calculatorStyles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <title>BankOfRyazan</title>
+</head>
+<body>
+        <nav class="navbar" id="shadow">
+            <div class="leftNav">
+                <a href="/insurance/main" class="linksNavBar2">Страхование</a>
+                <a href="/investments/main" class="linksNavBar2">Инвестиции</a>
+            </div>
+            <div class="rightNav2">
+               <div th:text="${USD}"></div>
+            </div>
+            <div class="rightNav2">
+                <div th:text="${EUR}"></div>
+            </div>
+            <div class="rightNav">
+                <a href="/main/personal-area" class="linksNavBar">Личный кабинет</a> <!--sec:authorize="isAnonymous()" -->
+                <a href="/registration" class="linksNavBar" >Стать клиентом</a>
+            </div>
+        </nav>
 
-</html>
+        <div class="warning">
+            <div>
+                <img src="https://img.icons8.com/stickers/344/exclamation-mark--v1.png" alt="" class="icon">
+            </div>
+            <h4 class="warnText">
+                <a href="" class="warnHref">Ознакомьтесь</a>
+                 с нашими предложениями по безопасности, чтобы всегда быть уверенными в надёжной защите своего аккаунта.
+            </h4>
+        </div>
 
-<div th:insert="blocks/header-main"></div>
-<body style="background-color: darkseagreen">
-    <div style="border: 2px solid green; border-radius: 12px; background-color: aqua; margin-left: 40%; margin-right: 40%;
-margin-top: 20%; padding: 25px; text-align: center">
-        <span>СТРАНИЦА НА МОДЕРНИЗАЦИИ</span>
-    </div>
+        <div class="containerFirst-2">
+            <div id="carouserFirst" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-item active" data-bs-interval="7000">
+                            <div class="slaid">
+                                <div class="innerCarousel">
+                                    <nobr><h4 class="slaidText">Вот это да! ОСАГО со скидкой 50%!</h4></nobr>
+                                    <h4 class="slaidText2">Выбери условия, которые подходят тебе, а не страховой компании!</h4>
+                                    <a href="main/insurance" class="hrefItem">Подробнее</a>
+                                </div>
+                                <div class="img">
+                                    <img src="https://hdpic.club/uploads/posts/2022-02/1643705364_2-hdpic-club-p-mashini-na-belom-fone-3.png" class="innerCarousel" alt="car">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item" data-bs-interval="7000">
+                            <div class="slaid">
+                                <div class="innerCarousel">
+                                    <nobr><h4 class="slaidText">Деньги делают деньги!</h4></nobr>
+                                    <h4 class="slaidText2">Специальный вклад на 9% годовых. Присоединяйся!</h4>
+                                    <a href="main/contribution" class="hrefItem">Подробнее</a>
+                                </div>
+                                <div class="img2">
+                                    <img src="static/img/9percent.png" th:src="@{img/9percent.png}" class="innerCarousel" alt="%">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item" data-bs-interval="7000">
+                            <div class="slaid">
+                                <div class="innerCarousel">
+                                    <nobr><h4 class="slaidText">Семейный автомобиль по цене производителя?</h4></nobr>
+                                    <h4 class="slaidText2">Беспроцентная рассрочка на первый семейный автомобиль, при условии обязательного обслуживания в авторизованном сервисном центре, а также автострахования в нашем банке на весь период выплаты. </h4>
+                                    <a href="main/credit" class="hrefItem">Подробнее</a>
+                                </div>
+                                <div class="img">
+                                    <img src="static/img/fcar.png" th:src="@{img/fcar.png}"  class="innerCarousel" alt="car">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button class="carousel-control-prev" style="margin-top: 100px;" type="button" data-bs-target="#carouserFirst" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Предыдущий</span>
+                    </button>
+                    <button class="carousel-control-next" style="margin-top: 100px;" type="button" data-bs-target="#carouserFirst" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Следующий</span>
+                    </button>
+            </div>
+        </div>
+
+        <div class="containerSecond">
+            <a href="main/insurance" class="containerHref">
+                <div class="standartContainer45">
+                    <div class="setkaContainer">
+                        <h4 class="textHeaderInSetka">
+                            Медицинское страхование на отличных условиях!
+                        </h4>
+                        <div class="divMedic">
+                            <img src="static/img/doccc.png"  th:src="@{img/doccc.png}" alt="doc">
+                            <div>
+                                <h4 class="textIn45Container">Нашими партнёрами являются только лучшие клиники страны, поэтому, сервис, который мы предлагаем соответствует  лучшему мировому уровню!</h4>
+                                <div class="buttonCenter">
+                                    <a href="main/insurance" class="hrefItemBlack">Узнать условия</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="main/credit" class="containerHref">
+                <div class="standartContainer45">
+                <div class="setkaContainer">
+                    <h4 class="textHeaderInSetka">
+                        Льготные займы до 50 тысяч рублей
+                    </h4>
+                    <div class="divMedic">
+                        <img src="static/img/telek.png"   th:src="@{img/telek.png}" alt="doc">
+                        <div>
+                            <h4 class="textIn45Container">Хотите новый телевизор прямо сейчас? Нет ничего проще! До 50 тысяч рублей с фиксированной переплатой всего в 2500 рублей!</h4>
+                            <div class="buttonCenter">
+                                <a href="main/credit" class="hrefItemBlack">Узнать условия</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="containerSecond">
+            <a href="main/contribution" class="containerHref">
+                <div class="standartContainer45">
+                <div class="setkaContainer">
+                    <h4 class="textHeaderInSetka">
+                        Вклад 'Долговременный' - от 5 млн рублей под 11.3% годовых, сроком на 3 года
+                    </h4>
+                    <div class="divMedic">
+                        <img src="static/img/money.png" th:src="@{img/money.png}"  alt="doc">
+                        <div>
+                            <h4 class="textIn45Container">Хотите заставить свободные деньги работать? Это то, что вам нужно!</h4>
+                            <div class="buttonCenter">
+                                <a href="main/credit" class="hrefItemBlack">Узнать условия</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+            <a href="main/investments" class="containerHref">
+                <div class="standartContainer45">
+                <div class="setkaContainer">
+                    <h4 class="textHeaderInSetka">
+                        Инвестируйте в золото!
+                    </h4>
+                    <div class="divMedic">
+                        <img src="static/img/gold.png" th:src="@{img/gold.png}"   alt="doc">
+                        <div>
+                            <h4 class="textIn45Container">А наши специалисты помогут вам советом и своим огромным опытом!</h4>
+                            <div class="buttonCenter">
+                                <a href="main/investments" class="hrefItemBlack">Узнать условия</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="calculatorMainContainer" id="calc">
+            <div class="innerContainer">
+                <h4 class="calcText">Какую сумму вы хотите взять в кредит?</h4>
+                <h4 class="calcText">Минимально возможная - 10 тысяч рублей, максимально - 10 миллионов рублей</h4>
+                <div class="containerSmall">
+                    <form th:action="@{/calculate}" method="post" class="containerSmall">
+                        <nobr>
+                            <h5 class="calcTextTitle">Хочу взять:</h5>
+                            <input type="number" name="sumOfCredit" class="inputField" required min="10000">
+                            <input type="text" class="readOnly" name="" value="₽" readonly>
+                        </nobr>
+                        <nobr class="nobrRight">
+                            <h5 class="calcTextTitle">На срок:</h5>
+                            <input type="number" name="duration" class="inputField2" required min="1">
+                            <input type="text" class="readOnly" name="" value="лет" readonly>
+                        </nobr>
+                        <nobr class="nobrRight">
+                            <h5 class="calcTextTitle">Нажми меня!</h5>
+                            <button type="submit" name="button" class="inputField">Рассчитать кредит</button>
+                        </nobr>
+                        <nobr class="nobrRight">
+                            <h5 class="resultText">Выплачу:</h5>
+                            <input type="number" class="result" th:value="${result}" readonly>
+                            <input type="text" class="readOnly" name="" value="₽" readonly>
+                        </nobr>
+                    </form>
+                </div>
+                <div class="containerSmall">
+                    <div>
+                        <h4 class="calcTextPercents">
+                            Займ <a href="" class="creditNames">'ПРОСТОЙ'</a> - 12% годовых - от 10 000 ₽ до 300 000 ₽
+                        </h4>
+                        <h4 class="calcTextPercents">
+                            Займ <a href="" class="creditNames">'Потребительский'</a> - 10% годовых - от 300 000 ₽ до 600 000 ₽
+                        </h4>
+                        <h4 class="calcTextPercents">
+                            Займ <a href="" class="creditNames">'Бизнес'</a> - 8% годовых - от 600 000 ₽ до 1 200 000 ₽
+                        </h4>
+                        <h4 class="calcTextPercents">
+                            Займ <a href="" class="creditNames">'Профессиональный'</a> - 7% годовых - от 1 200 000 ₽ до 5 000 000 ₽
+                        </h4>
+                        <h4 class="calcTextPercents">
+                            Займ <a href="" class="creditNames">'Космос'</a> - 5% годовых - от 5 000 000 ₽ до 10 000 000 ₽
+                        </h4>
+                    </div>
+                    <div class="calcImg">
+                        <img src="static/img/9percent.png"  th:src="@{img/9percent.png}" alt="11">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="calculatorMainContainer">
+            курсы валют и обменник
+        </div>
+
+        <div class="foot">
+            футер с инфой
+        </div>
+
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+</script>
 </body>
-
-<div th:insert="blocks/footer"></div>
-
+</html>

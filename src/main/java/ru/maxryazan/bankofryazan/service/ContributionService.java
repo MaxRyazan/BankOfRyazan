@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.Contribution;
 import ru.maxryazan.bankofryazan.repository.ContributionRepository;
 
-import java.util.List;
 
 @Service
 public class ContributionService {
@@ -25,4 +24,5 @@ public class ContributionService {
     public boolean existByNumberOfContribution(String number){
         return contributionRepository.existsByNumberOfContribution(number);
     }
+
 }

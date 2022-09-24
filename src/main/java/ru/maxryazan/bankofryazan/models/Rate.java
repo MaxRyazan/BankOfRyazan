@@ -43,10 +43,15 @@ public class Rate {
     private String date;
 
     public Rate(float silver, float gold, float palladium, float platinum, float rhodium) {
-        this.silver = silver;
-        this.gold = gold;
-        this.palladium = palladium;
-        this.platinum = platinum;
-        this.rhodium = rhodium;
+        this.silver = roundRate(silver);
+        this.gold = roundRate(gold);
+        this.palladium = roundRate(palladium);
+        this.platinum = roundRate(platinum);
+        this.rhodium = roundRate(rhodium);
     }
+
+    private float roundRate(float number){
+        return  (float)((int)(number * 100)) / 100;
+    }
+
 }

@@ -22,46 +22,34 @@ public class CreditService {
 
 
     public Credit findById(long id){
-        Optional<Credit> credit = creditRepository.findById(id);
-        if(credit.isPresent()){
-            return credit.get();
-        }
-        throw  new IllegalArgumentException();
+        return creditRepository.findById(id);
     }
-
-    public void addNewCredit(String phoneNumber, int sum, double percent, int numberOfPays) {
-        if (phoneNumber.isBlank() || sum <= 9999 || percent <= 2 || numberOfPays <= 1) {
-            throw new IllegalArgumentException("Can borrow minimum 10 000, min 2%,  and minimum 2 pays");
-        }
-        Client borrower = clientService.findByPhoneNumber(clientService.validationPhoneNumber(phoneNumber));
-
-        List<Credit> thisBorrowerCredits = borrower.getCredits();
-
-        Credit credit = new Credit();
-        String num;
-        do {
-            Random random = new Random();
-            num = serviceClass.generateRandomUniqueNumber(random);
-        }  while (!isUnique(num));
-        credit.setNumberOfCreditContract(num);
-        credit.setSumOfCredit(sum);
-        credit.setCreditPercent(percent);
-        credit.setDateOfBegin(serviceClass.generateDate());
-        credit.setEveryMonthPay(serviceClass.generateEveryMonthPay(sum, percent, numberOfPays));
-        credit.setSumWithPercents(serviceClass.generateSumWithPercent(sum, percent));
-        credit.setNumberOfPays(numberOfPays);
-        credit.setBorrower(borrower);
-        credit.setRestOfCredit(credit.getSumWithPercents());
-        credit.setStatus(Status.ACTIVE);
-        thisBorrowerCredits.add(credit);
-        creditRepository.save(credit);
-
-    }
-
 
     public void save(Credit credit) {
         creditRepository.save(credit);
     }
+
+    public void addNewCredit(String phoneNumber, int sum, double percent, int numberOfPays) {
+        Client borrower = clientService.findByPhoneNumber(phoneNumber);
+        String num;
+        do {
+            num = serviceClass.generateRandomUniqueNumber();
+        }  while (!isUnique(num));
+        Credit credit = new Credit(
+                num,
+                sum,
+                percent,
+                serviceClass.generateDate(),
+                serviceClass.generateEveryMonthPay(sum, percent, numberOfPays),
+                serviceClass.generateSumWithPercent(sum, percent),
+                numberOfPays,
+                borrower,
+                serviceClass.generateSumWithPercent(sum, percent),
+                Status.ACTIVE
+        );
+        creditRepository.save(credit);
+    }
+
 
     public void saveOrUpdateCredit(Credit credit) {
         if (credit.getPays() != null) {
@@ -73,8 +61,7 @@ public class CreditService {
            for(Pay pp : credit.getPays()) {
                sumOfPays += pp.getSum();
            }
-           double temp = credit.getSumWithPercents() - serviceClass.roundToDoubleWithTwoSymbolsAfterDot(sumOfPays);
-
+           double temp = credit.getSumWithPercents() - sumOfPays;
                 credit.setRestOfCredit(temp);
                 save(credit);
             }
@@ -125,4 +112,31 @@ public class CreditService {
      return !creditRepository.existsByNumberOfCreditContract(str);
     }
 
+    public double creditCalculator(double sumOfCredit, int duration) {
+        double result = 0;
+        if(sumOfCredit < 300000){
+            result = sumOfCredit * duration * (sumOfCredit *  0.12);
+        }
+        if(sumOfCredit >= 300000 && sumOfCredit < 600000){
+            result =  sumOfCredit + duration * (sumOfCredit * 0.1);
+        }
+        if(sumOfCredit >= 600000 && sumOfCredit < 1200000){
+            result =  sumOfCredit + duration * (sumOfCredit *  0.08);
+        }
+        if(sumOfCredit >= 1200000 && sumOfCredit < 5000000){
+            result =  sumOfCredit + duration * (sumOfCredit *  0.07);
+        }
+        if(sumOfCredit >= 5000000 && sumOfCredit < 10000000){
+            result =  sumOfCredit + duration * (sumOfCredit *  0.05);
+        }
+        return (double)((int)(result * 100)) / 100;
+    }
+
+    public boolean ifCreditNotExistByNumberContract(String number) {
+        return !creditRepository.existsByNumberOfCreditContract(number);
+    }
+
+    public boolean ifCreditNotExistById(long id) {
+        return !creditRepository.existsById(id);
+    }
 }

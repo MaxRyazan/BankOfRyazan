@@ -8,6 +8,7 @@
     <link type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="shortcut icon">
     <link type="Image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="icon">
     <link rel="stylesheet" href="/templates/style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/self-reg-styles.css}" href="/styles/self-reg-styles.css.css">
     <title>Bank</title>
 </head>
 <style>
@@ -91,6 +92,7 @@
                     <h6>XRH  <span th:text="${thisDayRate.rhodium}"></span></h6>
                 </li>
             </ul>
+            <div class="error" th:text="${error}"></div>
             <ul class="navbar-nav d-flex ms-auto p-2">
                 <li class="nav-item">
                     <a href="/registration" class="nav-link" sec:authorize="isAnonymous()">Стать клиентом</a>
@@ -258,23 +260,24 @@
 <!--Всплывающее окно инвестиций-->
 <div style="text-align: center" id="investment" class="modalwin">
         <form name="f" th:action="@{/investments/main}" method="post">
-    <label>
-        <select name="type" class="btn btn-outline-warning btn-l me-4" style="text-align: center; background-color: #e6e6ff">
-            <option>Золото</option>
-            <option>Серебро</option>
-            <option>Платина</option>
-            <option>Палладий</option>
-            <option>Родий</option>
-            <option>Доллар США</option>
-            <option>Евро</option>
-        </select>
-    </label>
-    <label>
-        <input type="number" name="amount" placeholder="Количество в граммах или валюте" class="form-control" min="1">
-    </label>
-    <br><br>
-    <button type="submit" class="btn btn-outline-info btn-sm">Продолжить</button>
-    <input type="button" value="Закрыть"  class="btn btn-outline-warning btn-sm ms-1"  onclick="closeModal();">
+            <label>
+                <select name="type" class="btn btn-outline-warning btn-l me-4" style="text-align: center; background-color: #e6e6ff">
+                    <option>Золото</option>
+                    <option>Серебро</option>
+                    <option>Платина</option>
+                    <option>Палладий</option>
+                    <option>Родий</option>
+                    <option>Доллар США</option>
+                    <option>Евро</option>
+                </select>
+            </label>
+            <label>
+                <input type="number" name="amount" placeholder="Количество в граммах или валюте" class="form-control" min="1" required>
+            </label>
+            <br><br>
+            <button type="submit" class="btn btn-outline-info btn-sm">Продолжить</button>
+            <input type="button" value="Закрыть"  class="btn btn-outline-warning btn-sm ms-1"  onclick="closeModal();">
+            <div class="error" th:text="${error}"></div>
         </form>
 </div>
 <!--Всплывающее окно инвестиций-->

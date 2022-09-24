@@ -17,7 +17,7 @@ public class EmailCodeSenderService {
         this.codeRepository = codeRepository;
     }
 
-    public String findByPhoneNumber(String phoneNumber) {
+    public String findCodeByPhone(String phoneNumber) {
         Client client = clientService.findByPhoneNumber(phoneNumber);
         return client.getEmailCodes().get(client.getEmailCodes().size() - 1).getValue();
     }

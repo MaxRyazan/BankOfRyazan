@@ -32,8 +32,8 @@ public class ExchangeRateClassService {
                     final String URL_USD = "https://free.currconv.com/api/v7/convert?q=USD_RUB&compact=ultra&apiKey=f197b54334ada744011e";
                     ExchangeRateClass EUR_exchange = mapper.readValue(new URL(URL_EUR), ExchangeRateClass.class);
                     ExchangeRateClass USD_exchange = mapper.readValue(new URL(URL_USD), ExchangeRateClass.class);
-                    exchangeRateClass.setCourse_EUR(serviceClass.roundToDoubleWithTwoSymbolsAfterDot(EUR_exchange.getCourse_EUR()));
-                    exchangeRateClass.setCourse_USD(serviceClass.roundToDoubleWithTwoSymbolsAfterDot(USD_exchange.getCourse_USD()));
+                    exchangeRateClass.setCourse_EUR(serviceClass.round(EUR_exchange.getCourse_EUR()));
+                    exchangeRateClass.setCourse_USD(serviceClass.round(USD_exchange.getCourse_USD()));
                     exchangeRateClass.setDate(serviceClass.generateDate());
                     rateRepository.save(exchangeRateClass);
                     return exchangeRateClass;

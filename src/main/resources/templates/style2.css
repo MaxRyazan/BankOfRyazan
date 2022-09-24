@@ -1,0 +1,46 @@
+.textHeaderInSetka{
+    margin: 2%;
+    color: black;
+    font-size: 18px;
+    text-align: center;
+}
+.divMedic{
+    margin-left: 10px;
+    display: inline-flex;
+}
+.textIn45Container{
+    padding: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+.hrefItemBlack{
+    text-decoration: none;
+    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: inherit;
+    color: black;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 4px;
+    font-family: monospace;
+    letter-spacing: 2px;
+}
+.hrefItemBlack:hover{
+    color: rgb(35, 162, 8);
+}
+.buttonCenter{
+    text-align: center;
+    margin-top: 10%;
+}
+.containerHref{
+    text-decoration: none;
+    color: black;
+}
+.calc{
+    width: 30%;
+    border: 2px solid red;
+}
+.horizontScroll{
+    width: 100%;
+}

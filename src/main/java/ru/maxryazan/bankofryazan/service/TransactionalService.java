@@ -32,14 +32,17 @@ public class TransactionalService {
         Client sender = clientService.findByRequest(request);
         Client recipient = clientService.findByPhoneNumber(recipientPhoneNumber);
 
-        if (sender.getBalance() >= sum) {
             Date date = new Date();
-            Transaction transaction = new Transaction(sender, recipient, sum, serviceClass.generateDateWithHours(date));
-            sender.setBalance(sender.getBalance() - sum);
-            recipient.setBalance(recipient.getBalance() + sum);
+            Transaction transaction = new Transaction(
+                    sender,
+                    recipient,
+                    sum,
+                    serviceClass.generateDateWithHours(date)
+            );
+
+            clientService.updateBalance(sender, -sum);
+            clientService.updateBalance(recipient, sum);
             transactionalRepository.save(transaction);
-        } else {
-            throw new IllegalArgumentException();
-        }
+
     }
 }
