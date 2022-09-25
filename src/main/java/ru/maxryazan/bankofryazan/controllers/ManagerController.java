@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.service.*;
 
+import java.text.ParseException;
+
 
 @Controller
 public class ManagerController {
@@ -27,12 +29,12 @@ public class ManagerController {
     }
 
     @GetMapping("/manager")
-    public String showManagerPage(){
+    public String showManagerPage() {
         return "manager/manager-main-page";
     }
 
     @GetMapping("/manager/new-client")
-    public String getAddNewClient(@ModelAttribute String error){
+    public String getAddNewClient(@ModelAttribute String error) {
         return "manager/new-client";
     }
 
@@ -42,8 +44,8 @@ public class ManagerController {
                                    @RequestParam String phoneNumber,
                                    @RequestParam String email,
                                    @RequestParam String pinCode,
-                                   Model model){
-        if(!clientService.validationPhoneNumber(phoneNumber)){
+                                   Model model) {
+        if (!clientService.validationPhoneNumber(phoneNumber)) {
             return serviceClass.showErrorMessage("Номер телефона не верный!", "manager/new-client", model);
         }
         clientService.save(firstName, lastName, phoneNumber, email, pinCode);
@@ -51,7 +53,7 @@ public class ManagerController {
     }
 
     @GetMapping("manager/credit")
-    public String getNewCredit(@ModelAttribute String error){
+    public String getNewCredit(@ModelAttribute String error) {
         return "manager/new-credit";
     }
 
@@ -60,11 +62,11 @@ public class ManagerController {
                                 @RequestParam int sumOfCredit,
                                 @RequestParam double percentOfCredit,
                                 @RequestParam int numberOfPays,
-                                Model model){
-        if(!clientService.validationPhoneNumber(phoneNumber)){
+                                Model model) {
+        if (!clientService.validationPhoneNumber(phoneNumber)) {
             return serviceClass.showErrorMessage("Номер телефона не верный!", "manager/credit", model);
         }
-        if(sumOfCredit <= 9999 || percentOfCredit <= 2 || numberOfPays <= 1){
+        if (sumOfCredit <= 9999 || percentOfCredit <= 2 || numberOfPays <= 1) {
             return serviceClass.showErrorMessage("Кредитные данные не корректны!\n" +
                     "Минимальная сумма кредита 10 000 ₽ под 2% годовых. Минимум 2 платежа.", "manager/credit", model);
         }
@@ -74,7 +76,7 @@ public class ManagerController {
 
 
     @GetMapping("/manager/contribution")
-    public String getNewContribution(@ModelAttribute String error){
+    public String getNewContribution(@ModelAttribute String error) {
         return "manager/new-contribution";
     }
 
@@ -84,14 +86,17 @@ public class ManagerController {
                                       @RequestParam double percent,
                                       @RequestParam int duration,
                                       Model model) {
-        if(!clientService.validationPhoneNumber(phoneNumber)){
+        if (!clientService.validationPhoneNumber(phoneNumber)) {
             return serviceClass.showErrorMessage("Номер телефона не верный!", "manager/new-contribution", model);
         }
-        if(clientService.ifSumNotValid(phoneNumber, sum)){
-          return serviceClass.showErrorMessage("Недостаточно денег для вклада!", "manager/new-contribution", model);
+        if (clientService.ifSumNotValid(phoneNumber, sum)) {
+            return serviceClass.showErrorMessage("Недостаточно денег для вклада!", "manager/new-contribution", model);
         }
-        clientService.addNewContribution(phoneNumber, sum, percent, duration);
-        return "redirect:/manager/contribution";
+        try {
+            clientService.addNewContribution(phoneNumber, sum, percent, duration);
+            return "redirect:/manager/contribution";
+        } catch (ParseException e) {
+            return serviceClass.showErrorMessage("Ошибка парсинга даты!", "/main", model);
+        }
     }
-
 }

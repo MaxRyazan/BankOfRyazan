@@ -70,12 +70,7 @@ public class CreditService {
 
 
     public Credit findByNumberOfCreditContract(String numberOfCreditContract) {
-        Credit credit = creditRepository.findByNumberOfCreditContract(numberOfCreditContract);
-        if (credit == null) {
-            throw new IllegalArgumentException();
-        } else {
-            return credit;
-        }
+        return creditRepository.findByNumberOfCreditContract(numberOfCreditContract);
     }
 
 

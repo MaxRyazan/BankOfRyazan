@@ -32,34 +32,32 @@ public class PayService {
         payRepository.save(pay);
     }
 
-    public String addNewPay(double sum, String numberOfCreditContract, HttpServletRequest request){
+    public String addNewPay(double sum, String numberOfCreditContract, HttpServletRequest request) {
 
         Client client = clientService.findByRequest(request);
+        Credit credit = creditService.findByNumberOfCreditContract(numberOfCreditContract);
 
-        Credit credit =  creditService.findByNumberOfCreditContract(numberOfCreditContract);
-
-        if(credit.getStatus().equals(Status.ACTIVE)) {
-            if (client.getBalance() >= sum && sum > 0) {
-                if (credit.getRestOfCredit() >= sum) {
-                    Date date = new Date();
-                    Pay pay = new Pay(
-                            serviceClass.generateDateWithHours(date),
-                            sum,
-                            credit
-                    );
-                    save(pay);
-                    client.setBalance(client.getBalance() - pay.getSum());
-                    if(Math.round(credit.getRestOfCredit()) == 0) {
-                        credit.setStatus(Status.CLOSED);
-                    }
-                    creditService.saveOrUpdateCredit(credit);
-                    return "redirect:/main/personal-area";
-                }
-            }
-            throw new IllegalArgumentException("Кредит закрыт!");
+        Date date = new Date();
+        Pay pay = new Pay(
+                serviceClass.generateDateWithHours(date),
+                sum,
+                credit
+        );
+        save(pay);
+        client.setBalance(client.getBalance() - pay.getSum());
+        if (Math.round(credit.getRestOfCredit()) == 0) {
+            credit.setStatus(Status.CLOSED);
         }
-        throw new IllegalArgumentException("addNewPay error");
+        creditService.saveOrUpdateCredit(credit);
+        return "redirect:/main/personal-area";
     }
 
+    public boolean validateData(double sum, String numberOfCreditContract, HttpServletRequest request) {
+        Credit credit = creditService.findByNumberOfCreditContract(numberOfCreditContract);
+        Client client = clientService.findByRequest(request);
+        return credit.getStatus().equals(Status.ACTIVE)
+               && sum > 0
+               && client.getBalance() >= sum;
+    }
 
 }

@@ -8,6 +8,9 @@ import ru.maxryazan.bankofryazan.models.Investment;
 import ru.maxryazan.bankofryazan.models.Rate;
 import ru.maxryazan.bankofryazan.repository.InvestmentRepository;
 
+import java.io.IOException;
+import java.text.ParseException;
+
 
 @Service
 public class InvestmentService {
@@ -27,50 +30,66 @@ public class InvestmentService {
     }
 
 
-    public String createMainPage(Model model) {
-        Rate thisDayRate = rateService.showFromDB(serviceClass.generateDate());
-        ExchangeRateClass todayExchangeRate = exchangeRateClassService.getRateFromAPI();
-        model.addAttribute("thisDayRate", thisDayRate);
-        model.addAttribute("todayExchangeRate", todayExchangeRate);
-        model.addAttribute("silver", "silver");
-
-
-        ExchangeRateClass exchangeRateADayAgo = createExchangeRateClass(-1);
-        ExchangeRateClass exchangeRateAWeekAgo = createExchangeRateClass(-7);
-        ExchangeRateClass exchangeRateAMonthAgo = createExchangeRateClass(-31);
-        ExchangeRateClass exchangeRateAYearAgo = createExchangeRateClass(-365);
-
-
-        ExchangeRateClass tempExchangeDay = createTempExchangeRateClass(todayExchangeRate, exchangeRateADayAgo);
-        ExchangeRateClass tempExchangeWeek = createTempExchangeRateClass(todayExchangeRate, exchangeRateAWeekAgo);
-        ExchangeRateClass tempExchangeMonth = createTempExchangeRateClass(todayExchangeRate, exchangeRateAMonthAgo);
-        ExchangeRateClass tempExchangeYear = createTempExchangeRateClass(todayExchangeRate, exchangeRateAYearAgo);
-        model.addAttribute("dayExchange", tempExchangeDay);
-        model.addAttribute("weekExchange", tempExchangeWeek);
-        model.addAttribute("monthExchange", tempExchangeMonth);
-        model.addAttribute("yearExchange", tempExchangeYear);
-
-
-        Rate rateADayAgo = createRate(-1);
-        Rate rateAWeekAgo = createRate(-7);
-        Rate rateAMonthAgo = createRate(-31);
-        Rate rateAYearAgo = createRate(-365);
-
-
-        Rate tempRateDay = createTempRate(thisDayRate, rateADayAgo);
-        Rate tempRateWeek = createTempRate(thisDayRate, rateAWeekAgo);
-        Rate tempRateMonth = createTempRate(thisDayRate, rateAMonthAgo);
-        Rate tempRateYear = createTempRate(thisDayRate, rateAYearAgo);
-        model.addAttribute("dayRate", tempRateDay);
-        model.addAttribute("weekRate", tempRateWeek);
-        model.addAttribute("monthRate", tempRateMonth);
-        model.addAttribute("yearRate", tempRateYear);
-
-        return "/investments/investments-main";
-
+    public void save(Investment investment) {
+        investmentRepository.save(investment);
     }
 
-    private ExchangeRateClass createExchangeRateClass(int duration) {
+    public Rate findByDate(String date) throws IOException {
+        return rateService.showFromDB(date);
+    }
+
+    public String createMainPage(Model model) {
+        Rate thisDayRate;
+        ExchangeRateClass todayExchangeRate;
+        try {
+            thisDayRate = rateService.showFromDB(serviceClass.generateDate());
+            todayExchangeRate = exchangeRateClassService.getRateFromAPI();
+            model.addAttribute("thisDayRate", thisDayRate);
+            model.addAttribute("todayExchangeRate", todayExchangeRate);
+            model.addAttribute("silver", "silver");
+        } catch (Exception e) {
+            model.addAttribute("error", "В процессе получения данных с API была обнаружена ошибка!");
+            return "redirect:/main";
+        }
+            try {
+                ExchangeRateClass exchangeRateADayAgo = createExchangeRateClass(-1);
+                ExchangeRateClass exchangeRateAWeekAgo = createExchangeRateClass(-7);
+                ExchangeRateClass exchangeRateAMonthAgo = createExchangeRateClass(-31);
+                ExchangeRateClass exchangeRateAYearAgo = createExchangeRateClass(-365);
+
+
+                ExchangeRateClass tempExchangeDay = createTempExchangeRateClass(todayExchangeRate, exchangeRateADayAgo);
+                ExchangeRateClass tempExchangeWeek = createTempExchangeRateClass(todayExchangeRate, exchangeRateAWeekAgo);
+                ExchangeRateClass tempExchangeMonth = createTempExchangeRateClass(todayExchangeRate, exchangeRateAMonthAgo);
+                ExchangeRateClass tempExchangeYear = createTempExchangeRateClass(todayExchangeRate, exchangeRateAYearAgo);
+                model.addAttribute("dayExchange", tempExchangeDay);
+                model.addAttribute("weekExchange", tempExchangeWeek);
+                model.addAttribute("monthExchange", tempExchangeMonth);
+                model.addAttribute("yearExchange", tempExchangeYear);
+
+
+                Rate rateADayAgo = createRate(-1);
+                Rate rateAWeekAgo = createRate(-7);
+                Rate rateAMonthAgo = createRate(-31);
+                Rate rateAYearAgo = createRate(-365);
+
+
+                Rate tempRateDay = createTempRate(thisDayRate, rateADayAgo);
+                Rate tempRateWeek = createTempRate(thisDayRate, rateAWeekAgo);
+                Rate tempRateMonth = createTempRate(thisDayRate, rateAMonthAgo);
+                Rate tempRateYear = createTempRate(thisDayRate, rateAYearAgo);
+                model.addAttribute("dayRate", tempRateDay);
+                model.addAttribute("weekRate", tempRateWeek);
+                model.addAttribute("monthRate", tempRateMonth);
+                model.addAttribute("yearRate", tempRateYear);
+            } catch (Exception e) {
+                model.addAttribute("error", "В процессе генерации даты была обнаружена ошибка!");
+                return "redirect:/main";
+            }
+                return "/investments/investments-main";
+    }
+
+        private ExchangeRateClass createExchangeRateClass(int duration) throws ParseException {
         ExchangeRateClass rateClass = exchangeRateClassService.findByDate(serviceClass.generateDateMinusDays(duration));
         if(rateClass == null) {
             return exchangeRateClassService.findFirst();
@@ -78,7 +97,7 @@ public class InvestmentService {
         return rateClass;
     }
 
-    private Rate createRate(int duration) {
+    private Rate createRate(int duration) throws ParseException {
         Rate rate = rateService.findByDate(serviceClass.generateDateMinusDays(duration));
         if (rate == null) {
             return rateService.findFirst();
@@ -101,13 +120,6 @@ public class InvestmentService {
         serviceClass.roundFloat(todayRate.getRhodium() - lastRate.getRhodium()));
     }
 
-    public void save(Investment investment) {
-        investmentRepository.save(investment);
-    }
-
-    public Rate findByDate(String date) {
-    return rateService.showFromDB(date);
-    }
 
     public ExchangeRateClass findByDateMoney(String date) {
         return exchangeRateClassService.findByDate(date);
@@ -127,11 +139,12 @@ public class InvestmentService {
        return result;
     }
 
-    public double calculatePriceOfInvestment(String investment, String amount) {
+    public double calculatePriceOfInvestment(String investment, String amount) throws IOException {
         double result = 0;
-        Rate rate = findByDate(serviceClass.generateDate());
-        ExchangeRateClass exchangeRateClass = findByDateMoney(serviceClass.generateDate());
-        System.out.println(rate);
+        ExchangeRateClass exchangeRateClass;
+        Rate rate;
+            rate = findByDate(serviceClass.generateDate());
+            exchangeRateClass = findByDateMoney(serviceClass.generateDate());
         switch (investment) {
             case "gold" -> result = getResult(rate.getGold(), amount);
             case "silver" -> result = getResult(rate.getSilver(), amount);
@@ -151,7 +164,7 @@ public class InvestmentService {
         return  ratePrice * invokeAmount(amount);
     }
 
-    public void checkCurrPriceOfInvestment(Client client) {
+    public void checkCurrPriceOfInvestment(Client client) throws IOException {
         for (Investment inv : client.getInvestments()) {
             inv.setCurrPriceOfInvestment(calculatePriceOfInvestment(inv.getType(), Double.toString(inv.getInvestmentSizeByUnits())));
             inv.setMargin(serviceClass.round(inv.getCurrPriceOfInvestment() - inv.getBasePriceOfInvestment()));
@@ -159,7 +172,7 @@ public class InvestmentService {
         }
     }
 
-    public void createInvestment(String type, String amount, Client client) {
+    public void createInvestment(String type, String amount, Client client) throws IOException {
             String typeOfInvestment = changeType(type);
             double priceOfInvestment = calculatePriceOfInvestment(changeType(type), amount);
 

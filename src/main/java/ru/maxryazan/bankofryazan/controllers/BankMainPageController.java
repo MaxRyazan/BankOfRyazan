@@ -16,7 +16,7 @@ public class BankMainPageController {
     private final ExchangeRateClassService exchangeRate;
     private final ClientService clientService;
     private final MailSender mailSender;
-    private final EmailCodeSenderService codeSenderService;
+
     private final CreditService creditService;
     private final ServiceClass serviceClass;
 
@@ -24,12 +24,12 @@ public class BankMainPageController {
 
     public BankMainPageController(ExchangeRateClassService exchangeRate,
                                   ClientService clientService,
-                                  MailSender mailSender, EmailCodeSenderService codeSenderService, CreditService creditService, ServiceClass serviceClass,
+                                  MailSender mailSender, CreditService creditService,
+                                  ServiceClass serviceClass,
                                   BCryptPasswordEncoder passwordEncoder) {
         this.exchangeRate = exchangeRate;
         this.clientService = clientService;
         this.mailSender = mailSender;
-        this.codeSenderService = codeSenderService;
         this.creditService = creditService;
         this.serviceClass = serviceClass;
         this.passwordEncoder = passwordEncoder;

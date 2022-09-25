@@ -38,12 +38,16 @@ public class InvestmentController {
                                       HttpServletRequest request,
                                       Model model) {
         Client client = clientService.findByRequest(request);
-        if(client.getBalance() < investmentService.calculatePriceOfInvestment(investmentService.changeType(type), amount)){
-           investmentService.createMainPage(model);
-           return serviceClass.showErrorMessage("Недостаточно денег!", "investments/investments-main", model);
-        }
+    try {
+         if (client.getBalance() < investmentService.calculatePriceOfInvestment(investmentService.changeType(type), amount)) {
+             investmentService.createMainPage(model);
+             return serviceClass.showErrorMessage("Недостаточно денег!", "investments/investments-main", model);
+         }
         investmentService.createInvestment(type, amount, client);
         clientService.save(client);
+    } catch (Exception e){
+         return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!!", "investments/investments-main", model);
+    }
             return "redirect:/investments/main";
         }
 

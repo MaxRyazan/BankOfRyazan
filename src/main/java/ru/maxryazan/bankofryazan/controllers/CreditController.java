@@ -37,11 +37,16 @@ public class CreditController {
 
 
     @PostMapping("/credit-pays")
-    public String addPay(@RequestParam double sum, @RequestParam String numberOfCreditContract,
-                         HttpServletRequest request, Model model){
+    public String addPay(@RequestParam double sum,
+                         @RequestParam String numberOfCreditContract,
+                         HttpServletRequest request,
+                         Model model){
     if(creditService.ifCreditNotExistByNumberContract(numberOfCreditContract)){
         return serviceClass.showErrorMessage("Кредита с таким номером не существует!", "main/personal-area", model);
         }
+    if(!payService.validateData(sum, numberOfCreditContract, request)){
+        return serviceClass.showErrorMessage("Невозможно осуществить платёж", "main/personal-area", model);
+    }
     return payService.addNewPay(sum, numberOfCreditContract, request);
     }
 }

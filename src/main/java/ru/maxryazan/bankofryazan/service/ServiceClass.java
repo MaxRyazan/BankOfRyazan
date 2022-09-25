@@ -52,32 +52,22 @@ public class ServiceClass {
             return (double) Math.round(result * 100) / 100;
     }
 
-    public String generateDateOfEndInMonth(int duration) {
+    public String generateDateOfEndInMonth(int duration) throws ParseException {
         String dateOfBeginFromDB = generateDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calendar = Calendar.getInstance();
-        try {
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
             calendar.add(Calendar.MONTH, duration);
             return simpleDateFormat.format(calendar.getTime());
-        } catch (IllegalArgumentException | ParseException e) {
-            e.printStackTrace();
-        }
-        throw  new IllegalArgumentException();
     }
 
-    public String generateDateMinusDays(int numberOfDays) {
+    public String generateDateMinusDays(int numberOfDays) throws ParseException {
         String dateOfBeginFromDB = generateDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calendar = Calendar.getInstance();
-        try {
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
             calendar.add(Calendar.DAY_OF_WEEK, numberOfDays);
-            return simpleDateFormat.format(calendar.getTime());
-        } catch (IllegalArgumentException | ParseException e) {
-            e.printStackTrace();
-        }
-        throw  new IllegalArgumentException();
+        return simpleDateFormat.format(calendar.getTime());
     }
 
 

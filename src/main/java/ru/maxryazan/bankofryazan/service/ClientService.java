@@ -79,22 +79,26 @@ public class ClientService {
     }
 
     public String getPersonalPageArea(Model model, Client client) {
-        investmentService.checkCurrPriceOfInvestment(client);
-        checkDateOfContributions(client);
+        try {
+            investmentService.checkCurrPriceOfInvestment(client);
+            checkDateOfContributions(client);
 
-        Collections.reverse(client.getInComingTransactions());
-        Collections.reverse(client.getOutComingTransactions());
+            Collections.reverse(client.getInComingTransactions());
+            Collections.reverse(client.getOutComingTransactions());
 
-        List<Credit> closed = sortCreditsByStatus(client, Status.CLOSED);
-        List<Credit> active = sortCreditsByStatus(client, Status.ACTIVE);
-        List<Contribution> contributions = getActiveContributions(client);
+            List<Credit> closed = sortCreditsByStatus(client, Status.CLOSED);
+            List<Credit> active = sortCreditsByStatus(client, Status.ACTIVE);
+            List<Contribution> contributions = getActiveContributions(client);
 
-        model.addAttribute("contributions", contributions);
-        model.addAttribute("client", client);
-        model.addAttribute("closedCredits", closed);
-        model.addAttribute("activeCredits", active);
-        save(client);
-        return "personal/personal";
+            model.addAttribute("contributions", contributions);
+            model.addAttribute("client", client);
+            model.addAttribute("closedCredits", closed);
+            model.addAttribute("activeCredits", active);
+            save(client);
+            return "personal/personal";
+        } catch (Exception e) {
+            return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!", "/main", model);
+        }
     }
 
     private List<Credit> sortCreditsByStatus(Client client, Status status) {
@@ -113,8 +117,10 @@ public class ClientService {
         return result;
     }
 
-    private void checkDateOfContributions(Client client) {
-        client.getContributions().forEach(this::updateStatusAndBalance);
+    private void checkDateOfContributions(Client client) throws ParseException {
+        for(Contribution cn : client.getContributions()){
+            updateStatusAndBalance(cn);
+        }
     }
 
     public void updateBalance(Client client, double sum) {
@@ -123,7 +129,7 @@ public class ClientService {
         save(client);
     }
 
-    private void updateStatusAndBalance(Contribution cn) {
+    private void updateStatusAndBalance(Contribution cn) throws ParseException {
         if (cn.getStatus().equals(Status.ACTIVE)) {
             if (cn.getDateOfEnd().equals(serviceClass.generateDate()) || afterDateOfEnd(cn.getDateOfEnd())) {
                 cn.setStatus(Status.CLOSED);
@@ -133,17 +139,12 @@ public class ClientService {
         }
     }
 
-    private boolean afterDateOfEnd(String dateOfEnd) {
+    private boolean afterDateOfEnd(String dateOfEnd) throws ParseException {
         Date now = new Date();
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        try {
             Date endDate = dateFormat.parse(dateOfEnd);
             return endDate.before(now);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     /**
@@ -152,7 +153,7 @@ public class ClientService {
      * @param percent     of contribution
      * @param duration    in MONTHS
      */
-    public void addNewContribution(String phoneNumber, int sum, double percent, int duration) {
+    public void addNewContribution(String phoneNumber, int sum, double percent, int duration) throws ParseException {
         Client client = findByPhoneNumber(phoneNumber);
             String number;
             do {

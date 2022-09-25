@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.repository.ExchangeRateRepository;
+import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -22,11 +20,10 @@ public class ExchangeRateClassService {
         this.serviceClass = serviceClass;
     }
 
-    public ExchangeRateClass getRateFromAPI() {
+    public ExchangeRateClass getRateFromAPI() throws IOException {
         ExchangeRateClass exchangeRateClass = new ExchangeRateClass();
         ObjectMapper mapper = new ObjectMapper();
             if (rateRepository.findByDate(serviceClass.generateDate()) == null) {
-                try {
 //                    final String URL = "https://openexchangerates.org/api/latest.json?app_id=5893314b8b434e2b932b101821c225fd";
                     final String URL_EUR = "https://free.currconv.com/api/v7/convert?q=EUR_RUB&compact=ultra&apiKey=f197b54334ada744011e";
                     final String URL_USD = "https://free.currconv.com/api/v7/convert?q=USD_RUB&compact=ultra&apiKey=f197b54334ada744011e";
@@ -37,9 +34,6 @@ public class ExchangeRateClassService {
                     exchangeRateClass.setDate(serviceClass.generateDate());
                     rateRepository.save(exchangeRateClass);
                     return exchangeRateClass;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
             return rateRepository.findByDate(serviceClass.generateDate());
     }
