@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -102,7 +102,7 @@ class ServiceClassTest {
         calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
         calendar.add(Calendar.DAY_OF_WEEK, duration);
 
-        assertThat(serviceClass.generateDateOfEndInDays(duration))
+        assertThat(serviceClass.generateDateMinusDays(duration))
                 .isEqualTo(simpleDateFormat.format(calendar.getTime()));
     }
 }

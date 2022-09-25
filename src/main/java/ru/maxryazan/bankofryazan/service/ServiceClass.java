@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-import java.util.function.Function;
 
 @Service
 public class ServiceClass {
@@ -67,13 +66,13 @@ public class ServiceClass {
         throw  new IllegalArgumentException();
     }
 
-    public String generateDateOfEndInDays(int duration) {
+    public String generateDateMinusDays(int numberOfDays) {
         String dateOfBeginFromDB = generateDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calendar = Calendar.getInstance();
         try {
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
-            calendar.add(Calendar.DAY_OF_WEEK, duration);
+            calendar.add(Calendar.DAY_OF_WEEK, numberOfDays);
             return simpleDateFormat.format(calendar.getTime());
         } catch (IllegalArgumentException | ParseException e) {
             e.printStackTrace();

@@ -13,6 +13,7 @@ public class RateService {
 
     private final RateRepository rateRepository;
     private final ServiceClass serviceClass;
+
     public RateService(RateRepository rateRepository, ServiceClass serviceClass) {
         this.rateRepository = rateRepository;
         this.serviceClass = serviceClass;
@@ -20,19 +21,17 @@ public class RateService {
 
     public Rate getRateFromAPI() {
         ObjectMapper mapper = new ObjectMapper();
-        if (rateRepository.findByDate(serviceClass.generateDate()) == null) {
+        Rate rate;
             try {
                 final String METALS = "https://metals-api.com/api/latest?access_key=ymg6zgqfz0m5emiz9niyfcumi5otq3mhq30i7nr73a6gw6jt1l31739ci076&base=RUB&symbols=XAU%2CXAG%2CXPD%2CXPT%2CXRH";
                 MetalRate metals = mapper.readValue(new URL(METALS), MetalRate.class);
-                Rate rate = metals.getRates();
+                rate = metals.getRates();
                 rate.setDate(serviceClass.generateDate());
                 rateRepository.save(rate);
-                return metals.getRates();
+                return rate;
             } catch (Exception e) {
-                e.printStackTrace();
+                return rateRepository.findByDate(serviceClass.generateDateMinusDays(-1));
             }
-        }
-        return rateRepository.findByDate(serviceClass.generateDate());
     }
 
     public Rate showFromDB(String date){

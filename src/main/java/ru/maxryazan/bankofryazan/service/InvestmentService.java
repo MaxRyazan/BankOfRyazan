@@ -71,7 +71,7 @@ public class InvestmentService {
     }
 
     private ExchangeRateClass createExchangeRateClass(int duration) {
-        ExchangeRateClass rateClass = exchangeRateClassService.findByDate(serviceClass.generateDateOfEndInDays(duration));
+        ExchangeRateClass rateClass = exchangeRateClassService.findByDate(serviceClass.generateDateMinusDays(duration));
         if(rateClass == null) {
             return exchangeRateClassService.findFirst();
         }
@@ -79,7 +79,7 @@ public class InvestmentService {
     }
 
     private Rate createRate(int duration) {
-        Rate rate = rateService.findByDate(serviceClass.generateDateOfEndInDays(duration));
+        Rate rate = rateService.findByDate(serviceClass.generateDateMinusDays(duration));
         if (rate == null) {
             return rateService.findFirst();
         }
@@ -106,7 +106,7 @@ public class InvestmentService {
     }
 
     public Rate findByDate(String date) {
-        return rateService.findByDate(date);
+    return rateService.showFromDB(date);
     }
 
     public ExchangeRateClass findByDateMoney(String date) {
@@ -131,6 +131,7 @@ public class InvestmentService {
         double result = 0;
         Rate rate = findByDate(serviceClass.generateDate());
         ExchangeRateClass exchangeRateClass = findByDateMoney(serviceClass.generateDate());
+        System.out.println(rate);
         switch (investment) {
             case "gold" -> result = getResult(rate.getGold(), amount);
             case "silver" -> result = getResult(rate.getSilver(), amount);
