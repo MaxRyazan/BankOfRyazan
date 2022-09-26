@@ -6,6 +6,7 @@
     - Spring boot  
     - Spring security  
     - Spring MVC  
+    #Тесты jUnit5, Mockito
 ##### - Фронтэнд  
     - HTML  
     - CSS  
