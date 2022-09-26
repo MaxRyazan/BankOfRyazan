@@ -24,15 +24,19 @@ public class CreditService {
         return creditRepository.findById(id);
     }
 
+    public boolean ifCreditNotExistById(long id) {
+        return !creditRepository.existsById(id);
+    }
+
     public void save(Credit credit) {
         creditRepository.save(credit);
     }
 
     public Credit addNewCredit(Client borrower, int sum, double percent, int numberOfPays) {
-        String num = createAnValidateRandomNumber();
+        String generatedNumberOfCredit = createValidRandomNumber();
 
         return new Credit(
-                num,
+                generatedNumberOfCredit,
                 sum,
                 percent,
                 serviceClass.generateDate(),
@@ -49,12 +53,12 @@ public class CreditService {
         return !creditRepository.existsByNumberOfCreditContract(number);
     }
 
-    public String createAnValidateRandomNumber(){
-        String num;
+    public String createValidRandomNumber(){
+        String generatedNumber;
         do {
-            num = serviceClass.generateRandomUniqueNumber();
-        }  while (ifCreditNotExistByNumberContract(num));
-        return num;
+            generatedNumber = serviceClass.generateRandomUniqueNumber();
+        }  while (ifCreditNotExistByNumberContract(generatedNumber));
+        return generatedNumber;
     }
 
 
@@ -80,27 +84,24 @@ public class CreditService {
     }
 
 
-    public double creditCalculator(double sumOfCredit, int duration) {
-        double result = 0;
+    public double creditCalculator(double sumOfCredit, double duration) {
         if(sumOfCredit < 300000){
-            result = sumOfCredit + duration * (sumOfCredit *  0.12);
+            return createCreditCalculatorResult(sumOfCredit, duration, 12);
         }
         if(sumOfCredit >= 300000 && sumOfCredit < 600000){
-            result =  sumOfCredit + duration * (sumOfCredit * 0.1);
+            return createCreditCalculatorResult(sumOfCredit, duration, 10);
         }
         if(sumOfCredit >= 600000 && sumOfCredit < 1200000){
-            result =  sumOfCredit + duration * (sumOfCredit *  0.08);
+            return createCreditCalculatorResult(sumOfCredit, duration, 8);
         }
         if(sumOfCredit >= 1200000 && sumOfCredit < 5000000){
-            result =  sumOfCredit + duration * (sumOfCredit *  0.07);
+            return createCreditCalculatorResult(sumOfCredit, duration, 7);
         }
-        if(sumOfCredit >= 5000000 && sumOfCredit <= 10000000){
-            result =  sumOfCredit + duration * (sumOfCredit *  0.05);
-        }
-        return (double)((int)(result * 100)) / 100;
+        return createCreditCalculatorResult(sumOfCredit, duration, 5);
     }
 
-    public boolean ifCreditNotExistById(long id) {
-        return !creditRepository.existsById(id);
+    public double createCreditCalculatorResult(double sumOfCredit, double duration, double percent){
+        return sumOfCredit + duration * (sumOfCredit *  (percent / 100));
     }
+
 }

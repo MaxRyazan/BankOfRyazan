@@ -16,7 +16,6 @@ public class BankMainPageController {
     private final ExchangeRateClassService exchangeRate;
     private final ClientService clientService;
     private final MailSender mailSender;
-
     private final CreditService creditService;
     private final ServiceClass serviceClass;
 
@@ -53,7 +52,7 @@ public class BankMainPageController {
     }
 
     @PostMapping("/calculate")
-    public String postMain(@RequestParam double sumOfCredit, @RequestParam int duration, Model model){
+    public String postMain(@RequestParam double sumOfCredit, @RequestParam double duration, Model model){
         double result = creditService.creditCalculator(sumOfCredit, duration);
         model.addAttribute("result", result);
         return "main-page";

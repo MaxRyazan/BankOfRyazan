@@ -162,9 +162,6 @@ class CreditServiceTest {
         assertEquals(11000000, result);
     }
 
-    @Test
-    void ifCreditNotExistById() {
-    }
 
     @Test
     void createAnValidateRandomNumber() {
@@ -172,8 +169,19 @@ class CreditServiceTest {
         given(serviceClass.generateRandomUniqueNumber()).willReturn("1234567");
         given(creditService.ifCreditNotExistByNumberContract("1234567")).willReturn(true);
 
-        String num = creditService.createAnValidateRandomNumber();
+        String num = creditService.createValidRandomNumber();
 
         assertEquals(7, num.length());
+    }
+
+    @Test
+    void createCreditCalculatorResult() {
+        double result = creditService.createCreditCalculatorResult(100000, 0.5, 12);
+        assertEquals(106000, result);
+    }
+    @Test
+    void createCreditCalculatorResult2() {
+        double result = creditService.createCreditCalculatorResult(600000, 2, 8);
+        assertEquals(696000, result);
     }
 }
