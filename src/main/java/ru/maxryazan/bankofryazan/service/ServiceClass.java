@@ -79,8 +79,8 @@ public class ServiceClass {
     }
 
 
-    public String showErrorMessage(String message, String redirectTo, Model model){
+    public String showErrorMessage(String message, String pageToShow, Model model){
         model.addAttribute("error", message);
-        return redirectTo;
+        return pageToShow;
     }
 }

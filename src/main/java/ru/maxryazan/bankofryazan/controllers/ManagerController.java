@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.maxryazan.bankofryazan.models.Client;
+import ru.maxryazan.bankofryazan.models.Credit;
 import ru.maxryazan.bankofryazan.service.*;
 
 import java.text.ParseException;
@@ -70,7 +72,9 @@ public class ManagerController {
             return serviceClass.showErrorMessage("Кредитные данные не корректны!\n" +
                     "Минимальная сумма кредита 10 000 ₽ под 2% годовых. Минимум 2 платежа.", "manager/credit", model);
         }
-        creditService.addNewCredit(phoneNumber, sumOfCredit, percentOfCredit, numberOfPays);
+        Client client = clientService.findByPhoneNumber(phoneNumber);
+        Credit credit = creditService.addNewCredit(client, sumOfCredit, percentOfCredit, numberOfPays);
+        creditService.save(credit);
         return "redirect:/manager/credit";
     }
 

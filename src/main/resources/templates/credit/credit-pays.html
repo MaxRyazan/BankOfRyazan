@@ -76,12 +76,12 @@
 
 <body th:style="'background: url(/img/fon.png) no-repeat center center fixed; background-size:cover;'">
 <div class="inline">
-    <div class="text">Внести очередной платёж? Номер этого договора: <span th:text="${creditNumber}"></span></div>
+    <div class="text">Внести очередной платёж? Номер этого договора: <span th:text="${credit.numberOfCreditContract}"></span></div>
     <div class="input">
         <form th:action="@{/credit-pays}"  method="post" style="float: left" >
                 <label>
-                    <input type="text" name="numberOfCreditContract" th:value="${creditNumber}" class="input_field">
-                    <input type="number" name="sum" th:value="${everyMonthPay}" class="input_field">
+                    <input type="text" name="numberOfCreditContract" th:value="${credit.numberOfCreditContract}" class="input_field">
+                    <input type="number" name="sum" th:value="${credit.everyMonthPay}" class="input_field">
                 </label>
                 <input type="submit" value="Внести">
         </form>
@@ -92,16 +92,16 @@
                 <th>Дата</th>
                 <th>Сумма</th>
             </tr>
-            <tr th:each="element : ${pays}">
+            <tr th:each="element : ${credit.pays}">
                 <td th:text="${element.date}"></td>
                 <td th:text="${element.sum}"></td>
             </tr>
          </table>
         <br>
-         <label class="text">Внесено платежей: </label><label th:text="${numberOfPays}" class="green"></label>
-        <label class="text3"> на сумму: </label><label th:text="${payd}" class="green"></label> <br>
-        <label class="text">Осталось платежей: </label><label th:text="${ostPays}" class="red"></label>
-        <label class="text3"> на сумму: </label><label th:text="${ost}" class="red"></label>
+         <label class="text">Внесено платежей: </label><label th:text="${credit.pays.size}" class="green"></label>
+        <label class="text3"> на сумму: </label><label th:text="${credit.sumWithPercents} - ${credit.restOfCredit}" class="green"></label> <br>
+        <label class="text">Осталось платежей: </label><label th:text="${credit.numberOfPays} - ${credit.pays.size}" class="red"></label>
+        <label class="text3"> на сумму: </label><label th:text="${credit.restOfCredit}" class="red"></label>
     </div>
 </div>
 <input type="button" value="Назад" onclick="history.back()">

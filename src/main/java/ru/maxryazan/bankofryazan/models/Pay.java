@@ -1,16 +1,15 @@
 package ru.maxryazan.bankofryazan.models;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 @Entity
-@Getter
-@Setter
+
 @NoArgsConstructor
+@Getter
 @Table(name = "pay")
 public class Pay {
 
@@ -28,8 +27,7 @@ public class Pay {
     @JoinColumn(name = "credit_id")
     private Credit credit;
 
-
-    public Pay(String date, double sum, Credit credit) {
+    public Pay(final String date, final double sum, final Credit credit) {
         this.date = date;
         this.sum = sum;
         this.credit = credit;

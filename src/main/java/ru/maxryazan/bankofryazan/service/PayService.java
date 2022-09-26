@@ -37,19 +37,21 @@ public class PayService {
         Client client = clientService.findByRequest(request);
         Credit credit = creditService.findByNumberOfCreditContract(numberOfCreditContract);
 
-        Date date = new Date();
-        Pay pay = new Pay(
-                serviceClass.generateDateWithHours(date),
-                sum,
-                credit
-        );
-        save(pay);
-        client.setBalance(client.getBalance() - pay.getSum());
-        if (Math.round(credit.getRestOfCredit()) == 0) {
-            credit.setStatus(Status.CLOSED);
-        }
-        creditService.saveOrUpdateCredit(credit);
+        createPayByBuilder(sum, credit);
+        clientService.updateBalance(client, -sum);
+
+        creditService.setRestOfCreditOrCloseStatus(credit);
+
         return "redirect:/main/personal-area";
+    }
+
+
+    public void createPayByBuilder(double sum, Credit credit){
+     Pay pay = new Pay(
+                serviceClass.generateDateWithHours(new Date()),
+                sum,
+               credit);
+     save(pay);
     }
 
     public boolean validateData(double sum, String numberOfCreditContract, HttpServletRequest request) {
@@ -57,7 +59,8 @@ public class PayService {
         Client client = clientService.findByRequest(request);
         return credit.getStatus().equals(Status.ACTIVE)
                && sum > 0
-               && client.getBalance() >= sum;
+               && client.getBalance() >= sum
+               && credit.getRestOfCredit() >= sum;
     }
 
 }

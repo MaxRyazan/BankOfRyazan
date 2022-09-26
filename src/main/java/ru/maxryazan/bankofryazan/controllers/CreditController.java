@@ -29,7 +29,8 @@ public class CreditController {
     @GetMapping("/credit/{id}")
     public String showPays(@PathVariable long id, Model model, @ModelAttribute String error) {
         if(creditService.ifCreditNotExistById(id)){
-            return serviceClass.showErrorMessage("Кредита с таким ID не существует!", "main/personal-area", model);
+
+            return serviceClass.showErrorMessage("Кредита с таким ID не существует!", "personal/login", model);
         }
         Credit credit = creditService.findById(id);
         return creditService.checkRestOfCredit(credit, model);
