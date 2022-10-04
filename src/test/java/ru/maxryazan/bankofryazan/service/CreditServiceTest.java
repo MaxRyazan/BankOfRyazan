@@ -41,6 +41,7 @@ class CreditServiceTest {
     void setRestOfCreditOrCloseStatus() {
 
         Credit credit = new Credit();
+
         Pay pay = new Pay(
                 String.valueOf(new Date()),
                 3500,
@@ -50,7 +51,6 @@ class CreditServiceTest {
                 String.valueOf(new Date()),
                 1499.66,
                 credit);
-
 
         credit.setPays(List.of(pay, pay1));
         credit.setSumWithPercents(5000);

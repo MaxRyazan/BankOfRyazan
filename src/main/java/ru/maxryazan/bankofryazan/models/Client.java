@@ -1,6 +1,8 @@
 package ru.maxryazan.bankofryazan.models;
 
 import lombok.*;
+import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -58,6 +60,9 @@ public class Client {
 
     @OneToMany(mappedBy = "contributor", fetch = FetchType.LAZY)
     private List<Contribution> contributions;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<CarInsurance> insurances;
 
     public Client(String firstName, String lastName, String email, String phoneNumber,
                   double balance, double balanceUSD, double balanceEUR, String pinCode) {

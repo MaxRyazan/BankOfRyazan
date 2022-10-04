@@ -1,0 +1,161 @@
+.navbarINSURANCE{
+    margin-top: 0;
+    width: 100%;
+    height: 40px;
+    background-color: rgb(43, 42, 42);
+    display: inline-flex;
+    justify-content: space-between;
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+}
+
+.containerWarn{
+    margin-top: 2%;
+    margin-left: 10%;
+    width: 80%;
+    padding: 10px;
+    background: linear-gradient(to right, #b5d5ff, #21a3eb);
+}
+.containerMain{
+        margin-top: 1%;
+        margin-left: 2%;
+        padding: 10px;
+        width: 96%;
+}
+.containerInputSmall{
+        padding: 10px;
+        width: 90px;
+}
+.containerInputLarge{
+        padding: 10px;
+        width: 200px;
+}
+.containerInputLargeM{
+    padding: 10px;
+}
+.containerPrice{
+    align-content: center;
+    width: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 1px solid green;
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+}
+.containerRed{
+    padding: 10px;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+.containerGreen{
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 150px;
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+}
+.buttonGreen{
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 150px;
+    height: 40px;
+    margin: auto;
+    border: 1px solid green;
+    background-color: rgb(86, 255, 71);
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+}
+.containerInline{
+    display: inline-flex;
+    width: 98%;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.containerInfo{
+    border: 2px solid red;
+    padding: 10px;
+}
+.containershowPrice{
+    padding: 2px;
+    display: inline-flex;
+    height: 30px;
+    margin-left: 0;
+}
+#shadow{
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+}
+#title{
+    margin-top: 2%;
+}
+.innerInput{
+    background-color: rgb(228, 255, 144);
+    padding: 1px;
+    border: 1px solid green;
+    width: 98%;
+    padding: 2px;
+    height: 25px;
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+
+}
+.text{
+    text-align: center;
+    margin-bottom: 5px;
+}
+.center{
+    width: 98%;
+    margin: 10px;
+    margin-bottom: 5%;
+}
+.textInfo{
+    border: 2px solid black;
+    padding: 7px;
+    display: inline-flex;
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+}
+.textInfoTitle{
+    background-color: rgb(86, 255, 71);
+    border: 1px solid black;
+    text-align: center;
+    padding: 7px;
+    box-shadow: 0 0 10px rgb(78, 78, 78);
+}
+.HPower{
+    margin-left: 8px;
+    margin-right: 8px;
+}
+.redKoeff{
+    margin-left: 8px;
+    margin-right: 8px;
+    color: red;
+    font-weight: bold;
+}
+.img50 {
+   	animation: pulse 1.2s linear infinite;
+    height: 75px;
+    width: 75px;
+    margin: auto;
+}
+
+@-webkit-keyframes "pulse" {
+0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+50% {
+   -webkit-transform: scale(0.8);
+   transform: scale(0.8);
+}
+100% {
+    -webkit-transform: scale(1);
+   transform: scale(1);
+}
+}
+.warnText{
+    font-family: monospace;
+    font-size: 18px;
+    margin-top: 2%;
+}
+.footerOSAGO{
+    margin: 2%;
+    background: linear-gradient(to right, rgb(194, 236, 254), rgb(115, 180, 255));
+}
+.footerTextOSAGO{
+    font-family: cursive;
+    font-size: 12px;
+}

@@ -12,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "contribution")
 public class Contribution {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

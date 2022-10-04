@@ -16,8 +16,6 @@
 .hrefItemBlack{
     text-decoration: none;
     padding: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: inherit;
     color: black;
     font-weight: bold;
@@ -37,10 +35,15 @@
     text-decoration: none;
     color: black;
 }
-.calc{
-    width: 30%;
-    border: 2px solid red;
+.USD{
+    margin-left: 7px;
+    margin-top: 3px;
+    color: darkgreen;
+    font-size: 18px;
 }
-.horizontScroll{
-    width: 100%;
+.EUR{
+    margin-left: 7px;
+    margin-top: 3px;
+    color: #E5BE01;
+    font-size: 18px;
 }

@@ -35,13 +35,7 @@ public class Investment {
 
     @Column(name = "margin")
     private double margin;
-
-
-
     @ManyToOne
     @JoinColumn(name = "investment_id")
     private Client investor;
-
-
-
 }

@@ -17,7 +17,6 @@ public class PayService {
     private final PayRepository payRepository;
     private final CreditService creditService;
     private final ClientService clientService;
-
     private final ServiceClass serviceClass;
 
     public PayService(PayRepository payRepository, CreditService creditService, ClientService clientService, ServiceClass serviceClass) {
@@ -37,7 +36,7 @@ public class PayService {
         Client client = clientService.findByRequest(request);
         Credit credit = creditService.findByNumberOfCreditContract(numberOfCreditContract);
 
-        createPayByBuilder(sum, credit);
+        createPay(sum, credit);
         clientService.updateBalance(client, -sum);
 
         creditService.setRestOfCreditOrCloseStatus(credit);
@@ -46,7 +45,7 @@ public class PayService {
     }
 
 
-    public void createPayByBuilder(double sum, Credit credit){
+    public void createPay(double sum, Credit credit){
      Pay pay = new Pay(
                 serviceClass.generateDateWithHours(new Date()),
                 sum,
@@ -54,7 +53,8 @@ public class PayService {
      save(pay);
     }
 
-    public boolean validateData(double sum, String numberOfCreditContract, HttpServletRequest request) {
+    public boolean validateData(double sum, String numberOfCreditContract,
+                                HttpServletRequest request) {
         Credit credit = creditService.findByNumberOfCreditContract(numberOfCreditContract);
         Client client = clientService.findByRequest(request);
         return credit.getStatus().equals(Status.ACTIVE)
@@ -62,5 +62,4 @@ public class PayService {
                && client.getBalance() >= sum
                && credit.getRestOfCredit() >= sum;
     }
-
 }

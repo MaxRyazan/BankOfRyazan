@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 
 @Entity
-
 @NoArgsConstructor
 @Getter
 @Table(name = "pay")
@@ -16,7 +15,6 @@ public class Pay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @Column(name = "date")
     private String date;
 

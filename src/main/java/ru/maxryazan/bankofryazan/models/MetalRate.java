@@ -30,6 +30,4 @@ public class MetalRate {
 
     @JsonIgnore
     private String unit;
-
-
 }

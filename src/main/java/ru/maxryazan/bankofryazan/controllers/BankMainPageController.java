@@ -1,6 +1,8 @@
 package ru.maxryazan.bankofryazan.controllers;
 
 
+import lombok.extern.log4j.Log4j2;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.service.*;
+import java.util.logging.Logger;
 
 @Controller
+@Log4j2
 public class BankMainPageController {
     private final ExchangeRateClassService exchangeRate;
     private final ClientService clientService;
@@ -20,6 +24,7 @@ public class BankMainPageController {
     private final ServiceClass serviceClass;
 
     private final BCryptPasswordEncoder passwordEncoder;
+
 
     public BankMainPageController(ExchangeRateClassService exchangeRate,
                                   ClientService clientService,
@@ -41,11 +46,13 @@ public class BankMainPageController {
 
     @GetMapping("/main")
     public String showMainPage(Model model, @ModelAttribute String result) {
+        log.info("Получаем рейтинги с exchangeRate.getRateFromAPI()");
         try {
             ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
             model.addAttribute("USD", exchangeRateClass.getCourse_USD());
             model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
         } catch (Exception e){
+            log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
            return "/login";
         }
         return "main-page";
@@ -71,10 +78,13 @@ public class BankMainPageController {
                                        @RequestParam String pinCode,
                                        Model model){
             if(clientService.existsByPhoneAndEmail(phoneNumber, email)){
+                log.error("в методе BankMainPageController.postSelfRegistration() произошла ошибка. Попробовали зарегистрировать" +
+                        "уже существующего клиента с номером телефона " + phoneNumber);
             return serviceClass.showErrorMessage("Клиент с таким номером телефона или почтой уже существует!",
                     "personal/self-registration-page", model);
         }
-        clientService.save(firstName, lastName, phoneNumber, email, passwordEncoder.encode(pinCode));
+             clientService.save(firstName, lastName, phoneNumber, email, passwordEncoder.encode(pinCode));
+                log.info("зарегистрирован новый клиент с номером телефона " + phoneNumber);
         return "redirect:/main/personal-area";
     }
 
@@ -91,9 +101,12 @@ public class BankMainPageController {
     @PostMapping("/forgot")
     public String postRestorePass(@RequestParam String email, @RequestParam String phoneNumber, Model model){
         if(!clientService.existsByPhoneAndEmail(phoneNumber, email)){
+            log.error("введены не верные персональные данные в методе BankMainPageController.postRestorePass()" +
+                    phoneNumber + " / " + email);
             return serviceClass.showErrorMessage("Комбинация почта - телефон не верна.", "personal/forgot", model);
         }
         mailSender.restorePassword(email, phoneNumber);
+             log.info("выслан проверочный код на по номеру телефона " + phoneNumber);
         return "redirect:/restore";
     }
 
@@ -109,15 +122,21 @@ public class BankMainPageController {
                                   @RequestParam String confirmPassword,
                                   Model model){
         if(!clientService.validationPhoneNumber(phoneNumber)){
+            log.error("В методе BankMainPageController.postRestorePage() введен некорректный номер телефона " + phoneNumber);
             return serviceClass.showErrorMessage("Указан не верный номер телефона!", "/personal/restore", model);
         }
         if(clientService.ifCodeFromEmailNotValid(phoneNumber, codeFromEmail)){
+            log.error("В методе BankMainPageController.postRestorePage() введен некорректный проверочный код " + phoneNumber
+                    + " / " + codeFromEmail);
             return serviceClass.showErrorMessage("Проверочный код не верен!", "/personal/restore", model);
         }
         if(!password.equals(confirmPassword)){
+            log.error("В методе BankMainPageController.postRestorePage() произошла ошибка ввода паролей");
             return serviceClass.showErrorMessage("Пароли не совпадают!", "/personal/restore", model);
         }
         mailSender.resetPassword(phoneNumber, password);
+            log.info("В методе BankMainPageController.postRestorePage() был успешно изменён пароль пользователя с номером" +
+                    " телефона " + phoneNumber);
         return "redirect:/login";
     }
 }

@@ -27,7 +27,8 @@ public class TransactionalService {
         transactionalRepository.save(transaction);
     }
 
-    public void createNewTransaction(String recipientPhoneNumber, int sum, HttpServletRequest request) {
+    public void createNewTransaction(String recipientPhoneNumber,
+                                     int sum, HttpServletRequest request) {
 
         Client sender = clientService.findByRequest(request);
         Client recipient = clientService.findByPhoneNumber(recipientPhoneNumber);

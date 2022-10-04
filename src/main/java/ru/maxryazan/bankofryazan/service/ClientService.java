@@ -97,7 +97,8 @@ public class ClientService {
             save(client);
             return "personal/personal";
         } catch (Exception e) {
-            return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!", "/main", model);
+            return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!",
+                    "/main", model);
         }
     }
 

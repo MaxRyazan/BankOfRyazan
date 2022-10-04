@@ -16,8 +16,6 @@
 .hrefItemBlack{
     text-decoration: none;
     padding: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: inherit;
     color: black;
     font-weight: bold;
@@ -36,4 +34,16 @@
 .containerHref{
     text-decoration: none;
     color: black;
+}
+.USD{
+    margin-left: 7px;
+    margin-top: 3px;
+    color: darkgreen;
+    font-size: 18px;
+}
+.EUR{
+    margin-left: 7px;
+    margin-top: 3px;
+    color: #E5BE01;
+    font-size: 18px;
 }

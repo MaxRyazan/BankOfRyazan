@@ -7,7 +7,6 @@ import ru.maxryazan.bankofryazan.models.Credit;
 import ru.maxryazan.bankofryazan.service.CreditService;
 import ru.maxryazan.bankofryazan.service.PayService;
 import ru.maxryazan.bankofryazan.service.ServiceClass;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Controller

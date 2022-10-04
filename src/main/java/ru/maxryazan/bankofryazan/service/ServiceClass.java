@@ -83,4 +83,9 @@ public class ServiceClass {
         model.addAttribute("error", message);
         return pageToShow;
     }
+
+    public String showSuccessMessage(String message, String pageToShow, Model model) {
+        model.addAttribute("success", message);
+        return pageToShow;
+    }
 }
