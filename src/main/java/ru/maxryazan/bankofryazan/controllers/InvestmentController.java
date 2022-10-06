@@ -46,16 +46,10 @@ public class InvestmentController {
         investmentService.createInvestment(type, amount, client);
         clientService.save(client);
     } catch (Exception e){
-         return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!!", "investments/investments-main", model);
+         return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!!",
+                 "investments/investments-main", model);
     }
             return "redirect:/investments/main";
         }
-
-
-
-    @GetMapping("/make")
-    public String getMakeInvestment(){
-        return "/investments/investments-make";
-    }
 
 }

@@ -391,7 +391,7 @@ width: 50%;">
                                     <td th:text="${credit.everyMonthPay}" class="align-center"></td>
                                     <td th:text="${credit.restOfCredit}" class="align-center"></td>
                                     <td>
-                                        <a th:href="'/credit/' + ${credit.id}">Детали</a>
+                                        <a th:href="'/main/personal-area/credit/' + ${credit.id}">Детали</a>
                                     </td>
                                 </tr>
                                </thead>
@@ -440,7 +440,7 @@ width: 50%;">
                                     <td th:text="${credit.creditPercent}" class="align-center"></td>
                                     <td th:text="${credit.everyMonthPay}" class="align-center"></td>
                                     <td>
-                                        <a th:href="'/credit/' + ${credit.id}">Детали</a>
+                                        <a th:href="'/main/personal-area/credit/' + ${credit.id}">Детали</a>
                                     </td>
                                 </tr>
                                 </thead>
@@ -581,7 +581,6 @@ width: 50%;">
                                     <td th:text="${insurance.carNumber}" class="align-center"></td>
                                     <td th:text="${insurance.dateOfExpired}" class="align-center"></td>
                                     <td th:text="${insurance.priceOfOsago}" class="align-center"></td>
-
                                 </tr>
                                 </thead>
                             </table>
@@ -599,11 +598,12 @@ width: 50%;">
 
 <div class="error" id="err" style="margin-top: 10%" th:text="${error}"></div>
 <div class="success" id="succ" style="margin-top: 10%" th:text="${success}"></div>
+<div th:text="${insuranceExpired}"></div>
 
 <details style="margin-top: 10%">
     <summary>Купить полис ОСАГО</summary>
         <div>
-            <form th:action="@{/buy_car_insurance}" method="post">
+            <form th:action="@{/personal/buy_car_insurance}" method="post">
                 <label>
                     <input type="text" name="carNumber" required>
                     <input type="number" name="horsePower" required min="1">

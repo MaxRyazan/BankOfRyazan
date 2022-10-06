@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement(session -> session.maximumSessions(1))
                 .authorizeRequests()
                 .antMatchers("/investments/main", "/main", "/forgot", "/restore", "/").permitAll()
-                .antMatchers("/main/personal-area", "/credit/**").authenticated()
+                .antMatchers("/main/personal-area", "/main/personal-area/**").authenticated()
               //  .anyRequest().authenticated()
                 .and()
                 .formLogin()

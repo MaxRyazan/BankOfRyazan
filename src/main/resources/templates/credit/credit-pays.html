@@ -78,10 +78,10 @@
 <div class="inline">
     <div class="text">Внести очередной платёж? Номер этого договора: <span th:text="${credit.numberOfCreditContract}"></span></div>
     <div class="input">
-        <form th:action="@{/credit-pays}"  method="post" style="float: left" >
+        <form th:action="@{/main/personal-area/credit-pays}"  method="post" style="float: left" >
                 <label>
-                    <input type="text" name="numberOfCreditContract" th:value="${credit.numberOfCreditContract}" class="input_field">
-                    <input type="number" name="sum" th:value="${credit.everyMonthPay}" class="input_field">
+                    <input type="text" name="numberOfCreditContract" th:value="${credit.numberOfCreditContract}" class="input_field" required>
+                    <input type="number" name="sum" th:value="${credit.everyMonthPay}" class="input_field" required min="1">
                 </label>
                 <input type="submit" value="Внести">
         </form>

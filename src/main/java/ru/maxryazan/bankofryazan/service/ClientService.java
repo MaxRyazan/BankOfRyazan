@@ -3,13 +3,15 @@ package ru.maxryazan.bankofryazan.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.*;
+import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
 import ru.maxryazan.bankofryazan.repository.ClientRepository;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.Principal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -78,6 +80,7 @@ public class ClientService {
         return findByPhoneNumber(authClientPhoneNumber);
     }
 
+
     public String getPersonalPageArea(Model model, Client client) {
         try {
             investmentService.checkCurrPriceOfInvestment(client);
@@ -94,9 +97,10 @@ public class ClientService {
             model.addAttribute("client", client);
             model.addAttribute("closedCredits", closed);
             model.addAttribute("activeCredits", active);
+
             save(client);
             return "personal/personal";
-        } catch (Exception e) {
+        } catch (ParseException | IOException e) {
             return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!",
                     "/main", model);
         }
@@ -118,7 +122,8 @@ public class ClientService {
         return result;
     }
 
-    private void checkDateOfContributions(Client client) throws ParseException {
+
+    public void checkDateOfContributions(Client client) throws ParseException {
         for(Contribution cn : client.getContributions()){
             updateStatusAndBalance(cn);
         }
@@ -130,9 +135,10 @@ public class ClientService {
         save(client);
     }
 
-    private void updateStatusAndBalance(Contribution cn) throws ParseException {
+
+    public void updateStatusAndBalance(Contribution cn) throws ParseException {
         if (cn.getStatus().equals(Status.ACTIVE)) {
-            if (cn.getDateOfEnd().equals(serviceClass.generateDate()) || afterDateOfEnd(cn.getDateOfEnd())) {
+            if (cn.getDateOfEnd().equals(serviceClass.generateDate()) || serviceClass.afterDateOfEnd(cn.getDateOfEnd())) {
                 cn.setStatus(Status.CLOSED);
                 contributionService.save(cn);
                 updateBalance(cn.getContributor(), cn.getSumWithPercent());
@@ -140,20 +146,8 @@ public class ClientService {
         }
     }
 
-    private boolean afterDateOfEnd(String dateOfEnd) throws ParseException {
-        Date now = new Date();
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-            Date endDate = dateFormat.parse(dateOfEnd);
-            return endDate.before(now);
-    }
 
-    /**
-     * @param phoneNumber of current contributor
-     * @param sum         of contribution in roubles
-     * @param percent     of contribution
-     * @param duration    in MONTHS
-     */
+
     public void addNewContribution(String phoneNumber, int sum, double percent, int duration) throws ParseException {
         Client client = findByPhoneNumber(phoneNumber);
             String number;
@@ -197,8 +191,9 @@ public class ClientService {
 
     public boolean ifSumNotValid(String phone, int sum) {
         Client client = findByPhoneNumber(phone);
-        return client.getBalance() < sum;
+        return client.getBalance() < Math.abs(sum);
     }
+
 }
 
 

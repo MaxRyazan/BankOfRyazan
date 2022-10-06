@@ -2,7 +2,6 @@ package ru.maxryazan.bankofryazan.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -88,4 +87,14 @@ public class ServiceClass {
         model.addAttribute("success", message);
         return pageToShow;
     }
+
+    public boolean afterDateOfEnd(String dateOfEnd) throws ParseException {
+        Date now = new Date();
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        Date endDate = dateFormat.parse(dateOfEnd);
+        return endDate.before(now);
+    }
+
+
 }

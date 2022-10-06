@@ -1,20 +1,33 @@
 package ru.maxryazan.bankofryazan.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ru.maxryazan.bankofryazan.models.Client;
+import ru.maxryazan.bankofryazan.models.Status;
+import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
 import ru.maxryazan.bankofryazan.repository.CarInsuranceRepository;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class CarInsuranceServiceTest {
     @Mock
-    CarInsuranceRepository carInsuranceRepository;
+     CarInsuranceRepository carInsuranceRepository;
     @Mock
-    ServiceClass serviceClass;
+    ClientService  clientService;
+     ServiceClass serviceClass = new ServiceClass();
 
-    CarInsuranceService carInsuranceService = new CarInsuranceService(carInsuranceRepository, serviceClass);
+
+    CarInsuranceService carInsuranceService = new CarInsuranceService(carInsuranceRepository, serviceClass, clientService);
+
 
     @Test
     void validateYearOfCarBuild() {
@@ -37,4 +50,5 @@ class CarInsuranceServiceTest {
     void validateCaNumber(String number) {
         assertTrue(carInsuranceService.validateCaNumber(number));
     }
+
 }

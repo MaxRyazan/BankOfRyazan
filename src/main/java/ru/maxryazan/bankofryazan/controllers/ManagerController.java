@@ -2,6 +2,7 @@ package ru.maxryazan.bankofryazan.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,6 +60,7 @@ public class ManagerController {
         return "manager/new-credit";
     }
 
+
     @PostMapping("/manager/credit")
     public String postNewCredit(@RequestParam String phoneNumber,
                                 @RequestParam int sumOfCredit,
@@ -83,6 +85,7 @@ public class ManagerController {
     public String getNewContribution(@ModelAttribute String error) {
         return "manager/new-contribution";
     }
+
 
     @PostMapping("/manager/contribution")
     public String postNewContribution(@RequestParam String phoneNumber,

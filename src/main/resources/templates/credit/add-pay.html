@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form name="f" th:action="@{/credit-pays}" method="post">
-    <div th:each="element : ${pay}">
-        <input type="hidden" name="sum" th:value="${element.sum}" />
-        <input type="hidden" name="date" th:value="${element.date}" />
-        <button type="submit" class="btn btn-success"></button>
-    </div>
-</form>
-</body>
-</html>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<form name="f" th:action="@{/credit-pays}" method="post">-->
+<!--    <div th:each="element : ${pay}">-->
+<!--        <input type="hidden" name="sum" th:value="${element.sum}" />-->
+<!--        <input type="hidden" name="date" th:value="${element.date}" />-->
+<!--        <button type="submit" class="btn btn-success"></button>-->
+<!--    </div>-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->

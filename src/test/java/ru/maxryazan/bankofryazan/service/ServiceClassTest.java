@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class ServiceClassTest {
@@ -104,5 +105,11 @@ class ServiceClassTest {
 
         assertThat(serviceClass.generateDateMinusDays(duration))
                 .isEqualTo(simpleDateFormat.format(calendar.getTime()));
+    }
+
+    @Test
+    void afterDateOfEnd() throws ParseException {
+        String dateOfEnd = "04-10-2022";
+        assertTrue(serviceClass.afterDateOfEnd(dateOfEnd));
     }
 }

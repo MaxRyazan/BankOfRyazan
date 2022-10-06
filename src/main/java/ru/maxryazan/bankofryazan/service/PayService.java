@@ -1,6 +1,8 @@
 package ru.maxryazan.bankofryazan.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Credit;
 import ru.maxryazan.bankofryazan.models.Pay;
@@ -31,17 +33,16 @@ public class PayService {
         payRepository.save(pay);
     }
 
-    public String addNewPay(double sum, String numberOfCreditContract, HttpServletRequest request) {
 
-        Client client = clientService.findByRequest(request);
+    public String addNewPay(double sum, String numberOfCreditContract, Client client) {
+
         Credit credit = creditService.findByNumberOfCreditContract(numberOfCreditContract);
 
         createPay(sum, credit);
         clientService.updateBalance(client, -sum);
 
         creditService.setRestOfCreditOrCloseStatus(credit);
-
-        return "redirect:/main/personal-area";
+        return "personal/personal";
     }
 
 

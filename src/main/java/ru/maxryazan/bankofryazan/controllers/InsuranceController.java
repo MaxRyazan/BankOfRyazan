@@ -7,13 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.maxryazan.bankofryazan.models.Client;
-import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
 import ru.maxryazan.bankofryazan.service.CarInsuranceService;
-import ru.maxryazan.bankofryazan.service.ClientService;
 import ru.maxryazan.bankofryazan.service.ServiceClass;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,7 +34,7 @@ public class InsuranceController {
         return "insurance/insurance-osago";
     }
 
-    @PostMapping("insurance/osago")
+    @PostMapping("/insurance/osago")
     public String postOsagoPage(@RequestParam int horsePower,
                                 @RequestParam int year,
                                 @RequestParam int drivers,

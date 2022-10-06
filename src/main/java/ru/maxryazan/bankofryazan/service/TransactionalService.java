@@ -2,6 +2,8 @@ package ru.maxryazan.bankofryazan.service;
 
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Transaction;
 import ru.maxryazan.bankofryazan.repository.TransactionalRepository;
@@ -27,6 +29,7 @@ public class TransactionalService {
         transactionalRepository.save(transaction);
     }
 
+
     public void createNewTransaction(String recipientPhoneNumber,
                                      int sum, HttpServletRequest request) {
 
@@ -45,5 +48,20 @@ public class TransactionalService {
             clientService.updateBalance(recipient, sum);
             transactionalRepository.save(transaction);
 
+    }
+    public String doTransaction(String recipientPhoneNumber,
+                                int sum, HttpServletRequest request, Model model){
+        model.addAttribute("client", clientService.findByRequest(request));
+        if (!clientService.validationPhoneNumber(recipientPhoneNumber)) {
+            return serviceClass.showErrorMessage("Указан неверный номер телефона!",
+                    "personal/personal", model);
+        }
+        if (clientService.ifSumNotValid(clientService.findByRequest(request).getPhoneNumber(), sum)) {
+            return serviceClass.showErrorMessage("Введена некорректная сумма!",
+                    "personal/personal", model);
+        }
+
+        createNewTransaction(recipientPhoneNumber, sum, request);
+        return "redirect:/main/personal-area";
     }
 }
