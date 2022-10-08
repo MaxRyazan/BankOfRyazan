@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "osago")
 @Getter
 @NoArgsConstructor
-public class CarInsurance implements Insurance{
+public class CarInsurance{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,6 +27,7 @@ public class CarInsurance implements Insurance{
     private double upperCoefficient;
     private double priceOfOsago;
     @Setter
+    @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToOne
     @JoinColumn(name = "client_id")

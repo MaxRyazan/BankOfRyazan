@@ -62,7 +62,7 @@ public class Client {
     private List<Contribution> contributions;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
-    private List<CarInsurance> insurances;
+    private List<CarInsurance> carInsurancies;
 
     public Client(String firstName, String lastName, String email, String phoneNumber,
                   double balance, double balanceUSD, double balanceEUR, String pinCode) {

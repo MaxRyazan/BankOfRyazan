@@ -577,7 +577,7 @@ width: 50%;">
                                     <th class="align-center">Дата окончания страховки</th>
                                     <th class="align-center">Цена страховки</th>
                                 </tr>
-                                <tr th:each="insurance : ${client.insurances}">
+                                <tr th:each="insurance : ${client.carInsurancies}">
                                     <td th:text="${insurance.carNumber}" class="align-center"></td>
                                     <td th:text="${insurance.dateOfExpired}" class="align-center"></td>
                                     <td th:text="${insurance.priceOfOsago}" class="align-center"></td>

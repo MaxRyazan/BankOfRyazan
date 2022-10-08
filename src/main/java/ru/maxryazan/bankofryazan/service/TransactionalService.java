@@ -2,6 +2,7 @@ package ru.maxryazan.bankofryazan.service;
 
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.Client;
@@ -49,6 +50,8 @@ public class TransactionalService {
             transactionalRepository.save(transaction);
 
     }
+
+
     public String doTransaction(String recipientPhoneNumber,
                                 int sum, HttpServletRequest request, Model model){
         model.addAttribute("client", clientService.findByRequest(request));

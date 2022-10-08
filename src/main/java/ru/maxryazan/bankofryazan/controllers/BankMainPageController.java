@@ -2,7 +2,6 @@ package ru.maxryazan.bankofryazan.controllers;
 
 
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.service.*;
-import java.util.logging.Logger;
 
 @Controller
 @Log4j2
@@ -53,8 +51,9 @@ public class BankMainPageController {
             model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
         } catch (Exception e){
             log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
-           return "/login";
+           return "redirect:/login";
         }
+        log.info("Успешно загрузили главную страницу  @GetMapping(/main) ");
         return "main-page";
     }
 

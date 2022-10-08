@@ -1,19 +1,18 @@
 package ru.maxryazan.bankofryazan.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Status;
 import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
-import ru.maxryazan.bankofryazan.models.insurance.Insurance;
 import ru.maxryazan.bankofryazan.repository.CarInsuranceRepository;
-
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
+@Log4j2
 @Service
 public class CarInsuranceService {
     private final CarInsuranceRepository carInsuranceRepository;
@@ -36,7 +35,7 @@ public class CarInsuranceService {
         double yr = validateYearCoefficient(year);
         double dr = validateDriversCoefficient(drivers);
         double taxi = validateIsTaxiCoefficient(isTaxi);
-        return 1 + hp + yr + dr + taxi;
+        return serviceClass.round(1 + hp + yr + dr + taxi);
     }
 
     private double validateIsTaxiCoefficient(String isTaxi) {
@@ -127,15 +126,20 @@ public class CarInsuranceService {
     }
 
     public String checkInsuranceForExpiration(Client client) throws ParseException {
-        for (CarInsurance ins : client.getInsurances()) {
-            if (serviceClass.afterDateOfEnd(ins.getDateOfExpired())) {
-                ins.setStatus(Status.CLOSED);
-                carInsuranceRepository.save(ins);
-                return "Страховка на автомобиль с гос. номером " + ins.getCarNumber() + " истекла!";
+        log.info("Проверяем страховки внутри метода   public String checkInsuranceForExpiration(Client client) ");
+        if(!client.getCarInsurancies().isEmpty()) {
+            for (CarInsurance ins : client.getCarInsurancies()) {
+                if (serviceClass.afterDateOfEnd(ins.getDateOfExpired())) {
+                    ins.setStatus(Status.CLOSED);
+                    carInsuranceRepository.save(ins);
+                    return "Страховка на автомобиль с гос. номером " + ins.getCarNumber() + " истекла!";
+                }
             }
         }
+        log.info("public String checkInsuranceForExpiration(Client client) успешно отработал");
         return "";
     }
+
 
     public String validateAllData(int year, String carNumber, int horsePower,
                                   int drivers, String isTaxi, Model model, HttpServletRequest request){
@@ -164,9 +168,10 @@ public class CarInsuranceService {
                     horsePower, year, drivers, isTaxi, koeff, client, priceOfOsago);
             clientService.updateBalance(client, -priceOfOsago);
             save(insurance);
+            clientService.randerPersonalPage(client, model);
             return serviceClass.showSuccessMessage("Спасибо что оформили полис ОСАГО у нас!",
                     "personal/personal", model);
-        } catch (ParseException e){
+        } catch (Exception e){
             return serviceClass.showErrorMessage("Возникла непредвиденная ошибка, попробуйте еще раз",
                     "personal/personal", model);
         }

@@ -1,8 +1,10 @@
 package ru.maxryazan.bankofryazan.service;
 
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.*;
@@ -14,6 +16,7 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.util.*;
 
+@Log4j2
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
@@ -82,28 +85,34 @@ public class ClientService {
 
 
     public String getPersonalPageArea(Model model, Client client) {
+        log.info("Пробуем отобразить личный кабинет " + " public String getPersonalPageArea");
         try {
-            investmentService.checkCurrPriceOfInvestment(client);
-            checkDateOfContributions(client);
-
-            Collections.reverse(client.getInComingTransactions());
-            Collections.reverse(client.getOutComingTransactions());
-
-            List<Credit> closed = sortCreditsByStatus(client, Status.CLOSED);
-            List<Credit> active = sortCreditsByStatus(client, Status.ACTIVE);
-            List<Contribution> contributions = getActiveContributions(client);
-
-            model.addAttribute("contributions", contributions);
-            model.addAttribute("client", client);
-            model.addAttribute("closedCredits", closed);
-            model.addAttribute("activeCredits", active);
-
+            randerPersonalPage(client, model);
             save(client);
+            log.info("Успешно отобразили личный кабинет public String getPersonalPageArea");
             return "personal/personal";
         } catch (ParseException | IOException e) {
+            log.error("НЕУДАЧНО отобразили личный кабинет public String getPersonalPageArea");
             return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!",
-                    "/main", model);
+                    "/main-page", model);
         }
+    }
+
+    public void randerPersonalPage(Client client, Model model) throws IOException, ParseException {
+        investmentService.checkCurrPriceOfInvestment(client);
+        checkDateOfContributions(client);
+
+        Collections.reverse(client.getInComingTransactions());
+        Collections.reverse(client.getOutComingTransactions());
+
+        List<Credit> closed = sortCreditsByStatus(client, Status.CLOSED);
+        List<Credit> active = sortCreditsByStatus(client, Status.ACTIVE);
+        List<Contribution> contributions = getActiveContributions(client);
+
+        model.addAttribute("contributions", contributions);
+        model.addAttribute("client", client);
+        model.addAttribute("closedCredits", closed);
+        model.addAttribute("activeCredits", active);
     }
 
     private List<Credit> sortCreditsByStatus(Client client, Status status) {
@@ -129,6 +138,7 @@ public class ClientService {
         }
     }
 
+
     public void updateBalance(Client client, double sum) {
         double newBalance = client.getBalance() + sum;
         client.setBalance(newBalance);
@@ -147,7 +157,7 @@ public class ClientService {
     }
 
 
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public void addNewContribution(String phoneNumber, int sum, double percent, int duration) throws ParseException {
         Client client = findByPhoneNumber(phoneNumber);
             String number;

@@ -1,6 +1,7 @@
 package ru.maxryazan.bankofryazan.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.Client;
