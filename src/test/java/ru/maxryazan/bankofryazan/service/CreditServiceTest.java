@@ -184,4 +184,5 @@ class CreditServiceTest {
         double result = creditService.createCreditCalculatorResult(600000, 2, 8);
         assertEquals(696000, result);
     }
+
 }

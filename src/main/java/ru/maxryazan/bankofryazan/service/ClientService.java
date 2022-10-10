@@ -188,7 +188,7 @@ public class ClientService {
 
     public boolean existsByPhoneAndEmail(String phoneNumber, String email) {
         if (validationPhoneNumber(phoneNumber)) {
-            return existsByPhoneNumber(phoneNumber) && existsByEmail(email);
+            return existsByPhoneNumber(phoneNumber) || existsByEmail(email);
         }
         return false;
     }

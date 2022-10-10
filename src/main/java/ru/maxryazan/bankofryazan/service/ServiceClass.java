@@ -73,6 +73,7 @@ public class ServiceClass {
     public double round(double number){
         return (double)((int)(number * 100)) / 100;
     }
+
     public float roundFloat(double number){
         return (float)((int)(number * 100)) / 100;
     }

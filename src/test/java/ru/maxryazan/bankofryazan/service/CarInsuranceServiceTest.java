@@ -26,7 +26,8 @@ class CarInsuranceServiceTest {
      ServiceClass serviceClass = new ServiceClass();
 
 
-    CarInsuranceService carInsuranceService = new CarInsuranceService(carInsuranceRepository, serviceClass, clientService);
+    CarInsuranceService carInsuranceService = new CarInsuranceService(carInsuranceRepository,
+            serviceClass, clientService);
 
 
     @Test

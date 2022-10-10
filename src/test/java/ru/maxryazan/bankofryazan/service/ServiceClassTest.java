@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -111,5 +112,17 @@ class ServiceClassTest {
     void afterDateOfEnd() throws ParseException {
         String dateOfEnd = "04-10-2022";
         assertTrue(serviceClass.afterDateOfEnd(dateOfEnd));
+    }
+
+    @Test
+    void round() {
+        assertEquals(14.11, serviceClass.round(14.11155));
+        assertEquals(14.11, serviceClass.round(14.1185));
+    }
+
+    @Test
+    void roundFloat() {
+        assertEquals(14.11, serviceClass.round(14.11155));
+        assertEquals(14.11, serviceClass.round(14.1185));
     }
 }
