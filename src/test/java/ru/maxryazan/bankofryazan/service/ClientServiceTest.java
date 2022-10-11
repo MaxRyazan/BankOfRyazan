@@ -9,10 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.maxryazan.bankofryazan.models.Client;
-import ru.maxryazan.bankofryazan.models.Contribution;
-import ru.maxryazan.bankofryazan.models.EmailCodeSender;
-import ru.maxryazan.bankofryazan.models.Status;
+import ru.maxryazan.bankofryazan.models.*;
 import ru.maxryazan.bankofryazan.repository.ClientRepository;
 
 import java.text.ParseException;
@@ -47,17 +44,21 @@ class ClientServiceTest {
                 investmentService);
     }
 
-    @Test
-    void validationPhoneNumber() {
+    @ParameterizedTest
+    @ValueSource(strings = {"89505005050", "89237421524", "8 950 500 50 50"})
+    @DisplayName("Тестируем подходящие номера")
+    void validationPhoneNumber(String value) {
+        assertTrue(clientService.validationPhoneNumber(value));
     }
 
-    @Test
-    void randerPersonalPage() {
+    @ParameterizedTest
+    @ValueSource(strings = {"+79505005050", "9237421524", "+79509505050"})
+    @DisplayName("Тестируем НЕПОДХОДЯЩИЕ номера")
+    void validationPhoneNumber2(String value) {
+        assertFalse(clientService.validationPhoneNumber(value));
     }
 
-    @Test
-    void checkDateOfContributions() {
-    }
+
 
     @Test
     void updateBalance() {
@@ -198,5 +199,60 @@ class ClientServiceTest {
 
         lenient().when(clientService.findByPhoneNumber(client.getPhoneNumber())).thenReturn(client);
         assertTrue(clientService.ifSumNotValid(client.getPhoneNumber(), value));
+    }
+
+    @Test
+    void sortCreditsByStatus() {
+        Credit credit1 = new Credit();
+            credit1.setStatus(Status.ACTIVE);
+            credit1.setNumberOfCreditContract("1");
+        Credit credit2 = new Credit();
+            credit2.setStatus(Status.ACTIVE);
+        credit2.setNumberOfCreditContract("2");
+        Credit credit3 = new Credit();
+            credit3.setStatus(Status.CLOSED);
+        credit3.setNumberOfCreditContract("3");
+        Credit credit4 = new Credit();
+            credit4.setStatus(Status.CLOSED);
+        credit4.setNumberOfCreditContract("4");
+        Client client = new Client();
+        List<Credit> credits = new ArrayList<>();
+            credits.add(credit1);
+            credits.add(credit2);
+            credits.add(credit3);
+            credits.add(credit4);
+            client.setCredits(credits);
+
+        List<Credit> listOfActive = new ArrayList<>();
+        listOfActive.add(credit2);
+        listOfActive.add(credit1);
+        List<Credit> listOfClosed = new ArrayList<>();
+        listOfClosed.add(credit4);
+        listOfClosed.add(credit3);
+
+        assertEquals(listOfActive, clientService.sortCreditsByStatus(client, Status.ACTIVE));
+        assertEquals(listOfClosed, clientService.sortCreditsByStatus(client, Status.CLOSED));
+
+    }
+
+    @Test
+    void getActiveContributions() {
+        Contribution contribution1 = new Contribution();
+        Contribution contribution2 = new Contribution();
+        contribution1.setStatus(Status.ACTIVE);
+        contribution2.setStatus(Status.CLOSED);
+
+        List<Contribution> contributions = new ArrayList<>();
+        contributions.add(contribution1);
+        contributions.add(contribution2);
+
+        List<Contribution> active = new ArrayList<>();
+        active.add(contribution1);
+
+        Client client = new Client();
+        client.setContributions(contributions);
+
+        assertEquals(active , clientService.getActiveContributions(client));
+
     }
 }

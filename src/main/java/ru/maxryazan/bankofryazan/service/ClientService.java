@@ -115,7 +115,7 @@ public class ClientService {
         model.addAttribute("activeCredits", active);
     }
 
-    private List<Credit> sortCreditsByStatus(Client client, Status status) {
+    public List<Credit> sortCreditsByStatus(Client client, Status status) {
         List<Credit> result = new ArrayList<>(
                 client.getCredits().stream().filter(credit -> credit.getStatus().equals(status)).toList()
         );
@@ -123,7 +123,7 @@ public class ClientService {
         return result;
     }
 
-    private List<Contribution> getActiveContributions(Client client) {
+    public List<Contribution> getActiveContributions(Client client) {
         List<Contribution> result = new ArrayList<>(
                 client.getContributions().stream().filter(Contribution -> Contribution.getStatus().equals(Status.ACTIVE)).toList()
         );
