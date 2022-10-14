@@ -1,6 +1,7 @@
 package ru.maxryazan.bankofryazan.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.maxryazan.bankofryazan.models.ExchangeRateClass;
 import ru.maxryazan.bankofryazan.repository.ExchangeRateRepository;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 
-
+@Log4j2
 @Service
 public class ExchangeRateClassService {
 
@@ -21,17 +22,17 @@ public class ExchangeRateClassService {
     }
 
     public ExchangeRateClass getRateFromAPI() throws IOException {
-        ExchangeRateClass exchangeRateClass = new ExchangeRateClass();
         ObjectMapper mapper = new ObjectMapper();
             if (rateRepository.findByDate(serviceClass.generateDate()) == null) {
 //                    final String URL = "https://openexchangerates.org/api/latest.json?app_id=5893314b8b434e2b932b101821c225fd";
                     final String URL_EUR = "https://free.currconv.com/api/v7/convert?q=EUR_RUB&compact=ultra&apiKey=6af10ed52db7073ded90";
                     final String URL_USD = "https://free.currconv.com/api/v7/convert?q=USD_RUB&compact=ultra&apiKey=6af10ed52db7073ded90";
-                    ExchangeRateClass EUR_exchange = mapper.readValue(new URL(URL_EUR), ExchangeRateClass.class);
-                    ExchangeRateClass USD_exchange = mapper.readValue(new URL(URL_USD), ExchangeRateClass.class);
-                    exchangeRateClass.setCourse_EUR(serviceClass.round(EUR_exchange.getCourse_EUR()));
-                    exchangeRateClass.setCourse_USD(serviceClass.round(USD_exchange.getCourse_USD()));
-                    exchangeRateClass.setDate(serviceClass.generateDate());
+
+                    ExchangeRateClass exchangeRateClass = new ExchangeRateClass(
+                            mapper.readValue(new URL(URL_EUR), ExchangeRateClass.class).getCourse_EUR(),
+                            mapper.readValue(new URL(URL_USD), ExchangeRateClass.class).getCourse_USD(),
+                            serviceClass.generateDate()
+                    );
                     rateRepository.save(exchangeRateClass);
                     return exchangeRateClass;
             }
@@ -40,6 +41,7 @@ public class ExchangeRateClassService {
 
 
     ExchangeRateClass findByDate(String date){
+        log.info("[ExchangeRateClassService. findByDate(String date)]" + date + " // " + rateRepository.findByDate(date));
        return rateRepository.findByDate(date);
     }
 

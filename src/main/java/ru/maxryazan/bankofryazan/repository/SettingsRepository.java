@@ -1,0 +1,18 @@
+package ru.maxryazan.bankofryazan.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import ru.maxryazan.bankofryazan.models.Client;
+import ru.maxryazan.bankofryazan.models.Settings;
+
+
+@Repository
+public interface SettingsRepository extends JpaRepository<Settings, Long> {
+
+    @Modifying
+    void deleteByAuthClient(Client authClient);
+
+    Settings findByAuthClient(Client authClient);
+}

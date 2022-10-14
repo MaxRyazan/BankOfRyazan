@@ -38,7 +38,7 @@
 .USD{
     margin-left: 7px;
     margin-top: 3px;
-    color: darkgreen;
+    color: #1cff00;
     font-size: 18px;
 }
 .EUR{
@@ -47,3 +47,12 @@
     color: #E5BE01;
     font-size: 18px;
 }
+
+.arrow{
+    height: 25px;
+    width: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 0;
+}
+

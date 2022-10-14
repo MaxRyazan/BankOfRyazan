@@ -1,5 +1,6 @@
 package ru.maxryazan.bankofryazan.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import java.text.ParseException;
@@ -8,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+@Log4j2
 @Service
 public class ServiceClass {
 
@@ -66,6 +68,7 @@ public class ServiceClass {
         Calendar calendar = Calendar.getInstance();
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
             calendar.add(Calendar.DAY_OF_WEEK, numberOfDays);
+            log.info("[ServiceClass. public String generateDateMinusDays(int numberOfDays)] " + simpleDateFormat.format(calendar.getTime()));
         return simpleDateFormat.format(calendar.getTime());
     }
 

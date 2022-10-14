@@ -5,9 +5,6 @@
     <link rel="stylesheet" type="text/css" th:href="@{/styles/style.css}" href="/styles/style.css">
     <link rel="stylesheet" type="text/css" th:href="@{/styles/style2.css}" href="/styles/style2.css">
     <link rel="stylesheet" type="text/css" th:href="@{/styles/calculatorStyles.css}" href="/styles/calculatorStyles.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" type="text/css" href="style2.css">
-    <link rel="stylesheet" type="text/css" href="calculatorStyles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -24,11 +21,25 @@
                 <a href="/investments/main" class="linksNavBar2">Инвестиции</a>
             </div>
             <div class="rightNav2">
-               <div th:text="${USD}"></div>
+
+                    <img src="/img/arrowGreen.png" class="arrow" th:src="@{img/arrowGreen.png}" alt="doc">
+
+                    <div th:text="${exchangeRateClass.course_USD}"></div>
+
+                    <img src="/img/arrowRed.png" class="arrow" th:src="@{img/arrowRed.png}" alt="doc">
+
+                    <div th:text="${exchangeRateClass.course_USD_sold}"></div>
                <h5 class="USD">$</h5>
             </div>
             <div class="rightNav2">
-                <div th:text="${EUR}"></div>
+
+                     <img src="/img/arrowGreen.png" class="arrow" th:src="@{img/arrowGreen.png}" alt="doc">
+
+                <div th:text="${exchangeRateClass.course_EUR}"></div>
+
+                    <img src="/img/arrowRed.png" class="arrow" th:src="@{img/arrowRed.png}" alt="doc">
+
+                    <div th:text="${exchangeRateClass.course_EUR_sold}"></div>
                 <h5 class="EUR">€</h5>
             </div>
             <div class="rightNav">
@@ -36,13 +47,13 @@
                 <a href="/registration" class="linksNavBar" >Стать клиентом</a>
             </div>
         </nav>
-
+            <div th:text="${error}"></div>
         <div class="warning">
             <div>
                 <img src="https://img.icons8.com/stickers/344/exclamation-mark--v1.png" alt="" class="icon">
             </div>
             <h4 class="warnText">
-                <a href="" class="warnHref">Ознакомьтесь</a>
+                <a href="/security-rules" class="warnHref">Ознакомьтесь</a>
                  с нашими предложениями по безопасности, чтобы всегда быть уверенными в надёжной защите своего аккаунта.
             </h4>
         </div>
@@ -68,10 +79,10 @@
                                 <div class="innerCarousel">
                                     <nobr><h4 class="slaidText">Деньги делают деньги!</h4></nobr>
                                     <h4 class="slaidText2">Специальный вклад на 9% годовых. Присоединяйся!</h4>
-                                    <a href="main/contribution" class="hrefItem">Подробнее</a>
+                                    <a href="/contributions" class="hrefItem">Подробнее</a>
                                 </div>
                                 <div class="img2">
-                                    <img src="static/img/9percent.png" th:src="@{img/9percent.png}" class="innerCarousel" alt="%">
+                                    <img src="/img/9percent.png" th:src="@{img/9percent.png}" class="innerCarousel" alt="%">
                                 </div>
                             </div>
                         </div>
@@ -81,10 +92,10 @@
                                 <div class="innerCarousel">
                                     <nobr><h4 class="slaidText">Семейный автомобиль по цене производителя?</h4></nobr>
                                     <h4 class="slaidText2">Беспроцентная рассрочка на первый семейный автомобиль, при условии обязательного обслуживания в авторизованном сервисном центре, а также автострахования в нашем банке на весь период выплаты. </h4>
-                                    <a href="main/credit" class="hrefItem">Подробнее</a>
+                                    <a href="/credits" class="hrefItem">Подробнее</a>
                                 </div>
                                 <div class="img">
-                                    <img src="static/img/fcar.png" th:src="@{img/fcar.png}"  class="innerCarousel" alt="car">
+                                    <img src="/img/fcar.png" th:src="@{img/fcar.png}"  class="innerCarousel" alt="car">
                                 </div>
                             </div>
                         </div>
@@ -110,7 +121,7 @@
                             Медицинское страхование на отличных условиях!
                         </h4>
                         <div class="divMedic">
-                            <img src="static/img/doccc.png"  th:src="@{img/doccc.png}" alt="doc">
+                            <img src="/img/doccc.png"  th:src="@{img/doccc.png}" alt="doc">
                             <div>
                                 <h4 class="textIn45Container">Нашими партнёрами являются только лучшие клиники страны, поэтому, сервис, который мы предлагаем соответствует  лучшему мировому уровню!</h4>
                                 <div class="buttonCenter">
@@ -132,7 +143,7 @@
                         <div>
                             <h4 class="textIn45Container">Хотите новый телевизор прямо сейчас? Нет ничего проще! До 50 тысяч рублей с фиксированной переплатой всего в 2500 рублей!</h4>
                             <div class="buttonCenter">
-                                <a href="main/credit" class="hrefItemBlack">Узнать условия</a>
+                                <a href="/credits" class="hrefItemBlack">Узнать условия</a>
                             </div>
                         </div>
                     </div>
@@ -149,11 +160,11 @@
                         Вклад 'Долговременный' - от 5 млн рублей под 11.3% годовых, сроком на 3 года
                     </h4>
                     <div class="divMedic">
-                        <img src="static/img/money.png" th:src="@{img/money.png}"  alt="doc">
+                        <img src="/img/money.png" th:src="@{img/money.png}"  alt="doc">
                         <div>
                             <h4 class="textIn45Container">Хотите заставить свободные деньги работать? Это то, что вам нужно!</h4>
                             <div class="buttonCenter">
-                                <a href="main/credit" class="hrefItemBlack">Узнать условия</a>
+                                <a href="/contributions" class="hrefItemBlack">Узнать условия</a>
                             </div>
                         </div>
                     </div>
@@ -167,7 +178,7 @@
                         Инвестируйте в золото!
                     </h4>
                     <div class="divMedic">
-                        <img src="static/img/gold.png" th:src="@{img/gold.png}"   alt="doc">
+                        <img src="/img/gold.png" th:src="@{img/gold.png}"   alt="doc">
                         <div>
                             <h4 class="textIn45Container">А наши специалисты помогут вам советом и своим огромным опытом!</h4>
                             <div class="buttonCenter">

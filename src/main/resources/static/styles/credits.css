@@ -1,0 +1,20 @@
+.verticalContainer{
+    padding: 5px;
+    width: 30%;
+    max-width: 300px;
+    margin-top: 30px;
+    box-shadow: 0 0 15px rgb(20, 109, 128);
+}
+.inlineContainer{
+    width: 99%;
+    display: inline-flex;
+    justify-content: space-around;
+}
+.creditDescription{
+    width: 99%;
+    text-align: center;
+}
+.img{
+    width: 100%;
+    height: auto;
+}

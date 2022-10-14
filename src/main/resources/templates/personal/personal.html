@@ -7,8 +7,9 @@
           integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="shortcut icon">
     <link type="Image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7182/7182510.png" rel="icon">
-    <link rel="stylesheet" href="/templates/style.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/styles/self-reg-styles.css}" href="/styles/self-reg-styles.css.css">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/style.css}" href="../static/styles/style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/self-reg-styles.css}" href="../static/styles/self-reg-styles.css">
     <title>Bank</title>
 </head>
 <style>
@@ -121,6 +122,11 @@ url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIz
                 <li class="nav-item">
                     <a href="/main" class="nav-link">На главную</a>
                 </li>
+                <li class="nav-item">
+                    <a href="/main/personal-area/settings" class="nav-link">
+                        <img src="../static/img/settings.png" th:src="@{/img/settings.png}" alt="sett" class="settingsImg">
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -135,35 +141,69 @@ url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIz
                      src="https://img.freepik.com/premium-vector/financial-technology-graphic-concept-background_73426-141.jpg?w=1380"
                      alt="png1">
                 <div class="carousel-caption d-none d-md-block">
-                <form  name="f" th:action="@{/main/personal-area}" method="post"  class=" justify-content-center mb-2">
-                    <div class="col-sm">
-                        <input type="number" name="recipientPhoneNumber" placeholder="Получатель" required
-                               class="form-control form-control-sm"
-                               style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
-                               no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover; width: 84%;">
+                    <div th:if="${client.settings.doAllTransactionsWithSecretCode} == '1'">
+                        <form name="f" th:action="@{/main/personal-area/secure-transaction}" method="post"  class=" justify-content-center mb-2">
+                            <div class="col-sm">
+                                <input type="number" name="recipientPhoneNumber" placeholder="Получатель" required
+                                       class="form-control form-control-sm"
+                                       style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                                       no-repeat center center fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover; width: 84%;">
+                            </div>
+                            <div class="col-sm d-flex mt-1">
+                                <input type="number" name="sum" placeholder="Сумма" min="1" required
+                                       class="form-control form-control-sm"
+                                       style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                                       no-repeat center center fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+        width: 50%;">
+                                <button type="submit" class="btn btn-secondary btn-sm ms-4" style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                                       no-repeat center center fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover; color: dimgray">Перевести</button>
+                            </div>
+                                <input type="text" name="codeFromClientForm" required placeholder="Проверочный код">
+                        </form>
                     </div>
-                    <div class="col-sm d-flex mt-1">
-                        <input type="number" name="sum" placeholder="Сумма" min="1" required
-                               class="form-control form-control-sm"
-                               style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
-                               no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-width: 50%;">
-                        <button type="submit" class="btn btn-secondary btn-sm ms-4" style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
-                               no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover; color: dimgray">Перевести</button>
-                    </div>
-                </form>
+                    <div th:if="${client.settings.doAllTransactionsWithSecretCode} == '0'">
+                        <form name="f" th:action="@{/main/personal-area}" method="post"  class=" justify-content-center mb-2">
+                            <div class="col-sm">
+                                <input type="number" name="recipientPhoneNumber" placeholder="Получатель" required
+                                       class="form-control form-control-sm"
+                                       style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                                           no-repeat center center fixed;
+                    -webkit-background-size: cover;
+                    -moz-background-size: cover;
+                    -o-background-size: cover;
+                    background-size: cover; width: 84%;">
+                            </div>
+                            <div class="col-sm d-flex mt-1">
+                                <input type="number" name="sum" placeholder="Сумма" min="1" required
+                                       class="form-control form-control-sm"
+                                       style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                                           no-repeat center center fixed;
+                    -webkit-background-size: cover;
+                    -moz-background-size: cover;
+                    -o-background-size: cover;
+                    background-size: cover;
+            width: 50%;">
+                                <button type="submit" class="btn btn-secondary btn-sm ms-4" style="background:url('https://as2.ftcdn.net/v2/jpg/02/83/16/63/1000_F_283166327_quWYYTZLuIaIHmsIzxMu1bSHceIWLWz1.jpg')
+                                           no-repeat center center fixed;
+                    -webkit-background-size: cover;
+                    -moz-background-size: cover;
+                    -o-background-size: cover;
+                    background-size: cover; color: dimgray">Перевести</button>
+                            </div>
+                        </form>
+                   </div>
                 </div>
             </div>
             <div class="carousel-item">

@@ -2,7 +2,6 @@ package ru.maxryazan.bankofryazan.models;
 
 import lombok.*;
 import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -64,6 +63,9 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private List<CarInsurance> carInsurancies;
 
+    @OneToOne(mappedBy = "authClient", fetch = FetchType.LAZY)
+    private Settings settings;
+
     public Client(String firstName, String lastName, String email, String phoneNumber,
                   double balance, double balanceUSD, double balanceEUR, String pinCode) {
         this.firstName = firstName;
@@ -74,8 +76,9 @@ public class Client {
         this.balanceUSD = balanceUSD;
         this.balanceEUR = balanceEUR;
         this.pinCode = pinCode;
+        this.settings = new Settings(this,
+                "0", "0", "0");
     }
-
 
     public double getBalance() {
         return (double) Math.round(balance * 100) / 100;

@@ -11,7 +11,6 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Component
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "exchange_rate_class")
@@ -31,18 +30,28 @@ public class ExchangeRateClass {
     @Column(name = "course_of_USD")
     private double course_USD;
 
-    public ExchangeRateClass(double course_EUR, double course_USD) {
+    @Column(name = "course_EUR_sold")
+    private double course_EUR_sold;
+
+    @Column(name = "course_USD_sold")
+    private double course_USD_sold;
+
+    @Column(name = "percent_of_margin")
+    private double percentOfMargin;
+
+    public ExchangeRateClass(double course_EUR, double course_USD, String date) {
+        this.percentOfMargin = 1.05;
         this.course_EUR = roundCourse(course_EUR);
         this.course_USD = roundCourse(course_USD);
+        this.date = date;
+        this.course_EUR_sold = roundCourse(course_EUR * percentOfMargin);
+        this.course_USD_sold = roundCourse(course_USD * percentOfMargin);
     }
 
     @Override
     public String toString() {
-        return "ExchangeRateClass{" +
-                "date='" + date + '\'' +
-                ", course_EUR=" + course_EUR +
-                ", course_USD=" + course_USD +
-                '}';
+        return String.format("Курс USD:\nПокупка: %s\nПродажа: %s.\nКурс EUR:\nПокупка: %s\nПродажа: %s.\n",
+                course_USD,  course_EUR_sold, course_EUR, course_EUR_sold);
     }
 
     private double roundCourse(double number){

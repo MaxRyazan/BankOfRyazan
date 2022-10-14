@@ -28,6 +28,11 @@ public class CreditController {
         this.serviceClass = serviceClass;
     }
 
+    @GetMapping("/credits")
+    public String showMainCreditsPage(){
+        return "credit/credits-main";
+    }
+
     @GetMapping("/main/personal-area/credit/{id}")
     public String showPays(@PathVariable long id, Model model, @ModelAttribute String error) {
         if(creditService.ifCreditNotExistById(id)){
@@ -48,10 +53,10 @@ public class CreditController {
         clientService.getPersonalPageArea(model, client);
     if(creditService.ifCreditNotExistByNumberContract(numberOfCreditContract)){
         return serviceClass.showErrorMessage("Кредита с таким номером не существует!", "personal/personal", model);
-        }
+      }
     if(!payService.validateData(sum, numberOfCreditContract, request)){
         return serviceClass.showErrorMessage("Невозможно осуществить платёж", "personal/personal", model);
-    }
+      }
     return payService.addNewPay(sum, numberOfCreditContract, client);
-    }
+     }
 }

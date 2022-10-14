@@ -1,5 +1,6 @@
 package ru.maxryazan.bankofryazan.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.Client;
@@ -11,7 +12,7 @@ import ru.maxryazan.bankofryazan.repository.InvestmentRepository;
 import java.io.IOException;
 import java.text.ParseException;
 
-
+@Log4j2
 @Service
 public class InvestmentService {
 
@@ -39,6 +40,7 @@ public class InvestmentService {
     }
 
     public String createMainPage(Model model) {
+        log.info("Пробуем отобразить главную страницу инвестиций  public String createMainPage(Model model)");
         Rate thisDayRate;
         ExchangeRateClass todayExchangeRate;
         try {
@@ -47,16 +49,17 @@ public class InvestmentService {
             model.addAttribute("thisDayRate", thisDayRate);
             model.addAttribute("todayExchangeRate", todayExchangeRate);
             model.addAttribute("silver", "silver");
+            log.info("Первый try отработал");
         } catch (Exception e) {
             model.addAttribute("error", "В процессе получения данных с API была обнаружена ошибка!");
             return "redirect:/main";
         }
             try {
+                log.info("Второй try начал работу");
                 ExchangeRateClass exchangeRateADayAgo = createExchangeRateClass(-1);
                 ExchangeRateClass exchangeRateAWeekAgo = createExchangeRateClass(-7);
                 ExchangeRateClass exchangeRateAMonthAgo = createExchangeRateClass(-31);
                 ExchangeRateClass exchangeRateAYearAgo = createExchangeRateClass(-365);
-
 
                 ExchangeRateClass tempExchangeDay = createTempExchangeRateClass(todayExchangeRate, exchangeRateADayAgo);
                 ExchangeRateClass tempExchangeWeek = createTempExchangeRateClass(todayExchangeRate, exchangeRateAWeekAgo);
@@ -66,7 +69,6 @@ public class InvestmentService {
                 model.addAttribute("weekExchange", tempExchangeWeek);
                 model.addAttribute("monthExchange", tempExchangeMonth);
                 model.addAttribute("yearExchange", tempExchangeYear);
-
 
                 Rate rateADayAgo = createRate(-1);
                 Rate rateAWeekAgo = createRate(-7);
@@ -82,18 +84,24 @@ public class InvestmentService {
                 model.addAttribute("weekRate", tempRateWeek);
                 model.addAttribute("monthRate", tempRateMonth);
                 model.addAttribute("yearRate", tempRateYear);
+                log.info("Второй try отработал");
             } catch (Exception e) {
                 model.addAttribute("error", "В процессе генерации даты была обнаружена ошибка!");
                 return "redirect:/main";
             }
+                 log.info("Успешно отобразили страницу инвестиций");
                 return "/investments/investments-main";
     }
 
         private ExchangeRateClass createExchangeRateClass(int duration) throws ParseException {
+            log.info("private ExchangeRateClass createExchangeRateClass(int duration) starts");
         ExchangeRateClass rateClass = exchangeRateClassService.findByDate(serviceClass.generateDateMinusDays(duration));
+        log.info("Ищем курсы обмена.. " + rateClass);
+            System.out.println(rateClass);
         if(rateClass == null) {
             return exchangeRateClassService.findFirst();
         }
+            log.info("Курсы обмена найдены!.. ");
         return rateClass;
     }
 
@@ -106,10 +114,11 @@ public class InvestmentService {
     }
 
     private ExchangeRateClass createTempExchangeRateClass(ExchangeRateClass todayRate, ExchangeRateClass lastRate) {
-        ExchangeRateClass exchangeRateClass = new ExchangeRateClass();
-        exchangeRateClass.setCourse_USD(serviceClass.round(todayRate.getCourse_USD() - lastRate.getCourse_USD()));
-        exchangeRateClass.setCourse_EUR(serviceClass.round(todayRate.getCourse_EUR() - lastRate.getCourse_EUR()));
-        return exchangeRateClass;
+       return new ExchangeRateClass(
+                serviceClass.round(todayRate.getCourse_USD() - lastRate.getCourse_USD()),
+                serviceClass.round(todayRate.getCourse_EUR() - lastRate.getCourse_EUR()),
+                serviceClass.generateDate()
+              );
     }
 
     private Rate createTempRate(Rate todayRate, Rate lastRate) {
@@ -151,8 +160,8 @@ public class InvestmentService {
             case "platinum" -> result = getResult(rate.getPlatinum(), amount);
             case "palladium" -> result = getResult(rate.getPalladium(), amount);
             case "rhodium" -> result = getResult(rate.getRhodium(), amount);
-            case "USD" -> result = exchangeRateClass.getCourse_USD() * (Double.parseDouble(amount));
-            case "EUR" -> result = exchangeRateClass.getCourse_EUR() * (Double.parseDouble(amount));
+            case "USD" -> result = exchangeRateClass.getCourse_USD_sold() * (Double.parseDouble(amount));
+            case "EUR" -> result = exchangeRateClass.getCourse_EUR_sold() * (Double.parseDouble(amount));
         }
        return serviceClass.round(result);
     }

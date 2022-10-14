@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.service.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Log4j2
 @Controller
@@ -18,14 +19,18 @@ public class PersonalAreaController {
     private final TransactionalService transactionalService;
     private final CarInsuranceService carInsuranceService;
     private final ServiceClass serviceClass;
+    private final SettingsService settingsService;
+    private final MailSender mailSender;
 
     public PersonalAreaController(ClientService clientService,
                                   TransactionalService transactionalService,
-                                  CarInsuranceService carInsuranceService, ServiceClass serviceClass) {
+                                  CarInsuranceService carInsuranceService, ServiceClass serviceClass, SettingsService settingsService, MailSender mailSender) {
         this.clientService = clientService;
         this.transactionalService = transactionalService;
         this.carInsuranceService = carInsuranceService;
         this.serviceClass = serviceClass;
+        this.settingsService = settingsService;
+        this.mailSender = mailSender;
     }
 
 
@@ -40,10 +45,14 @@ public class PersonalAreaController {
             String insuranceExpired = carInsuranceService.checkInsuranceForExpiration(client);
             model.addAttribute("insuranceExpired", insuranceExpired);
         } catch (Exception e) {
-            return serviceClass.showErrorMessage("@GetMapping(/main/personal-area) ошибка контроллера",
+            return serviceClass.showErrorMessage("Ошибка!",
                     "redirect:/main", model);
         }
-        log.info("Страховки проверен  @GetMapping(/main/personal-area)");
+        log.info("Страховки проверены  @GetMapping(/main/personal-area)");
+
+            if (settingsService.isTransactionalSecure(clientService.findByRequest(request))) {
+                mailSender.sendCodeToEmail(client);
+        }
         return clientService.getPersonalPageArea(model, client);
     }
 
@@ -51,8 +60,27 @@ public class PersonalAreaController {
     @PostMapping("/main/personal-area")
     public String postTransaction(@RequestParam String recipientPhoneNumber,
                                   int sum, HttpServletRequest request, Model model) {
+        if (settingsService.checkDoAllTransactionsWithSecretCode(clientService.findByRequest(request))) {
+            return transactionalService.doTransaction(recipientPhoneNumber, sum, request, model);
+        } else {
+            model.addAttribute("client", clientService.findByRequest(request));
+            return serviceClass.showErrorMessage("Установлено ограничение на совершение транзакций!",
+                    "personal/personal", model);
+        }
+    }
 
-        return transactionalService.doTransaction(recipientPhoneNumber, sum, request, model);
+    @PostMapping("/main/personal-area/secure-transaction")
+    public String postTransaction(@RequestParam String recipientPhoneNumber,
+                                  @RequestParam String codeFromClientForm,
+                                  int sum, HttpServletRequest request, Model model) {
+        Client authClient =  clientService.findByRequest(request);
+        model.addAttribute("client", authClient);
+        if (settingsService.isCodesEquals(authClient, codeFromClientForm)) {
+            return transactionalService.doTransaction(recipientPhoneNumber, sum, request, model);
+        } else {
+            return serviceClass.showErrorMessage("Проверочный код не верен!",
+                    "personal/personal", model);
+        }
     }
 
     @PostMapping("/personal/buy_car_insurance")

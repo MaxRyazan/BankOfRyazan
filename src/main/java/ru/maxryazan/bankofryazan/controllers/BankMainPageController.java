@@ -42,13 +42,18 @@ public class BankMainPageController {
         return "redirect:/main";
     }
 
+
+    @GetMapping("/security-rules")
+    public String getSecurityRulesPage(){
+        return "securityRules/security-rules";
+    }
+
     @GetMapping("/main")
     public String showMainPage(Model model, @ModelAttribute String result) {
         log.info("Получаем рейтинги с exchangeRate.getRateFromAPI()");
         try {
             ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
-            model.addAttribute("USD", exchangeRateClass.getCourse_USD());
-            model.addAttribute("EUR", exchangeRateClass.getCourse_EUR());
+            model.addAttribute("exchangeRateClass", exchangeRateClass);
         } catch (Exception e){
             log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
            return "redirect:/login";

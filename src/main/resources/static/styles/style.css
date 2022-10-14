@@ -213,3 +213,14 @@
 .img2 img:hover {
       transform: scale(1.2);
 }
+.settingsImg{
+    width: 31px;
+    height: 27px;
+    margin-left: 15px;
+    padding: 3px;
+    border: 1px solid  rgb(162, 161, 162);
+    border-radius: 7px;
+}
+.settingsImg:hover{
+    background-color:  rgb(162, 161, 162);
+}

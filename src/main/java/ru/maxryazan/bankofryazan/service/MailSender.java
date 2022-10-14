@@ -49,6 +49,19 @@ public class MailSender {
         }
     }
 
+    public void sendCodeToEmail(Client authClient) {
+            String subject = "Password for transaction";
+            String code = emailCodeSenderService.generateCode(authClient.getLastName());
+            String message = "Your code for transactions : " + code;
+            send(authClient.getEmail(), subject, message);
+
+            EmailCodeSender codeSender = new EmailCodeSender();
+            codeSender.setValue(code);
+            codeSender.setPassRestorer(authClient);
+            authClient.getEmailCodes().add(codeSender);
+            emailCodeSenderService.save(codeSender);
+    }
+
     public void resetPassword(String phoneNumber, String password) {
         Client client = clientService.findByPhoneNumber(phoneNumber);
             client.setPinCode(clientService.passwordEncoder.encode(password));

@@ -1,5 +1,6 @@
 package ru.maxryazan.bankofryazan.controllers;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import ru.maxryazan.bankofryazan.service.ServiceClass;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Log4j2
 @Controller
 @RequestMapping("/investments")
 public class InvestmentController {
@@ -29,6 +31,7 @@ public class InvestmentController {
 
     @GetMapping("/main")
     public String getMainInvestments(Model model, @ModelAttribute String error) {
+        log.info("Пробуем отобразить главную страницу инвестиций @GetMapping(/main)");
      return investmentService.createMainPage(model);
     }
 
