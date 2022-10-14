@@ -49,23 +49,83 @@ public class BankMainPageController {
     }
 
     @GetMapping("/main")
-    public String showMainPage(Model model, @ModelAttribute String result) {
+    public String showMainPage(Model model, @ModelAttribute String result,
+                               @ModelAttribute String sumOfCredit, @ModelAttribute String duration) {
         log.info("Получаем рейтинги с exchangeRate.getRateFromAPI()");
-        try {
-            ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
-            model.addAttribute("exchangeRateClass", exchangeRateClass);
-        } catch (Exception e){
-            log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
-           return "redirect:/login";
+            try {
+                ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
+                model.addAttribute("exchangeRateClass", exchangeRateClass);
+            } catch (Exception e) {
+                log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
+                return "redirect:/login";
+            }
+            log.info("Успешно загрузили главную страницу  @GetMapping(/main) ");
+            return "main-page";
         }
-        log.info("Успешно загрузили главную страницу  @GetMapping(/main) ");
-        return "main-page";
-    }
+
 
     @PostMapping("/calculate")
     public String postMain(@RequestParam double sumOfCredit, @RequestParam double duration, Model model){
         double result = creditService.creditCalculator(sumOfCredit, duration);
         model.addAttribute("result", result);
+        try {
+            ExchangeRateClass exchangeRateClass = exchangeRate.getRateFromAPI();
+            model.addAttribute("exchangeRateClass", exchangeRateClass);
+            model.addAttribute("sumOfCredit", sumOfCredit);
+            model.addAttribute("duration", duration);
+        } catch (Exception e) {
+            log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
+            return "redirect:/login";
+        }
+        return "main-page";
+    }
+
+    @PostMapping("/exchange")
+    public String postMainExchange(@RequestParam double amount, @RequestParam String valuta, Model model){
+        ExchangeRateClass exchangeRateClass;
+        double in_roubles = 0;
+        try {
+            exchangeRateClass = exchangeRate.getRateFromAPI();
+            model.addAttribute("exchangeRateClass", exchangeRateClass);
+        } catch (Exception e) {
+            log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
+            return "redirect:/login";
+        }
+        if(valuta.equals("USD")){
+            in_roubles = amount * exchangeRateClass.getCourse_USD_sold();
+        } else {
+            if (valuta.equals("EUR")) {
+                in_roubles = amount * exchangeRateClass.getCourse_EUR_sold();
+            }
+        }
+        model.addAttribute("amount", amount);
+        model.addAttribute("valuta", valuta);
+        model.addAttribute("in_roubles", in_roubles);
+        return "main-page";
+    }
+
+    @PostMapping("/exchange_sell")
+    public String postMainExchangeSell(@RequestParam double amount_sell,
+                                       @RequestParam String valuta_sell, Model model){
+        ExchangeRateClass exchangeRateClass;
+        double in_roubles_sell = 0;
+        try {
+            exchangeRateClass = exchangeRate.getRateFromAPI();
+            model.addAttribute("exchangeRateClass", exchangeRateClass);
+        } catch (Exception e) {
+            log.error("ошибка получения рейтинга с API exchangeRate.getRateFromAPI()");
+            return "redirect:/login";
+        }
+        if(valuta_sell.equals("USD_sell")){
+            in_roubles_sell = amount_sell * exchangeRateClass.getCourse_USD();
+        } else {
+            if (valuta_sell.equals("EUR_sell")) {
+                in_roubles_sell = amount_sell * exchangeRateClass.getCourse_EUR();
+            }
+        }
+        model.addAttribute("amount_sell", amount_sell);
+        model.addAttribute("valuta_sell", valuta_sell);
+        model.addAttribute("in_roubles_sell", in_roubles_sell);
         return "main-page";
     }
 

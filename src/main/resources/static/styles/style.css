@@ -170,12 +170,13 @@
     border: 2px solid red;
     background: linear-gradient(to right, rgb(181, 237, 255) , #3dbbbb);
 }
-.foot{
+.exchange{
     margin-top: 10%;
+    margin-left: 2%;
     padding: 10px;
     width: 98%;
-    height: 300px;
-    border: 2px solid red;
+    height: 200px;
+    box-shadow: 0 0 10px rgba(0, 59, 60, 1); /* Параметры тени */
     background: linear-gradient(to right, rgb(181, 237, 255) , #3dbbbb);
 }
 .slaid{

@@ -83,6 +83,7 @@ public class ServiceClass {
 
 
     public String showErrorMessage(String message, String pageToShow, Model model){
+        log.error("[ServiceClass] public String showErrorMessage()");
         model.addAttribute("error", message);
         return pageToShow;
     }
