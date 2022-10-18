@@ -204,6 +204,9 @@ public class ClientService {
         return client.getBalance() < Math.abs(sum);
     }
 
+    public Client findByFLP(String firstName, String lastName, String patronymic){
+        return clientRepository.findByFirstNameAndLastNameAndPatronymic(firstName, lastName, patronymic);
+    }
 }
 
 

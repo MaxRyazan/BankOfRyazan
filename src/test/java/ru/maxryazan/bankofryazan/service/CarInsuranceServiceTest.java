@@ -1,19 +1,10 @@
 package ru.maxryazan.bankofryazan.service;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import ru.maxryazan.bankofryazan.models.Client;
-import ru.maxryazan.bankofryazan.models.Status;
-import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
 import ru.maxryazan.bankofryazan.repository.CarInsuranceRepository;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,4 +43,9 @@ class CarInsuranceServiceTest {
         assertTrue(carInsuranceService.validateCaNumber(number));
     }
 
+    @Test
+    void calculatePriceOfOsago() {
+
+        assertEquals(6336, carInsuranceService.calculatePriceOfOsago(1.3, 1.34 , 20));
+    }
 }

@@ -1,13 +1,19 @@
 package ru.maxryazan.bankofryazan.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Status;
+import ru.maxryazan.bankofryazan.models.accient_rate_api_response.ApiAccidentRateResponse;
+import ru.maxryazan.bankofryazan.models.accient_rate_api_response.ClientDto;
 import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
 import ru.maxryazan.bankofryazan.repository.CarInsuranceRepository;
+
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -92,9 +98,10 @@ public class CarInsuranceService {
         return horsePower > low && horsePower <= hight;
     }
 
-    public double calculatePriceOfOsago(double koeff) {
+    public double calculatePriceOfOsago(double koeff, double accidentRate, int discount) {
         double basePriceOfOsago = 3000;
-        return serviceClass.round(koeff * basePriceOfOsago);
+        var temp =  (koeff + accidentRate) * basePriceOfOsago;
+        return serviceClass.round(temp - temp * ((double)discount * 0.01));
     }
 
     public boolean validateYearOfCarBuild(int year) {
@@ -142,25 +149,35 @@ public class CarInsuranceService {
 
 
     public String validateAllData(int year, String carNumber, int horsePower,
-                                  int drivers, String isTaxi, Model model, HttpServletRequest request){
+                                  int drivers, String isTaxi, Model model, HttpServletRequest request) {
         Client client = clientService.findByRequest(request);
         model.addAttribute(client);
-        if(!validateYearOfCarBuild(year)){
+        if (!validateYearOfCarBuild(year)) {
             return serviceClass.showErrorMessage("Не верно указан год сборки авто! Укажите 4 цифры соответствующие году выпуска",
                     "personal/personal", model);
         }
-        if(isInsuranceForThisCarAlreadyExist(carNumber)){
+        if (isInsuranceForThisCarAlreadyExist(carNumber)) {
             return serviceClass.showErrorMessage("Машина с номером " + carNumber + " уже застрахована!",
                     "personal/personal", model);
         }
-        if(!validateCaNumber(carNumber)){
+        if (!validateCaNumber(carNumber)) {
             return serviceClass.showErrorMessage("Введен некорректный гос. номер! Маски номеров: а000аа / аа000 / аа0000",
                     "personal/personal", model);
         }
-        double koeff = calculateCoefficientOfOsago(horsePower, year, drivers, isTaxi);
-        double priceOfOsago = serviceClass.round(calculatePriceOfOsago(koeff));
-        if(priceOfOsago > client.getBalance()){
-            return serviceClass.showErrorMessage("Недостаточно средств!",
+        double koeff;
+        double priceOfOsago;
+        try {
+            ClientDto responseValues = getAccidentRateFromApi(client.getFirstName(), client.getLastName(), client.getPatronymic());
+            koeff = calculateCoefficientOfOsago(horsePower, year, drivers, isTaxi);
+            priceOfOsago = serviceClass.round(calculatePriceOfOsago(koeff,
+                    responseValues.getAccidentRate(),
+                    responseValues.getDiscount()));
+            if (priceOfOsago > client.getBalance()) {
+                return serviceClass.showErrorMessage("Недостаточно средств!",
+                        "personal/personal", model);
+            }
+        } catch (IOException e) {
+            return serviceClass.showErrorMessage("Ошибка получения данных с API",
                     "personal/personal", model);
         }
         try {
@@ -176,4 +193,20 @@ public class CarInsuranceService {
                     "personal/personal", model);
         }
     }
+
+    public ClientDto getAccidentRateFromApi(String firstName, String lastName, String patronymic) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Client client = clientService.findByFLP(firstName, lastName, patronymic);
+
+        final String URL = "http://localhost:8585/api/v1/" + client.getFirstName() + "/"
+                + client.getPatronymic() + "/" + client.getLastName();
+        if (objectMapper.readValue(new URL(URL), ApiAccidentRateResponse.class).getResponseCode().equals("200")) {
+            ClientDto dto = objectMapper.readValue(new URL(URL), ApiAccidentRateResponse.class).getMessage();
+            return new ClientDto(dto.getAccidentRate(), dto.getDiscount());
+        }
+        log.error("[CarInsuranceService]  public double getAccidentRateFromApi(long id) точка-3 "
+                + objectMapper.readValue(new URL(URL), ApiAccidentRateResponse.class).getResponseCode());
+        return new ClientDto(0,0);
+    }
+
 }

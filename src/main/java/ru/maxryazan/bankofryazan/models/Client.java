@@ -13,16 +13,18 @@ import java.util.List;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //приватный номер клиента в БД
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "patronymic", nullable = false)
+    private String patronymic;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
@@ -66,10 +68,11 @@ public class Client {
     @OneToOne(mappedBy = "authClient", fetch = FetchType.LAZY)
     private Settings settings;
 
-    public Client(String firstName, String lastName, String email, String phoneNumber,
+    public Client(String firstName, String lastName, String patronymic, String email, String phoneNumber,
                   double balance, double balanceUSD, double balanceEUR, String pinCode) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.patronymic = patronymic;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.balance = balance;
@@ -86,7 +89,7 @@ public class Client {
 
     @Override
     public String toString() {
-        return  firstName + " " + lastName;
+        return  firstName + " " + lastName + " " + patronymic;
     }
 
 
