@@ -1,8 +1,7 @@
 package ru.maxryazan.bankofryazan.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Settings;
 import ru.maxryazan.bankofryazan.repository.SettingsRepository;
@@ -13,9 +12,13 @@ public class SettingsService {
       private final ClientService clientService;
       private final SettingsRepository settingsRepository;
 
-    public SettingsService(ClientService clientService, SettingsRepository settingsRepository) {
+      private final BCryptPasswordEncoder passwordEncoder;
+
+    public SettingsService(ClientService clientService, SettingsRepository settingsRepository,
+                           BCryptPasswordEncoder passwordEncoder) {
         this.clientService = clientService;
         this.settingsRepository = settingsRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -46,5 +49,31 @@ public class SettingsService {
 
     public boolean isTransactionalSecure(Client authClient) {
         return  checkDoAllTransactionsWithSecretCode(authClient);
+    }
+
+    public boolean validateDataForChangePassword(Client client, String oldPassword, String newPassword, String confirmNewPassword) {
+        return validateOldPass(client, oldPassword)
+                && validateNewPass(newPassword)
+                && validatePasswords(newPassword, confirmNewPassword);
+    }
+
+    public boolean validatePasswords(String newPassword, String confirmNewPassword) {
+        return newPassword.equals(confirmNewPassword);
+    }
+
+    public boolean validateNewPass(String newPassword) {
+        return !newPassword.trim().isBlank()
+                && newPassword.trim().length() >= 7
+                && !newPassword.trim().matches("\\d+")
+                && !newPassword.trim().chars().allMatch(Character::isLetter);
+    }
+
+    public boolean validateOldPass(Client client, String oldPassword) {
+        return passwordEncoder.matches(oldPassword, client.getPinCode());
+    }
+
+    public void changePassword(String newPassword, Client client) {
+        client.setPinCode(passwordEncoder.encode(newPassword));
+        clientService.save(client);
     }
 }

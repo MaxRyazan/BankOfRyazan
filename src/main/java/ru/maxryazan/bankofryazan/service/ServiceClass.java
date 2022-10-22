@@ -68,7 +68,6 @@ public class ServiceClass {
         Calendar calendar = Calendar.getInstance();
             calendar.setTime(simpleDateFormat.parse(dateOfBeginFromDB));
             calendar.add(Calendar.DAY_OF_WEEK, numberOfDays);
-            log.info("[ServiceClass. public String generateDateMinusDays(int numberOfDays)] " + simpleDateFormat.format(calendar.getTime()));
         return simpleDateFormat.format(calendar.getTime());
     }
 
@@ -83,7 +82,6 @@ public class ServiceClass {
 
 
     public String showErrorMessage(String message, String pageToShow, Model model){
-        log.error("[ServiceClass] public String showErrorMessage()");
         model.addAttribute("error", message);
         return pageToShow;
     }

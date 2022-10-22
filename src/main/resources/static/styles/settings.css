@@ -46,14 +46,20 @@
         border-radius: 0 6px 6px 0;
         border-right: 1px solid #999;
     }
-
     /* Checked */
     .form_toggle .item-1 input[type=radio]:checked + label {
         background: #ffc5c5;
     }
     .form_toggle .item-2 input[type=radio]:checked + label {
+        background: #34cd34;
+    }
+    .form_toggle .item-1 input[type=radio]:hover + label {
+        background: rgb(156, 52, 101);
+    }
+    .form_toggle .item-2 input[type=radio]:hover + label {
         background: #bbffbb;
     }
+
     .containerInline{
         display: inline-flex;
         width: 100%;

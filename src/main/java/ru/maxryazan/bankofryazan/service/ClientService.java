@@ -7,14 +7,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import ru.maxryazan.bankofryazan.models.*;
-import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
+import ru.maxryazan.bankofryazan.models.Client;
+import ru.maxryazan.bankofryazan.models.Contribution;
+import ru.maxryazan.bankofryazan.models.Credit;
+import ru.maxryazan.bankofryazan.models.Status;
 import ru.maxryazan.bankofryazan.repository.ClientRepository;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Log4j2
 @Service
@@ -85,14 +90,12 @@ public class ClientService {
 
 
     public String getPersonalPageArea(Model model, Client client) {
-        log.info("Пробуем отобразить личный кабинет " + " public String getPersonalPageArea");
         try {
             randerPersonalPage(client, model);
             save(client);
-            log.info("Успешно отобразили личный кабинет public String getPersonalPageArea");
             return "personal/personal";
         } catch (ParseException | IOException e) {
-            log.error("НЕУДАЧНО отобразили личный кабинет public String getPersonalPageArea");
+            log.error("[ClientService] {getPersonalPageArea()} - 0");
             return serviceClass.showErrorMessage("Ошибка получения данных по текущей дате!",
                     "/main-page", model);
         }

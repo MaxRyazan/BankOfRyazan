@@ -2,3 +2,26 @@
     color: red;
     margin-top: 10px;
 }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: inherit;
+    min-width: 200px;
+    z-index: 1;
+}
+.dropdown-content a {
+    color: #3c64ff;
+    font-weight: bold;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+.dropdown-content a:hover {
+    background-color: inherit;
+    color: #1d2563;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}

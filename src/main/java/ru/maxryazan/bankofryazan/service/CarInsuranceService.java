@@ -10,7 +10,6 @@ import ru.maxryazan.bankofryazan.models.accient_rate_api_response.ApiAccidentRat
 import ru.maxryazan.bankofryazan.models.accient_rate_api_response.ClientDto;
 import ru.maxryazan.bankofryazan.models.insurance.CarInsurance;
 import ru.maxryazan.bankofryazan.repository.CarInsuranceRepository;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URL;
@@ -133,7 +132,6 @@ public class CarInsuranceService {
     }
 
     public String checkInsuranceForExpiration(Client client) throws ParseException {
-        log.info("Проверяем страховки внутри метода   public String checkInsuranceForExpiration(Client client) ");
         if(!client.getCarInsurancies().isEmpty()) {
             for (CarInsurance ins : client.getCarInsurancies()) {
                 if (serviceClass.afterDateOfEnd(ins.getDateOfExpired())) {
@@ -143,7 +141,6 @@ public class CarInsuranceService {
                 }
             }
         }
-        log.info("public String checkInsuranceForExpiration(Client client) успешно отработал");
         return "";
     }
 
@@ -204,8 +201,6 @@ public class CarInsuranceService {
             ClientDto dto = objectMapper.readValue(new URL(URL), ApiAccidentRateResponse.class).getMessage();
             return new ClientDto(dto.getAccidentRate(), dto.getDiscount());
         }
-        log.error("[CarInsuranceService]  public double getAccidentRateFromApi(long id) точка-3 "
-                + objectMapper.readValue(new URL(URL), ApiAccidentRateResponse.class).getResponseCode());
         return new ClientDto(0,0);
     }
 

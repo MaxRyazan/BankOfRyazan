@@ -41,7 +41,6 @@ public class ExchangeRateClassService {
 
 
     ExchangeRateClass findByDate(String date){
-        log.info("[ExchangeRateClassService. findByDate(String date)]" + date + " // " + rateRepository.findByDate(date));
        return rateRepository.findByDate(date);
     }
 

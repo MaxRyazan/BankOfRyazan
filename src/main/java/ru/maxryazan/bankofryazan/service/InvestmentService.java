@@ -40,7 +40,6 @@ public class InvestmentService {
     }
 
     public String createMainPage(Model model) {
-        log.info("Пробуем отобразить главную страницу инвестиций  public String createMainPage(Model model)");
         Rate thisDayRate;
         ExchangeRateClass todayExchangeRate;
         try {
@@ -49,13 +48,12 @@ public class InvestmentService {
             model.addAttribute("thisDayRate", thisDayRate);
             model.addAttribute("todayExchangeRate", todayExchangeRate);
             model.addAttribute("silver", "silver");
-            log.info("Первый try отработал");
         } catch (Exception e) {
+            log.error("[InvestmentService] {createMainPage()} В процессе получения данных с API была обнаружена ошибка! - 0");
             model.addAttribute("error", "В процессе получения данных с API была обнаружена ошибка!");
             return "redirect:/main";
         }
             try {
-                log.info("Второй try начал работу");
                 ExchangeRateClass exchangeRateADayAgo = createExchangeRateClass(-1);
                 ExchangeRateClass exchangeRateAWeekAgo = createExchangeRateClass(-7);
                 ExchangeRateClass exchangeRateAMonthAgo = createExchangeRateClass(-31);
@@ -84,24 +82,19 @@ public class InvestmentService {
                 model.addAttribute("weekRate", tempRateWeek);
                 model.addAttribute("monthRate", tempRateMonth);
                 model.addAttribute("yearRate", tempRateYear);
-                log.info("Второй try отработал");
             } catch (Exception e) {
+                log.error("[InvestmentService] {createMainPage()} В процессе получения данных с API была обнаружена ошибка! - 1");
                 model.addAttribute("error", "В процессе генерации даты была обнаружена ошибка!");
                 return "redirect:/main";
             }
-                 log.info("Успешно отобразили страницу инвестиций");
                 return "/investments/investments-main";
     }
 
         private ExchangeRateClass createExchangeRateClass(int duration) throws ParseException {
-            log.info("private ExchangeRateClass createExchangeRateClass(int duration) starts");
         ExchangeRateClass rateClass = exchangeRateClassService.findByDate(serviceClass.generateDateMinusDays(duration));
-        log.info("Ищем курсы обмена.. " + rateClass);
-            System.out.println(rateClass);
         if(rateClass == null) {
             return exchangeRateClassService.findFirst();
         }
-            log.info("Курсы обмена найдены!.. ");
         return rateClass;
     }
 

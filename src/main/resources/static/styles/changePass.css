@@ -1,0 +1,11 @@
+.inline{
+    display: inline-flex;
+    margin-top: 50px;
+    margin-right: 100px;
+}
+.vertical{
+    text-align: center;
+}
+.inputPassChange{
+    margin-left: 25px;
+}
