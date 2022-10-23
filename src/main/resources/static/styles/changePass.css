@@ -1,11 +1,92 @@
 .inline{
     display: inline-flex;
     margin-top: 50px;
-    margin-right: 100px;
+    width: 99%;
+    justify-content: space-between;
 }
 .vertical{
-    text-align: center;
+    max-width: 30%;
 }
 .inputPassChange{
-    margin-left: 25px;
+    max-width: 80%;
+    height: 20px;
+    border: 1px solid rgb(0, 189, 18);
+}
+.error{
+    color: red;
+    font-weight: bold;
+}
+.success{
+    color: green;
+    font-weight: bold;
+}
+.mainContainer{
+    border: 1px solid white;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgb(190, 190, 190);
+    padding: 10px;
+    width: 500px;
+    height: 75%;
+    min-height: 300px;
+    max-height: 500px;
+    top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+     margin: auto;
+    position: absolute;
+    background-color: white;
+}
+.address{
+    margin-left: 5%;
+    display: inline-flex;
+}
+.arrow{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.textGreen{
+    color: rgb(0, 189, 18);
+}
+.color1{
+    color: red;
+}
+.forTextGreen{
+    text-align: center;
+    width: 99%;
+}
+.buttonOK{
+    width: 100px;
+    height: 25px;
+    color: rgb(0, 189, 18);
+    font-weight: bold;
+}
+.buttonCancell{
+    width: 100px;
+    height: 25px;
+    color: red;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.relative{
+    position: absolute;
+    bottom: 15px;
+    justify-content: center;
+}
+.invize{
+    display: none;
+    color: rgb(0, 189, 18);
+    margin-top: 9px;
+    margin-left: 35%;
+}
+.bodyy{
+    width: 100%;
+    background-color: white;
+    height: 100vh;
+    margin-top: 0;
+
+}
+html, body {
+  height: 100%;
+  margin: 0;
 }

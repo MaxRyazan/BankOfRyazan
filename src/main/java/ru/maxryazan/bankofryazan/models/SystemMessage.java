@@ -1,6 +1,5 @@
 package ru.maxryazan.bankofryazan.models;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,7 +8,7 @@ import java.net.UnknownHostException;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "System_message")
 public class SystemMessage {
 
     @Id
