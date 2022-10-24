@@ -7,7 +7,7 @@ for(let b of a){
     b.addEventListener("mouseout", function(){
         this.style.color = 'rgb(0, 189, 18)'
     });
-};
+}
 
 let inputs = document.querySelectorAll('.inputPassChange');
 
@@ -26,7 +26,7 @@ for(let elem of inputs){
         this.style.borderColor = '';
         this.style.boxShadow = ''
     });
-};
+}
 
 let main = document.querySelector('.mainContainer');
 
@@ -60,7 +60,7 @@ function redBorder(){
     let validConfirm = document.querySelector('.validConfirm').value;
     let validConfirmForm = document.querySelector('.validConfirm');
     let safePass = document.querySelector('.safePass').value;
-    if(safePass != validConfirm){
+    if(safePass !== validConfirm){
         validConfirmForm.addEventListener("input", function(){
             validConfirmForm.style.borderColor = 'red';
             validConfirmForm.style.boxShadow = '0 0 12px red'
@@ -107,15 +107,16 @@ function redBorder(){
 }
 
 let shadow = document.querySelector('.bodyy');
-shadow.addEventListener('mouseout', function(e){
+shadow.addEventListener('mouseout', function(){
     shadow.style.backgroundColor = 'rgb(204, 203, 203)'
 });
+
 
 
 let pass = document.querySelector('.oldPassword');
 let eye = document.querySelector('.formOldPass');
 eye.addEventListener('click', function(){
-    if(pass.getAttribute('type') == 'password'){
+    if(pass.getAttribute('type') === 'password'){
     pass.setAttribute('type', 'text');
 } else {
     pass.setAttribute('type', 'password');
