@@ -68,8 +68,8 @@ public class Client {
     @OneToOne(mappedBy = "authClient", fetch = FetchType.LAZY)
     private Settings settings;
 
-    @OneToOne(mappedBy = "client", fetch = FetchType.LAZY)
-    private SystemMessage systemMessage;
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<SystemMessage> systemMessage;
 
     public Client(String firstName, String lastName, String patronymic, String email, String phoneNumber,
                   double balance, double balanceUSD, double balanceEUR, String pinCode) {

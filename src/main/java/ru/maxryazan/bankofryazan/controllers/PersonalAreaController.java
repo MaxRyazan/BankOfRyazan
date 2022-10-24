@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.service.*;
+
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 @Log4j2
 @Controller
@@ -60,7 +60,7 @@ public class PersonalAreaController {
     @PostMapping("/main/personal-area")
     public String postTransaction(@RequestParam String recipientPhoneNumber,
                                   int sum, HttpServletRequest request, Model model) {
-        if (settingsService.checkDoAllTransactionsWithSecretCode(clientService.findByRequest(request))) {
+        if (!settingsService.checkDoAllTransactionsWithSecretCode(clientService.findByRequest(request))) {
             return transactionalService.doTransaction(recipientPhoneNumber, sum, request, model);
         } else {
             model.addAttribute("client", clientService.findByRequest(request));

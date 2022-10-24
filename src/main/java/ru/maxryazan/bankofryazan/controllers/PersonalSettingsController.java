@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.maxryazan.bankofryazan.models.Client;
 import ru.maxryazan.bankofryazan.models.Settings;
 import ru.maxryazan.bankofryazan.models.SystemMessage;
+import ru.maxryazan.bankofryazan.models.Type;
 import ru.maxryazan.bankofryazan.service.ClientService;
 import ru.maxryazan.bankofryazan.service.ServiceClass;
 import ru.maxryazan.bankofryazan.service.SettingsService;
@@ -68,7 +69,8 @@ public class PersonalSettingsController {
        if(settingsService.validateDataForChangePassword(client, oldPassword, newPassword, confirmNewPassword)) {
            try {
                settingsService.changePassword(newPassword, client);
-               SystemMessage systemMessage = new SystemMessage(serviceClass.generateDate(), "Пароль был изменён!", client);
+               SystemMessage systemMessage = new SystemMessage(serviceClass.generateDate(),
+                       "Пароль был изменён!", client, Type.CHANGE_PASS);
                systemMessages.save(systemMessage);
                return serviceClass.showSuccessMessage("Пароль успешно изменён!",
                        "/personal/change_password_page", model);

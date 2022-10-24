@@ -69,9 +69,10 @@
     margin-left: 10px;
 }
 .relative{
-    position: absolute;
+    margin-top: 50%;
     bottom: 15px;
     justify-content: center;
+    margin-right: 50%;
 }
 .invize{
     display: none;

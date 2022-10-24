@@ -24,13 +24,18 @@ public class SystemMessage {
     @Column(name = "IP_address")
     private String IP;
 
-    @OneToOne
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
 
-    public SystemMessage(final String date, final String message, Client client) throws UnknownHostException {
+    public SystemMessage(final String date, final String message, Client client, Type type) throws UnknownHostException {
         this.date = date;
         this.message = message;
         this.IP = String.valueOf(InetAddress.getLocalHost());
         this.client = client;
+        this.type = type;
     }
 }

@@ -147,6 +147,9 @@ public class InvestmentService {
         Rate rate;
             rate = findByDate(serviceClass.generateDate());
             exchangeRateClass = findByDateMoney(serviceClass.generateDate());
+            if(exchangeRateClass == null){
+                exchangeRateClass = exchangeRateClassService.getRateFromAPI();
+            }
         switch (investment) {
             case "gold" -> result = getResult(rate.getGold(), amount);
             case "silver" -> result = getResult(rate.getSilver(), amount);
